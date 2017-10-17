@@ -10,20 +10,25 @@ import java.util.ArrayList;
 
 public class dbmanager3 {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false";
+    /*This ccode connects to database, remember last part of line 14 - solve timestamp issues for database*/
+    private static final String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "root";
+    private static final String PASSWORD = "";
     private static Connection connection = null;
-
 
     private ResetDatabase resetdatabase;
 
     public dbmanager3() {
 
         try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+
+            System.out.println("Worked!");
         } catch (SQLException exception) {
             exception.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -55,19 +60,24 @@ public class dbmanager3 {
             e.printStackTrace();
 
         } finally {
+            /*
             try {
                 resultSet.close();
             } catch (SQLException ef) {
                 ef.printStackTrace();
                 close();
             }
+            */
+
         }
         return courses;
 
     }
 
-    /* Method for seeing available wquizzes within a chosen topic */
-    public ArrayList<Quiz> loadQuizzes(int topicId) {
+    /* Method for seeing available wquizzes within a chosen course */
+
+
+    public ArrayList<Quiz> loadQuizzes(int courseId) {
         ResultSet resultSet = null;
         ArrayList<Quiz> quizzes = new ArrayList<Quiz>();
         try {
@@ -75,7 +85,7 @@ public class dbmanager3 {
                     .prepareStatement("SELECT * FROM Quiz WHERE topic_id = ?");
 
 
-            loadQuizzes.setInt(1, topicId);
+            loadQuizzes.setInt(1, courseId);
             resultSet = loadQuizzes.executeQuery();
 
 
@@ -85,7 +95,7 @@ public class dbmanager3 {
                 quiz.setCreatedBy(resultSet.getString("created_by"));
                 quiz.setQuestionCount(resultSet.getInt("question_count"));
                 quiz.setQuizTitle(resultSet.getString("quiz_description"));
-                quiz.setTopicId(resultSet.getInt("topc_id"));
+                quiz.setIdCourse(resultSet.getInt("topic_id"));
                 quizzes.add(quiz);
 
             }
@@ -123,7 +133,6 @@ public class dbmanager3 {
                 question.setQuestion(resultSet.getString("question"));
                 question.setQuizIdQuiz(resultSet.getInt("quiz_id"));
                 questions.add(question);
-
             }
 
         } catch (SQLException e) {
@@ -139,6 +148,7 @@ public class dbmanager3 {
         }
 
     }
+
 
 
 

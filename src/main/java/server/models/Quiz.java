@@ -8,16 +8,16 @@ public class Quiz {
     private int questionCount;
     private String quizTitle;
     private String quizDescription;
-    private int topicId;
+    private int idCourse;
 
-    public Quiz(int idQuiz, String createdBy, String url, int questionCount, String quizTitle, String quizDescription, int topicId) {
+    public Quiz(int idQuiz, String createdBy, String url, int questionCount, String quizTitle, String quizDescription, int idCourse) {
         this.idQuiz = idQuiz;
         this.createdBy = createdBy;
         this.url = url;
         this.questionCount = questionCount;
         this.quizTitle = quizTitle;
         this.quizDescription = quizDescription;
-        this.topicId = topicId;
+        this.idCourse= idCourse;
     }
 
     public Quiz() {
@@ -72,11 +72,8 @@ public class Quiz {
         this.quizDescription = quizDescription;
     }
 
-    public int getTopicId() {
-        return topicId;
-    }
+    public int getIdCourse() { return idCourse; }
 
-    public void setTopicId(int topicId) {
-        this.topicId = topicId;
+    public void setIdCourse (int idCourse) { this.idCourse = idCourse;
     }
 }
