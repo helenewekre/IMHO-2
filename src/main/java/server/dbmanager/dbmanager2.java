@@ -60,7 +60,7 @@ public class dbmanager2 {
     public boolean createQuestion(Question question) throws IllegalArgumentException {
         try {
             PreparedStatement createQuestion = connection
-                    .prepareStatement("INSERT INTO  (question, quiz_id) VALUES (?, ?)");
+                    .prepareStatement("INSERT INTO Question (question, quiz_id) VALUES (?, ?)");
             createQuestion.setString(1, question.getQuestion());
             createQuestion.setInt(2, question.getQuizIdQuiz());
 

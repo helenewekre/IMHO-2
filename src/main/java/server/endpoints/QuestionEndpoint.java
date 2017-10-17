@@ -3,31 +3,26 @@ package server.endpoints;
 import com.google.gson.Gson;
 import server.dbmanager.dbmanager2;
 import server.models.Question;
-import server.models.Quiz;
 
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
-@Path("/quiz")
-public class QuizEndpoint {
+
+@Path("/question")
+public class QuestionEndpoint {
 
     @POST
-    public Response createQuiz(String quizJson) {
+    public Response createQuestion(String questionJson) {
 
-        Quiz quiz = new Gson().fromJson(quizJson, Quiz.class);
+        Question question = new Gson().fromJson(questionJson, Question.class);
 
         dbmanager2 db2 = new dbmanager2();
-
-        db2.createQuiz(quiz);
+        db2.createQuestion(question);
         return Response
                 .status(200)
                 .type("application/json")
-                .entity(new Gson().toJson(quiz))
+                .entity(new Gson().toJson(question))
                 .build();
     }
-
-
-
 }
