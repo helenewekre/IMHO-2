@@ -8,7 +8,6 @@ import server.utility.Digester;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
 
 @Path("/user")
 public class UserEndpoint {
@@ -45,7 +44,6 @@ public class UserEndpoint {
     //Test method for user path
     public Response get() {
         System.out.println("hallo!");
-
         return Response.status(200).entity("User").build();
 
 
