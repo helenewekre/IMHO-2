@@ -10,18 +10,20 @@ import java.util.ArrayList;
 
 public class dbmanager4 {
 
-    private static String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false";
+    private static String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private static String USERNAME = "test";
     private static String PASSWORD = "";
     private static Connection connection = null;
 
-    public dbmanager4() throws Exception{
+    public dbmanager4() {
+
         try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            //connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        }
-        catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-            System.exit(1);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.out.println("demo");
         }
     }
 
@@ -102,7 +104,7 @@ public class dbmanager4 {
     }
 
 
-    public User getUserProfile(String idUser) {
+    public User getUserProfile(int idUser) {
 
         ResultSet resultSet = null;
         User user = null;
@@ -113,7 +115,7 @@ public class dbmanager4 {
                     .prepareStatement("SELECT * FROM User where idUser = ?");
 
 
-            getUserProfile.setString(1, idUser);
+            getUserProfile.setInt(1, idUser);
 
             resultSet = getUserProfile.executeQuery();
 
