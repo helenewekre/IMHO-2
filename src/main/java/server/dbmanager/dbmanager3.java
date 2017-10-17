@@ -75,13 +75,13 @@ public class dbmanager3 {
 
     }
 
-    /* Method for seeing available wquizzes within a chosen topic */
+    /* Method for seeing available wquizzes within a chosen course */
     public ArrayList<Quiz> loadQuizzes(int courseId) {
         ResultSet resultSet = null;
         ArrayList<Quiz> quizzes = new ArrayList<Quiz>();
         try {
             PreparedStatement loadQuizzes = connection
-                    .prepareStatement("SELECT * FROM Quiz WHERE topic_id = ?");
+                    .prepareStatement("SELECT * FROM Quiz WHERE idCourse = ?");
 
 
             loadQuizzes.setInt(1, courseId);
@@ -94,7 +94,7 @@ public class dbmanager3 {
                 quiz.setCreatedBy(resultSet.getString("created_by"));
                 quiz.setQuestionCount(resultSet.getInt("question_count"));
                 quiz.setQuizTitle(resultSet.getString("quiz_description"));
-                quiz.setTopicId(resultSet.getInt("topc_id"));
+                quiz.setIdCourse(resultSet.getInt("idCourse"));
                 quizzes.add(quiz);
 
             }
