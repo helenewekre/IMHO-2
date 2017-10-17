@@ -4,7 +4,9 @@ import server.models.Question;
 import server.models.Quiz;
 import server.resetdatabase.ResetDatabase;
 
+import javax.ws.rs.GET;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class dbmanager2 {
 
@@ -32,7 +34,7 @@ public class dbmanager2 {
         }
 
     }
-
+    /* Method for creating a quiz */
     public boolean createQuiz(Quiz quiz) throws IllegalArgumentException {
         try {
             PreparedStatement createQuiz = connection
@@ -54,11 +56,11 @@ public class dbmanager2 {
         }
         return false;
     }
-
+    /* Method for creating a question */
     public boolean createQuestion(Question question) throws IllegalArgumentException {
         try {
             PreparedStatement createQuestion = connection
-                    .prepareStatement("INSERT INTO  (VARCHAR question, int quiz_id) VALUES (?, ?)");
+                    .prepareStatement("INSERT INTO  (question, quiz_id) VALUES (?, ?)");
             createQuestion.setString(1, question.getQuestion());
             createQuestion.setInt(2, question.getQuizIdQuiz());
 
@@ -72,7 +74,44 @@ public class dbmanager2 {
         }
         return false;
     }
+    /* Method for loading quizzes */
+    public ArrayList<Quiz> loadQuizzes(int topicId) throws IllegalArgumentException {
+        ResultSet resultSet = null;
+        ArrayList<Quiz> quizzes = new ArrayList<Quiz>();
+        try {
+            PreparedStatement loadQuizzes = connection
+                    .prepareStatement("GET * FROM Quiz WHERE topic_id = ?");
 
+            loadQuizzes.setInt(1, topicId);
+            resultSet = loadQuizzes.executeQuery();
+
+            while (resultSet.next()) {
+                Quiz quiz = new Quiz();
+                quiz.setIdQuiz(resultSet.getInt("idQuiz"));
+                quiz.setCreatedBy(resultSet.getString("created_by"));
+                quiz.setQuestionCount(resultSet.getInt("question_count"));
+                quiz.setQuizTitle(resultSet.getString("quiz_title"));
+                quiz.setQuizDescription(resultSet.getString("quiz_description"));
+                quiz.setTopicId(resultSet.getInt("topic_id"));
+                quizzes.add(quiz);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        } finally {
+            try {
+                resultSet.close();
+            } catch (SQLException ef) {
+                ef.printStackTrace();
+                close();
+            }
+        }
+        return quizzes;
+
+    }
+
+    /* Method for deleting a quiz */
     public boolean deleteQuiz(Quiz quiz) throws IllegalArgumentException {
         try {
             PreparedStatement deleteQuiz = connection
