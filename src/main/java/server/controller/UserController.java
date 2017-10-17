@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 public class UserController {
 
+    /*
   private Quiz quiz = new Quiz();
 
   // Todo coments by peter
@@ -38,4 +39,5 @@ public class UserController {
         }
        return result + nrQuestion;
         }
+        */
 }
