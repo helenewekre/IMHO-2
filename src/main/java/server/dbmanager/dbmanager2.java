@@ -39,7 +39,7 @@ public class dbmanager2 {
             createQuiz.setInt(2, quiz.getQuestionCount());
             createQuiz.setString(3, quiz.getQuizTitle());
             createQuiz.setString(4, quiz.getQuizDescription());
-            createQuiz.setInt(5, quiz.getTopicId());
+            createQuiz.setInt(5, quiz.getIdCourse());
 
             int rowsAffected = createQuiz.executeUpdate();
             if (rowsAffected == 1) {

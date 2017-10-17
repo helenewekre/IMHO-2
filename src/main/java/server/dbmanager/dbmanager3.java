@@ -13,9 +13,8 @@ public class dbmanager3 {
     /*This ccode connects to database, remember last part of line 14 - solve timestamp issues for database*/
     private static final String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "root";
+    private static final String PASSWORD = "";
     private static Connection connection = null;
-
 
     private ResetDatabase resetdatabase;
 
@@ -83,7 +82,7 @@ public class dbmanager3 {
         ArrayList<Quiz> quizzes = new ArrayList<Quiz>();
         try {
             PreparedStatement loadQuizzes = connection
-                    .prepareStatement("SELECT * FROM Quiz WHERE idCourse = ?");
+                    .prepareStatement("SELECT * FROM Quiz WHERE topic_id = ?");
 
 
             loadQuizzes.setInt(1, courseId);
@@ -96,7 +95,7 @@ public class dbmanager3 {
                 quiz.setCreatedBy(resultSet.getString("created_by"));
                 quiz.setQuestionCount(resultSet.getInt("question_count"));
                 quiz.setQuizTitle(resultSet.getString("quiz_description"));
-                quiz.setIdCourse(resultSet.getInt("idCourse"));
+                quiz.setIdCourse(resultSet.getInt("topic_id"));
                 quizzes.add(quiz);
 
             }
