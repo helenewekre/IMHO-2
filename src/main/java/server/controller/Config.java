@@ -12,6 +12,9 @@ public final class Config {
 
     private static String DATABASE_HOST;
     private static Integer DATABASE_PORT;
+    private static String DATABASE_USERNAME;
+    private static String DATABASE_PASSWORD;
+    
 
 
     /**
@@ -44,6 +47,8 @@ public final class Config {
         //Set class variables
         DATABASE_HOST = json.get("DATABASE_HOST").toString().replace("\"", "");
         DATABASE_PORT = Integer.parseInt(json.get("DATABASE_PORT").toString().replace("\"", ""));
+        DATABASE_USERNAME = json.get("DATABASE_USERNAME").toString().replace("\"", "");
+        DATABASE_PASSWORD = json.get("DATABASE_PASSWORD").toString().replace("\"", "");
     }
 
     public static String getDatabaseHost(){
@@ -51,5 +56,11 @@ public final class Config {
     }
     public static Integer getDatabasePort(){
         return DATABASE_PORT;
+    }
+    public static String getDatabaseUsername(){
+        return DATABASE_USERNAME;
+    }
+    public static String getDatabasePassword(){
+        return DATABASE_PASSWORD;
     }
 }
