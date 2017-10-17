@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import server.dbmanager.dbmanager2;
 import server.models.Question;
 import server.models.Quiz;
+import server.controller.AdminController;
+
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -12,19 +14,17 @@ import javax.ws.rs.core.Response;
 
 @Path("/quiz")
 public class QuizEndpoint {
+    AdminController adminController = new AdminController();
 
     @POST
     public Response createQuiz(String quizJson) {
 
-        Quiz quiz = new Gson().fromJson(quizJson, Quiz.class);
+        Boolean quizCreated = adminController.createQuiz(quizJson);
 
-        dbmanager2 db2 = new dbmanager2();
-
-        db2.createQuiz(quiz);
         return Response
                 .status(200)
                 .type("application/json")
-                .entity(new Gson().toJson(quiz))
+                .entity("{\"quizCreated\":\"true\"}")
                 .build();
     }
 

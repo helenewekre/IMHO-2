@@ -74,59 +74,5 @@ public class dbmanager2 {
         }
         return false;
     }
-    /* Method for loading quizzes */
-    public ArrayList<Quiz> loadQuizzes(int topicId) throws IllegalArgumentException {
-        ResultSet resultSet = null;
-        ArrayList<Quiz> quizzes = new ArrayList<Quiz>();
-        try {
-            PreparedStatement loadQuizzes = connection
-                    .prepareStatement("GET * FROM Quiz WHERE topic_id = ?");
 
-            loadQuizzes.setInt(1, topicId);
-            resultSet = loadQuizzes.executeQuery();
-
-            while (resultSet.next()) {
-                Quiz quiz = new Quiz();
-                quiz.setIdQuiz(resultSet.getInt("idQuiz"));
-                quiz.setCreatedBy(resultSet.getString("created_by"));
-                quiz.setQuestionCount(resultSet.getInt("question_count"));
-                quiz.setQuizTitle(resultSet.getString("quiz_title"));
-                quiz.setQuizDescription(resultSet.getString("quiz_description"));
-                quiz.setTopicId(resultSet.getInt("topic_id"));
-                quizzes.add(quiz);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-        } finally {
-            try {
-                resultSet.close();
-            } catch (SQLException ef) {
-                ef.printStackTrace();
-                close();
-            }
-        }
-        return quizzes;
-
-    }
-
-    /* Method for deleting a quiz */
-    public boolean deleteQuiz(Quiz quiz) throws IllegalArgumentException {
-        try {
-            PreparedStatement deleteQuiz = connection
-                    .prepareStatement("DELETE FROM Quiz WHERE idQuiz = ?");
-
-            deleteQuiz.setInt(1, quiz.getIdQuiz());
-
-            int rowsAffected = deleteQuiz.executeUpdate();
-            if (rowsAffected == 1) {
-                return true;
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 }
