@@ -15,7 +15,7 @@ public class OptionEndpoint {
 
     dbmanager3 dbmanager = new dbmanager3();
 
-    //Without neccesary parameter! Must be fixed 
+    //Without neccesary parameter! Must be fixed
     @GET
     public Response loadQuestions(Integer quizId){
 

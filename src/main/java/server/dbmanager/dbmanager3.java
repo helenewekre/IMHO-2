@@ -75,7 +75,7 @@ public class dbmanager3 {
     }
 
     /* Method for seeing available wquizzes within a chosen topic */
-    public ArrayList<Quiz> loadQuizzes(int topicId) {
+    public ArrayList<Quiz> loadQuizzes(int courseId) {
         ResultSet resultSet = null;
         ArrayList<Quiz> quizzes = new ArrayList<Quiz>();
         try {
@@ -83,7 +83,7 @@ public class dbmanager3 {
                     .prepareStatement("SELECT * FROM Quiz WHERE topic_id = ?");
 
 
-            loadQuizzes.setInt(1, topicId);
+            loadQuizzes.setInt(1, courseId);
             resultSet = loadQuizzes.executeQuery();
 
 
