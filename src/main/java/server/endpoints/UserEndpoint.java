@@ -28,7 +28,7 @@ public class UserEndpoint {
 
     }
     //@POST
-    // public Response createUser(user)
+    // public Response createUser(user) DEMO
 
     @GET
     public Response get() {

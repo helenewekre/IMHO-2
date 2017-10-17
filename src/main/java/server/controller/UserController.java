@@ -12,12 +12,13 @@ public class UserController {
 
   private Quiz quiz = new Quiz();
 
-   public int getResult(Quiz quiz) throws Exception {
+  // Todo coments by peter
+   public int getQuizResult(Quiz quiz) throws Exception {
         dbmanager4 db4 = new dbmanager4();
         Option option = new Option();
        Answer answer = new Answer();
         int result = 0;
-        int nrQustion = 0;
+        int nrQuestion = 0;
         int quizId = quiz.getIdQuiz();
         ArrayList<Option> options = new ArrayList<>();
         ArrayList<Question> questions = new ArrayList();
@@ -30,11 +31,11 @@ public class UserController {
                 option = options.get(o);
                 if(option.getIsCorrect() == 1) {
                     if(answer.getIdAnswer() == option.getIdOption()){
-                        result++; nrQustion++;
-                    }else nrQustion++;
+                        result++; nrQuestion++;
+                    }else nrQuestion++;
                 }
             }
         }
-       return result + nrQustion;
+       return result + nrQuestion;
         }
 }
