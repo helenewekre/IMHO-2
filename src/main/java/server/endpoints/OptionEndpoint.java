@@ -8,14 +8,19 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 
+@Path("/quiz")
 public class OptionEndpoint {
-    dbmanager3 dbamanager3 = new dbmanager3();
+
+    dbmanager3 dbmanager = new dbmanager3();
 
     @GET
     @Path("{quizId}")
-    public Response showQuiz(@PathParam("quizId") Integer quizId){
-        Quiz quizFound = dbmanager3.showQuiz(quizId);
+    public Response loadQuestions(@PathParam("quizId") Integer quizId){
+
+        ArrayList<Quiz> quizFound = new ArrayList<Quiz>();
+
         return Response.status(200).entity(new Gson().toJson(quizFound)).build();
 
     }

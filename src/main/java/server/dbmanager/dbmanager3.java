@@ -12,7 +12,7 @@ public class dbmanager3 {
 
     private static final String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "Siitc180";
+    private static final String PASSWORD = "root";
     private static Connection connection = null;
 
 
@@ -131,7 +131,6 @@ public class dbmanager3 {
                 question.setQuestion(resultSet.getString("question"));
                 question.setQuizIdQuiz(resultSet.getInt("quiz_id"));
                 questions.add(question);
-
             }
 
         } catch (SQLException e) {
@@ -147,6 +146,7 @@ public class dbmanager3 {
         }
 
     }
+
 
 
 
