@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 public class UserEndpoint {
     //Creating objects of database manager and MainController
     dbmanager1 dbmanager1 = new dbmanager1();
-    private static dbmanager4 dbmanager4 = new dbmanager4();
+    dbmanager4 dbmanager4 = new dbmanager4();
     MainController mainController = new MainController();
     User currentUser = new User();
 

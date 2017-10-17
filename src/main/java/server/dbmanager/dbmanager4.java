@@ -11,8 +11,8 @@ import java.util.ArrayList;
 public class dbmanager4 {
 
     private static String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-    private static String USERNAME = "test";
-    private static String PASSWORD = "";
+    private static String USERNAME = "root";
+    private static String PASSWORD = "hello";
     private static Connection connection = null;
 
     public dbmanager4() {
@@ -26,7 +26,7 @@ public class dbmanager4 {
             System.out.println("demo");
         }
     }
-    //Closes the connection to the database
+    //Closes the connection to the databases
     private static void close(){
         try{
             connection.close();
