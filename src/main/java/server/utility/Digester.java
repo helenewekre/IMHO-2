@@ -7,6 +7,7 @@ public class Digester {
     private String salt;
     private static MessageDigest digester;
 
+    // Setting the default salt.
     public Digester() {
         this.salt = "hashingtest";
     }
@@ -18,6 +19,7 @@ public class Digester {
         }
     }
 
+    //Setting the salt.
     public void setSalt(String salt) {
         this.salt = salt;
     }
@@ -27,8 +29,8 @@ public class Digester {
      * @param password input string
      * @return MD5 hash of string
      */
+    //Method for hashing the password which is parsed.
     public  String hash(String password) {
-
         return Digester.performHashing(password);
     }
 
@@ -37,6 +39,7 @@ public class Digester {
      * @param password input string
      * @return MD5 hashed of string
      */
+    //Method for hashing the password with the salt.
     public String hashWithSalt(String password){
 
         password = password + this.salt;
@@ -49,6 +52,7 @@ public class Digester {
      * @param password input
      * @return MD5 hash of string
      */
+    // The logic behind the hashing.
     private static String performHashing(String password){
         // vigtigste metode, som laver hash for os
         digester.update(password.getBytes());
