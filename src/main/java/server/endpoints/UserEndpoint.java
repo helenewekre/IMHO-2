@@ -1,41 +1,45 @@
 package server.endpoints;
 
 import com.google.gson.Gson;
-import org.apache.ibatis.annotations.Param;
 import server.dbmanager.dbmanager1;
+import server.controller.MainController;
 import server.dbmanager.dbmanager4;
 import server.models.User;
-import server.utility.Digester;
-
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
 
 @Path("/user")
 public class UserEndpoint {
-
+    //Creating objects of database manager and MainController
     dbmanager1 dbmanager1 = new dbmanager1();
     private static dbmanager4 dbmanager4 = new dbmanager4();
+    MainController mainController = new MainController();
     User currentUser = new User();
 
 
+    @POST
+    @Path("/login")
+    /*
+    Endpoint for authorizing a user.
+    A user String is given to the maincontroller
+    which handles the logic. Returning a string with the found user.
+     */
+    public Response authorizeUser(String user) {
+        String userFound = mainController.authUser(user);
+        return Response.status(200).entity(userFound).build();
+    }
 
     @POST
-    @Path("{username}/{password}")
-    public Response authorizeUser(@PathParam("username") String username, @PathParam("password") String password) {
-        User userFound = dbmanager1.authorizeUser(username, password);
-        return Response.status(200).entity(new Gson().toJson(userFound)).build();
-
-    }
-    //@POST
-    // public Response createUser(user) DEMO
-
-    @GET
-    public Response get() {
-        System.out.println("hallo!");
-
-        return Response.status(200).entity("User").build();
-
+    @Path("/signup")
+    /*
+    Endpoint for creating a user.
+    A user String is given to the maincontroller
+    which handles the logic. Returning a boolean, which decides if
+    the user is created or not.
+     */
+    public Response createUser(String user) {
+        Boolean userCreated = mainController.createUser(user);
+        return Response.status(200).type("application/json").entity("{\"userCreated\":\"true\"}").build();
     }
 
     @GET

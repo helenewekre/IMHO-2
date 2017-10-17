@@ -59,7 +59,7 @@ CREATE TABLE `Course` (
   `idCourse` int(11) NOT NULL AUTO_INCREMENT,
   `course_title` varchar(45) NOT NULL,
   PRIMARY KEY (`idCourse`),
-  UNIQUE KEY `topic_name_UNIQUE` (`course_title`)
+  UNIQUE KEY `course_title` (`course_title`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -145,11 +145,11 @@ CREATE TABLE `Quiz` (
   `question_count` int(11) DEFAULT NULL,
   `quiz_title` varchar(200) DEFAULT 'Unidentified quiz',
   `quiz_description` varchar(1000) DEFAULT 'No description found',
-  `topic_id` int(11) DEFAULT NULL,
+  `idCourse` int(11) DEFAULT NULL,
   PRIMARY KEY (`idQuiz`),
   UNIQUE KEY `idQuiz_UNIQUE` (`idQuiz`),
-  KEY `topicRef` (`topic_id`),
-  CONSTRAINT `topicRef` FOREIGN KEY (`topic_id`) REFERENCES `Course` (`idCourse`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `idRef` (`idCourse`),
+  CONSTRAINT `idRef` FOREIGN KEY (`idCourse`) REFERENCES `Course` (`idCourse`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -159,7 +159,7 @@ CREATE TABLE `Quiz` (
 
 LOCK TABLES `Quiz` WRITE;
 /*!40000 ALTER TABLE `Quiz` DISABLE KEYS */;
-INSERT INTO `Quiz` (`idQuiz`, `created_by`, `question_count`, `quiz_title`, `quiz_description`, `topic_id`) VALUES (1,'Henrik Thorn',1,'Skalerbarhed','Tag denne quiz for at øve dig i skalerbarhed',2);
+INSERT INTO `Quiz` (`idQuiz`, `created_by`, `question_count`, `quiz_title`, `quiz_description`, `idCourse`) VALUES (1,'Henrik Thorn',1,'Skalerbarhed','Tag denne quiz for at øve dig i skalerbarhed',2);
 /*!40000 ALTER TABLE `Quiz` ENABLE KEYS */;
 UNLOCK TABLES;
 

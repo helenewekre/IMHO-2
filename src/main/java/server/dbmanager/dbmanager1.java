@@ -7,6 +7,7 @@ import server.models.User;
 
 
 public class dbmanager1 {
+    // Creating the connection for the database
     private static final String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "hello";
@@ -16,14 +17,13 @@ public class dbmanager1 {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            //connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         } catch (Exception exception) {
             exception.printStackTrace();
-            System.out.println("demo");
         }
     }
 
+    //Method for closing the connection
     private static void close() {
         try {
             connection.close();
@@ -33,12 +33,13 @@ public class dbmanager1 {
 
     }
 
+    //Method for authorizing the user. Prepared statement are used, and a user object is returned.
     public User authorizeUser(String username, String password) throws IllegalArgumentException {
-
         ResultSet resultSet = null;
         User user = null;
 
         try {
+
             PreparedStatement authorizeUser = connection.prepareStatement("SELECT * from User where username = ? AND password = ?");
 
             authorizeUser.setString(1, username);
@@ -69,9 +70,10 @@ public class dbmanager1 {
         return user;
     }
 
+    // Method for creating a user. Boolean returned, which decides if the user is created or not.
     public boolean createUser(User user) throws IllegalArgumentException {
         try {
-            PreparedStatement createUser = connection.prepareStatement("INSERT INTO users (username, password) VALUES (?,?)");
+            PreparedStatement createUser = connection.prepareStatement("INSERT INTO User (username, password) VALUES (?,?)");
             createUser.setString(1,user.getUsername());
             createUser.setString(2,user.getPassword());
 
