@@ -15,9 +15,9 @@ public class OptionEndpoint {
 
     dbmanager3 dbmanager = new dbmanager3();
 
+    //Without neccesary parameter! Must be fixed 
     @GET
-    @Path("{quizId}")
-    public Response loadQuestions(@PathParam("quizId") Integer quizId){
+    public Response loadQuestions(Integer quizId){
 
         ArrayList<Quiz> quizFound = new ArrayList<Quiz>();
 
