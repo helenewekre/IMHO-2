@@ -18,6 +18,10 @@ public class Answer {
         this.optionQuestionQuizTopicIdTopic = optionQuestionQuizTopicIdTopic;
     }
 
+    public Answer() {
+
+    }
+
     public int getIdAnswer() {
         return idAnswer;
     }

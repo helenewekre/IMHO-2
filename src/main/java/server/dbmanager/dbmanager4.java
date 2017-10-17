@@ -73,7 +73,7 @@ public class dbmanager4 {
     }
 
     //creates an arrayList based on options and use the question´s ID, to find the corresponding options
-    public ArrayList<Option> getOption(Question question){
+    public ArrayList<Option> getOption(int question){
         ResultSet resultSet = null;
         ArrayList<Option> options = new ArrayList<>();
 
@@ -81,7 +81,7 @@ public class dbmanager4 {
         try{
             PreparedStatement getOption = connection.prepareStatement("SELECT * FROM Option WHERE question_id = ?");
 
-            getOption.setInt(1,question.getIdQuestion());
+            getOption.setInt(1,question);
             resultSet = getOption.executeQuery();
 
             //add all tables from DB to specific option and finally add the option to the array.
