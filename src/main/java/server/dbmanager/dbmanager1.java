@@ -71,7 +71,7 @@ public class dbmanager1 {
 
     public boolean createUser(User user) throws IllegalArgumentException {
         try {
-            PreparedStatement createUser = connection.prepareStatement("INSERT INTO users (username, password) VALUES (?,?)");
+            PreparedStatement createUser = connection.prepareStatement("INSERT INTO User (username, password) VALUES (?,?)");
             createUser.setString(1,user.getUsername());
             createUser.setString(2,user.getPassword());
 

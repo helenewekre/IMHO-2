@@ -11,6 +11,8 @@ public class MainController {
     private UserController userController;
     private User currentUser;
     private Scanner input;
+    dbmanager1 dbmanager1 = new dbmanager1();
+
 
 
     public MainController() {
@@ -19,7 +21,6 @@ public class MainController {
 
     public boolean authUser(String username, String password) {
         User user = new User();
-        dbmanager1 dbmanager1 = new dbmanager1();
 
         user = dbmanager1.authorizeUser(username, password);
 
@@ -34,6 +35,13 @@ public class MainController {
 
     }
 
+    public boolean createUser(String username, String password) {
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+
+        return dbmanager1.createUser(user);
+    }
 
 
 

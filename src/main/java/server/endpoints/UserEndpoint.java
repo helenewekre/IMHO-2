@@ -21,14 +21,26 @@ public class UserEndpoint {
         return Response.status(200).entity(new Gson().toJson(userFound)).build();
 
     }
-    //@POST
-    // public Response createUser(user)
+    @POST
+    public Response createUser(String user) {
+
+        Digester digester = new Digester();
+
+        User newUser = new Gson().fromJson(user, User.class);
+
+        newUser.setPassword(digester.hashWithSalt(newUser.getPassword()));
+
+        dbmanager1.createUser(newUser);
+
+        return Response.status(200).type("application/json").entity("{\"userCreated\":\"true\"}").build();
+    }
 
     @GET
     public Response get() {
         System.out.println("hallo!");
 
         return Response.status(200).entity("User").build();
+
 
     }
 

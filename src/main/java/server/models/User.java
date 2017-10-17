@@ -1,5 +1,7 @@
 package server.models;
 
+import server.utility.Digester;
+
 public class User {
 
     private int idUser;
@@ -47,7 +49,11 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+
+        Digester digester = new Digester();
+
+        this.password = digester.hashWithSalt(password);
+
     }
 
     // Test!
