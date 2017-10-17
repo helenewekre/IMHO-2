@@ -8,16 +8,19 @@ import java.sql.*;
 
 public class dbmanager2 {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "hello";
+    private static final String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+    private static final String USERNAME = "VibrugerikkeRoot";
+    private static final String PASSWORD = "root1234";
     private static Connection connection = null;
 
     public dbmanager2() {
         try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         } catch (SQLException exception) {
             exception.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -33,7 +36,7 @@ public class dbmanager2 {
     public boolean createQuiz(Quiz quiz) throws IllegalArgumentException {
         try {
             PreparedStatement createQuiz = connection
-                    .prepareStatement("INSERT INTO Quiz (String created_by, int question_count, String quiz_title, String quiz_description, int topic_d) VALUES (?,?,?,?,?)");
+                    .prepareStatement("INSERT INTO Quiz (created_by, question_count, quiz_title, quiz_description, topic_id) VALUES (?,?,?,?,?)");
 
             createQuiz.setString(1, quiz.getCreatedBy());
             createQuiz.setInt(2, quiz.getQuestionCount());

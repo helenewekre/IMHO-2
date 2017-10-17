@@ -10,7 +10,7 @@ public class Quiz {
     private String quizDescription;
     private int topicId;
 
-    public Quiz(int idQuiz, String createdBy, String url, int questionCount, String quizTitle, String quizDescription, int topicId) {
+    public Quiz(String createdBy, int questionCount, String quizTitle, String quizDescription, int topicId) {
         this.idQuiz = idQuiz;
         this.createdBy = createdBy;
         this.url = url;

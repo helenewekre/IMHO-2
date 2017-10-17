@@ -10,9 +10,9 @@ import java.util.ArrayList;
 
 public class dbmanager4 {
 
-    private static String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false";
-    private static String USERNAME = "test";
-    private static String PASSWORD = "";
+    private static String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+    private static String USERNAME = "VibrugerikkeRoot";
+    private static String PASSWORD = "root1234";
     private static Connection connection = null;
 
     public dbmanager4() throws Exception{
