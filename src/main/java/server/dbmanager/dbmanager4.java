@@ -10,21 +10,23 @@ import java.util.ArrayList;
 
 public class dbmanager4 {
 
-    private static String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false";
+    private static String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private static String USERNAME = "test";
     private static String PASSWORD = "";
     private static Connection connection = null;
 
-    public dbmanager4() throws Exception{
+    public dbmanager4() {
+
         try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            //connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        }
-        catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-            System.exit(1);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.out.println("demo");
         }
     }
-
+    //Closes the connection to the database
     private static void close(){
         try{
             connection.close();
@@ -32,17 +34,20 @@ public class dbmanager4 {
             e.printStackTrace();
         }
     }
-
+    //creates an arrayList based on questions and use the quiz ID, to find the corresponding questions
     public ArrayList<Question> getQuestion(int quizId){
         ResultSet resultSet = null;
         ArrayList<Question> questions = new ArrayList<>();
 
+        //PreparedStatements which communicates with the database
         try{
             PreparedStatement getQuestion = connection.prepareStatement("SELECT * FROM Question WHERE quiz_id = ?");
 
             getQuestion.setInt(1,quizId);
             resultSet = getQuestion.executeQuery();
 
+            //add all tables from DB to specific questions and finally add the question to the array.
+            //the result.next() does this for each question.
             while(resultSet.next()){
                 Question question = new Question();
                 question.setIdQuestion(resultSet.getInt("idQuestion"));
@@ -62,20 +67,25 @@ public class dbmanager4 {
             }
 
         }
+        //returns to the array
         return questions;
 
     }
 
-    public ArrayList<Option> getOption(Question question){
+    //creates an arrayList based on options and use the question´s ID, to find the corresponding options
+    public ArrayList<Option> getOption(int question){
         ResultSet resultSet = null;
         ArrayList<Option> options = new ArrayList<>();
 
+        //PreparedStatements which communicates with the database
         try{
             PreparedStatement getOption = connection.prepareStatement("SELECT * FROM Option WHERE question_id = ?");
 
-            getOption.setInt(1,question.getIdQuestion());
+            getOption.setInt(1,question);
             resultSet = getOption.executeQuery();
 
+            //add all tables from DB to specific option and finally add the option to the array.
+            //the result.next() does this for each option.
             while(resultSet.next()){
                 Option option = new Option();
                 option.setIdOption(resultSet.getInt("idQuestion"));
@@ -102,21 +112,23 @@ public class dbmanager4 {
     }
 
 
-    public User getUserProfile(String idUser) {
+    //to get a specific userprofile based on a corresponding ID
+    public User getUserProfile(int idUser) {
 
         ResultSet resultSet = null;
         User user = null;
 
+        //PreparedStatements which communicates with the database
         try {
-
             PreparedStatement getUserProfile = connection
                     .prepareStatement("SELECT * FROM User where idUser = ?");
 
 
-            getUserProfile.setString(1, idUser);
+            getUserProfile.setInt(1, idUser);
 
             resultSet = getUserProfile.executeQuery();
 
+            //resultSet.next() takes user information from the DB and creates a temporary (user profile)
             while(resultSet.next()) {
                 user = new User();
                 user.setIdUser(resultSet.getInt("idUser"));
@@ -136,6 +148,8 @@ public class dbmanager4 {
             }
 
         }
+        
+        //The user is returned
         return user;
     }
 
