@@ -24,7 +24,6 @@ public class dbmanager3 {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 
-            System.out.println("Worked!");
         } catch (SQLException exception) {
             exception.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -82,7 +81,7 @@ public class dbmanager3 {
         ArrayList<Quiz> quizzes = new ArrayList<Quiz>();
         try {
             PreparedStatement loadQuizzes = connection
-                    .prepareStatement("SELECT * FROM Quiz WHERE topic_id = ?");
+                    .prepareStatement("SELECT * FROM Quiz WHERE idCourse = ?");
 
 
             loadQuizzes.setInt(1, courseId);
@@ -95,7 +94,7 @@ public class dbmanager3 {
                 quiz.setCreatedBy(resultSet.getString("created_by"));
                 quiz.setQuestionCount(resultSet.getInt("question_count"));
                 quiz.setQuizTitle(resultSet.getString("quiz_description"));
-                quiz.setIdCourse(resultSet.getInt("topic_id"));
+                quiz.setIdCourse(resultSet.getInt("idCourse"));
                 quizzes.add(quiz);
 
             }

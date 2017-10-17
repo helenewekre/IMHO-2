@@ -12,7 +12,7 @@ public class dbmanager4 {
 
     private static String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private static String USERNAME = "root";
-    private static String PASSWORD = "hello";
+    private static String PASSWORD = "";
     private static Connection connection = null;
 
     public dbmanager4() {

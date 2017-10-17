@@ -174,7 +174,7 @@ CREATE TABLE `User` (
   `idUser` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
-  `type` int(11) NOT NULL,
+  `type` int(11) NOT NULL DEFAULT '2',
   PRIMARY KEY (`idUser`),
   UNIQUE KEY `idUser_UNIQUE` (`idUser`),
   UNIQUE KEY `username_UNIQUE` (`username`)
