@@ -15,10 +15,16 @@ public class UserEndpoint {
     dbmanager1 dbmanager1 = new dbmanager1();
 
     @POST
-    @Path("{username}/{password}")
-    public Response authorizeUser(@PathParam("username") String username, @PathParam("password") String password) {
-        User userFound = dbmanager1.authorizeUser(username, password);
-        return Response.status(200).entity(new Gson().toJson(userFound)).build();
+    @Path("/login")
+    public Response authorizeUser(String user) {
+
+        User newUser = new Gson().fromJson(user, User.class);
+
+        User findUser = dbmanager1.authorizeUser(newUser.getUsername(), newUser.getPassword());
+
+        String userFound = new Gson().toJson(findUser, User.class);
+
+        return Response.status(200).entity(userFound).build();
 
     }
     @POST
@@ -33,7 +39,9 @@ public class UserEndpoint {
         dbmanager1.createUser(newUser);
 
         return Response.status(200).type("application/json").entity("{\"userCreated\":\"true\"}").build();
+
     }
+
 
     @GET
     public Response get() {

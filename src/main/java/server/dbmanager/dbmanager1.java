@@ -39,6 +39,7 @@ public class dbmanager1 {
         User user = null;
 
         try {
+
             PreparedStatement authorizeUser = connection.prepareStatement("SELECT * from User where username = ? AND password = ?");
 
             authorizeUser.setString(1, username);

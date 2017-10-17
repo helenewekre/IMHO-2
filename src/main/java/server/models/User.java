@@ -49,9 +49,7 @@ public class User {
     }
 
     public void setPassword(String password) {
-
         Digester digester = new Digester();
-
         this.password = digester.hashWithSalt(password);
 
     }
