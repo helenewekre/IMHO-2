@@ -4,6 +4,7 @@ import server.models.Question;
 import server.models.Quiz;
 import server.resetdatabase.ResetDatabase;
 
+import javax.ws.rs.GET;
 import java.sql.*;
 
 public class dbmanager2 {
@@ -15,9 +16,12 @@ public class dbmanager2 {
 
     public dbmanager2() {
         try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         } catch (SQLException exception) {
             exception.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -29,11 +33,11 @@ public class dbmanager2 {
         }
 
     }
-
+    /* Method for creating a quiz */
     public boolean createQuiz(Quiz quiz) throws IllegalArgumentException {
         try {
             PreparedStatement createQuiz = connection
-                    .prepareStatement("INSERT INTO Quiz (String created_by, int question_count, String quiz_title, String quiz_description, int topic_d) VALUES (?,?,?,?,?)");
+                    .prepareStatement("INSERT INTO Quiz (created_by, question_count, quiz_title, quiz_description, idCourse) VALUES (?,?,?,?,?)");
 
             createQuiz.setString(1, quiz.getCreatedBy());
             createQuiz.setInt(2, quiz.getQuestionCount());
@@ -51,11 +55,11 @@ public class dbmanager2 {
         }
         return false;
     }
-
+    /* Method for creating a question */
     public boolean createQuestion(Question question) throws IllegalArgumentException {
         try {
             PreparedStatement createQuestion = connection
-                    .prepareStatement("INSERT INTO  (VARCHAR question, int quiz_id) VALUES (?, ?)");
+                    .prepareStatement("INSERT INTO Question (question, quiz_id) VALUES (?, ?)");
             createQuestion.setString(1, question.getQuestion());
             createQuestion.setInt(2, question.getQuizIdQuiz());
 
@@ -70,21 +74,4 @@ public class dbmanager2 {
         return false;
     }
 
-    public boolean deleteQuiz(Quiz quiz) throws IllegalArgumentException {
-        try {
-            PreparedStatement deleteQuiz = connection
-                    .prepareStatement("DELETE FROM Quiz WHERE idQuiz = ?");
-
-            deleteQuiz.setInt(1, quiz.getIdQuiz());
-
-            int rowsAffected = deleteQuiz.executeUpdate();
-            if (rowsAffected == 1) {
-                return true;
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 }

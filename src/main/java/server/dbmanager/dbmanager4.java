@@ -16,14 +16,11 @@ public class dbmanager4 {
     private static Connection connection = null;
 
     public dbmanager4() {
-
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            //connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         } catch (Exception exception) {
             exception.printStackTrace();
-            System.out.println("demo");
         }
     }
     //Closes the connection to the databases
@@ -148,7 +145,7 @@ public class dbmanager4 {
             }
 
         }
-        
+
         //The user is returned
         return user;
     }

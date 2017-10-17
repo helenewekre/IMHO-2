@@ -59,23 +59,18 @@ public class dbmanager3 {
             e.printStackTrace();
 
         } finally {
-            /*
             try {
                 resultSet.close();
             } catch (SQLException ef) {
                 ef.printStackTrace();
                 close();
             }
-            */
-
         }
         return courses;
 
     }
 
     /* Method for seeing available wquizzes within a chosen course */
-
-
     public ArrayList<Quiz> loadQuizzes(int courseId) {
         ResultSet resultSet = null;
         ArrayList<Quiz> quizzes = new ArrayList<Quiz>();
