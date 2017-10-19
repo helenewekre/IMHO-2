@@ -13,7 +13,7 @@ public class DbManager {
     // Creating the connection for the database
     private static final String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = "fiemus9582";
     private static Connection connection = null;
     private static Logging log = new Logging();
 
