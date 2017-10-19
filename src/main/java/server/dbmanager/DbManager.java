@@ -8,16 +8,16 @@ import server.models.User;
 import server.utility.Globals;
 
 import server.utility.Crypter;
+import server.models.*;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DbManager {
     // Creating the connection for the database
     private static final String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-
     private static final String USERNAME = "VibrugerikkeRoot";
-
     private static final String PASSWORD = "root1234";
     private static Connection connection = null;
 
@@ -232,41 +232,104 @@ public class DbManager {
         }
     }
 
-    /*Method for starting quiz - hereby showing questionlist*/
-
+    //Method for loading questions
     public ArrayList<Question> loadQuestions(int quizId) {
+
+        //Resultset to temporary contain values from SQL statement, first given the value of null
         ResultSet resultSet = null;
+        //Arraylist of question object
         ArrayList<Question> questions = new ArrayList<Question>();
+
+        //Try/catch method to avoid the program crashing on exceoptions
         try {
+            //SQL query sent to SQL to get values from the database. Done thoug the connection method - see top of class.
             PreparedStatement loadQuestions = connection
                     .prepareStatement("SELECT * FROM Question WHERE quiz_id = ?");
 
-
+            //Gives the SQL statement value to parameter - the quizid integer
             loadQuestions.setInt(1, quizId);
+            //Adds values from SQL statement to resultset (temporarty table)
             resultSet = loadQuestions.executeQuery();
 
-
+            //Method will run as long as there is content in the next line of the resultset
             while (resultSet.next()) {
+                //Creating question object
                 Question question = new Question();
-                question.setIdQuestion(resultSet.getInt("idQuestion"));
+                //Adding values to parameter variables in the question object
                 question.setQuestion(resultSet.getString("question"));
+                question.setIdQuestion(resultSet.getInt("idQuestion"));
                 question.setQuizIdQuiz(resultSet.getInt("quiz_id"));
+                //Adding the questoin object to the arraylist of question objects
                 questions.add(question);
             }
 
+            //Question to avoid crashes on exceptions
         } catch (SQLException e) {
             e.printStackTrace();
+            //Always close the resultset as it is a temporary table of content
         } finally {
+            try {
+                if(resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (SQLException ef) {
+                ef.printStackTrace();
+                close();
+            }
+        }
+
+      // Retuning the ArrayList of question objects found in database with given quiz id
+        return questions;
+
+    }
+
+    //Method for loading options to a given question
+    public ArrayList<Option> loadOptions(int questionId) {
+
+        //Resultset to temporary contain values from SQL statement
+        ResultSet resultSet = null;
+        //Arraylist of Option object
+        ArrayList<Option> options = new ArrayList<Option>();
+
+        //Try-catch to avoid the program crashing on exceptions
+        try {
+            //SQL statement sendt to DB via. conncetion method.
+            PreparedStatement loadQuestions = connection
+                    .prepareStatement("SELECT * FROM `Option` WHERE question_id = ?");
+            loadQuestions.setInt(1, questionId);
+            //Resultset gets the value of the SQL statement
+            resultSet = loadQuestions.executeQuery();
+
+            //The method will run as long as the resultset contains more (next line)
+            while (resultSet.next()) {
+                //Adding values in resultset to option objet.
+                Option option = new Option();
+                option.setIdOption(resultSet.getInt("idOption"));
+                option.setQuestionIdQuestion(resultSet.getInt("question_id"));
+                option.setIsCorrect(resultSet.getInt("is_correct"));
+                option.setOption(resultSet.getString("option"));
+                //Adding option object with given parameter values to the arraylist of several option objects.
+                options.add(option);
+            }
+
+            //Catch to avoid crashing on exceptions
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+            //Always close the resultset as it is a temporary table of content
+        finally {
             try {
                 resultSet.close();
             } catch (SQLException ef) {
                 ef.printStackTrace();
                 close();
             }
-            return questions;
+            //Returning the arraylist of option objects
+            return options;
         }
 
     }
+
 
     //to get a specific userprofile based on a corresponding ID
     public User getUserProfile(int idUser) {
@@ -285,7 +348,7 @@ public class DbManager {
             resultSet = getUserProfile.executeQuery();
 
             //resultSet.next() takes user information from the DB and creates a temporary (user profile)
-            while (resultSet.next()) {
+            while(resultSet.next()) {
                 user = new User();
                 user.setIdUser(resultSet.getInt("idUser"));
                 user.setType(resultSet.getInt("type"));
@@ -348,20 +411,20 @@ public class DbManager {
         int score = 0;
 
         //this preparedStatement get all the correct answers the user have on a quiz
-        try {
+        try { //In the SELECT part we define that we need the DB to return quiz description and count. we use count
             PreparedStatement getNrCorrectAnswers = connection.prepareStatement("SELECT q.quiz_description, count(*)\n" +
-                    "FROM user u\n" +
-                    "INNER JOIN answer a\n" +
-                    "ON u.idUser = a.user_id\n" +
-                    "INNER JOIN `option` o\n" +
-                    "ON a.option_id = o.idOption\n" +
-                    "INNER JOIN question qt\n" +
-                    "ON o.question_id = qt.idQuestion\n" +
-                    "INNER JOIN quiz q\n" +
-                    "ON qt.quiz_id = q.idQuiz\n" +
-                    "WHERE quiz_id = ? \n" +
-                    "\tAND user_id = ?\n" +
-                    "GROUP BY o.is_correct"
+                    "FROM user u\n" + // we define that it is from user, her after known as u.
+                    "INNER JOIN answer a\n" + // we inner join the statement with answer. now know as a.
+                    "ON u.idUser = a.user_id\n" + // and that is should do it where user id from the user table = user id from answer table
+                    "INNER JOIN `option` o\n" + // the statement is continued with option o.
+                    "ON a.option_id = o.idOption\n" +//where a option id = o option id.
+                    "INNER JOIN question qt\n" + // same as before with question qt.
+                    "ON o.question_id = qt.idQuestion\n" + // where o question id = qt question id.
+                    "INNER JOIN quiz q\n" + // finally inner join with quiz q.
+                    "ON qt.quiz_id = q.idQuiz\n" + // on qt quiz id = q id quiz
+                    "WHERE quiz_id = ? \n" + // where quiz id = ?. ? is defined by the user.
+                    "\tAND user_id = ?\n" + // and user id = + ?. also defined by the user.
+                    "GROUP BY o.is_correct" // in the end it is sortet by o is correct. so the final count is returned.
             );
 
             getNrCorrectAnswers.setInt(1, quizID);

@@ -94,13 +94,13 @@ CREATE TABLE `Option` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Option`
+-- Dumping data for table `Options`
 --
 
-LOCK TABLES `Option` WRITE;
-/*!40000 ALTER TABLE `Option` DISABLE KEYS */;
-INSERT INTO `Option` (`idOption`, `option`, `question_id`, `is_correct`) VALUES (1,'En database',1,0),(2,'Begrebet findes ikke',1,0),(3,'Fordeler trafik på serverne',1,1),(4,'Et operativsystem',1,0);
-/*!40000 ALTER TABLE `Option` ENABLE KEYS */;
+LOCK TABLES `Options` WRITE;
+/*!40000 ALTER TABLE `Options` DISABLE KEYS */;
+INSERT INTO `Options` (`idOption`, `option`, `question_id`, `is_correct`) VALUES (1,'En database',1,0),(2,'Begrebet findes ikke',1,0),(3,'Fordeler trafik på serverne',1,1),(4,'Et operativsystem',1,0);
+/*!40000 ALTER TABLE `Options` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
