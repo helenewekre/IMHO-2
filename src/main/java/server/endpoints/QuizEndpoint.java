@@ -22,19 +22,20 @@ public class QuizEndpoint {
         return Response.status(200).entity(new Gson().toJson(quizzes)).build();
 
     }
-
+        // Method for creating a quiz
     @POST
     @Path("/{create}")
     public Response createQuiz(String quizJson) {
-        Boolean quizCreated = adminController.createQuiz(quizJson);
 
+        Quiz quiz = new Gson().fromJson(quizJson, Quiz.class);
+        boolean quizCreated = adminController.createQuiz(quiz);
         return Response
                 .status(200)
                 .type("application/json")
                 .entity("{\"quizCreated\":\"true\"}")
                 .build();
     }
-
+        // Method for deleting a quiz and all it's sub-tables
     @DELETE
     @Path("{deleteId}")
     public Response deleteQuiz(@PathParam("deleteId")int idQuiz) {

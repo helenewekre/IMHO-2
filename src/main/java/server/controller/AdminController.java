@@ -14,8 +14,7 @@ public class AdminController {
 
     }
 
-    public Boolean createQuiz(String quizJson) {
-        Quiz quiz = new Gson().fromJson(quizJson, Quiz.class);
+    public Boolean createQuiz(Quiz quiz) {
         Boolean ifCreated = dbManager.createQuiz(quiz);
 
         if(ifCreated) {
@@ -26,8 +25,8 @@ public class AdminController {
 
     }
 
-    public Boolean createQuestion(String questionJson) {
-        Question question = new Gson().fromJson(questionJson, Question.class);
+    public Boolean createQuestion(Question question) {
+
         Boolean ifCreated = dbManager.createQuestion(question);
 
         if(ifCreated) {
