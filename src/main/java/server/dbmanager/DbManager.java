@@ -2,6 +2,7 @@ package server.dbmanager;
 
 import server.models.Course;
 import server.models.Question;
+import server.models.Option;
 import server.models.Quiz;
 import server.models.User;
 import server.utility.Globals;
@@ -130,6 +131,27 @@ public class DbManager {
             if (rowsAffected == 1) {
                 return true;
             }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /* Method for creating a option */
+    public boolean createOption(Option option) throws IllegalArgumentException {
+        try {
+            PreparedStatement createOption = connection
+                    .prepareStatement("INSERT INTO `Option` (`option`, question_id, is_correct) VALUES (?, ?, ?);");
+                createOption.setString(1, option.getOptions());
+                createOption.setInt(2, option.getQuestionIdQuestion());
+                createOption.setInt(3, option.getIsCorrect());
+
+                int rowsAffected = createOption.executeUpdate();
+
+        if (rowsAffected == 1) {
+            return true;
+        }
 
         } catch (SQLException e) {
             e.printStackTrace();

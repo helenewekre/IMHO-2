@@ -2,6 +2,7 @@ package server.controller;
 
 import com.google.gson.Gson;
 import server.dbmanager.DbManager;
+import server.models.Option;
 import server.models.Question;
 import server.models.Quiz;
 import server.utility.Globals;
@@ -40,4 +41,19 @@ public class AdminController {
         }
 
     }
+
+    public Boolean createOption(String optionJson) {
+        System.out.println(optionJson);
+        Option option = new Gson().fromJson(optionJson, Option.class);
+        Boolean ifCreated = dbManager.createOption(option);
+        Globals.log.writeLog(getClass().getName(), this, "Option created", 2);
+
+        if(ifCreated) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
 }
