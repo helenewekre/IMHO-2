@@ -13,6 +13,8 @@ import javax.ws.rs.core.Response;
 public class QuestionEndpoint {
     AdminController adminController = new AdminController();
 
+
+    //Method for creating a question
     @POST
     public Response createQuestion(String questionJson) {
 

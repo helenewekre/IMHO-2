@@ -88,7 +88,7 @@ public class DbManager {
         } return false;
     }
 
-    /* Method for creating a quiz */
+    // Method for creating a quiz. Boolean returned, which decides if the user is created or not.
     public boolean createQuiz(Quiz quiz) throws IllegalArgumentException {
         try {
             PreparedStatement createQuiz = connection
@@ -110,7 +110,7 @@ public class DbManager {
         }
         return false;
     }
-    /* Method for creating a question */
+    // Method for creating a question. Boolean returned, which decides if the user is created or not.
     public boolean createQuestion(Question question) throws IllegalArgumentException {
         try {
             PreparedStatement createQuestion = connection
@@ -274,7 +274,7 @@ public class DbManager {
         //The user is returned
         return user;
     }
-
+        //Method for deleting a quiz and all it's sub-tables. Boolean returned, which decides if the user is created or not.
     public boolean deleteQuiz(int idQuiz) throws IllegalArgumentException {
         try {
             PreparedStatement deleteQuiz = connection

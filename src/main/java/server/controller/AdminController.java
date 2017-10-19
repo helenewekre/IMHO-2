@@ -13,7 +13,7 @@ public class AdminController {
         dbManager = new DbManager();
 
     }
-
+        //Method for creating a question
     public Boolean createQuiz(Quiz quiz) {
         Boolean ifCreated = dbManager.createQuiz(quiz);
 
@@ -24,7 +24,7 @@ public class AdminController {
         }
 
     }
-
+        //Method for creating a question
     public Boolean createQuestion(Question question) {
 
         Boolean ifCreated = dbManager.createQuestion(question);
@@ -36,7 +36,7 @@ public class AdminController {
         }
 
     }
-
+        //Method for deleting a quiz and all it's sub-tables
     public Boolean deleteQuiz(int idQuiz) {
 
         Boolean ifDeleted = dbManager.deleteQuiz(idQuiz);
