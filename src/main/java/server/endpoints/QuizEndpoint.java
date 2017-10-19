@@ -39,9 +39,9 @@ public class QuizEndpoint {
         // Method for deleting a quiz and all it's sub-tables
     @DELETE
     @Path("{deleteId}")
-    public Response deleteQuiz(@PathParam("deleteId")int idQuiz) {
+    public Response deleteQuiz(@PathParam("deleteId")int quizJson) {
 
-        Boolean quizDeleted = adminController.deleteQuiz(idQuiz);
+        Boolean quizDeleted = adminController.deleteQuiz(quizJson);
 
         return Response
                 .status(200)
