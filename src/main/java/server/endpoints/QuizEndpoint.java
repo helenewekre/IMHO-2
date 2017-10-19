@@ -1,23 +1,30 @@
 package server.endpoints;
+
 import com.google.gson.Gson;
 import server.controller.AdminController;
+import server.controller.MainController;
 import server.controller.UserController;
 import server.dbmanager.DbManager;
 import server.models.Quiz;
+import server.models.User;
+import server.utility.CurrentUserContext;
 
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 @Path("/quiz")
 public class QuizEndpoint {
     DbManager dbManager = new DbManager();
     AdminController adminController = new AdminController();
+    MainController mainController = new MainController();
+
 
     @GET
     @Path("/{CourseID}")
-    public Response loadQuizzes(@PathParam("CourseID") int courseId){
+    public Response loadQuizzes(@PathParam("CourseID") int courseId) {
         ArrayList<Quiz> quizzes = dbManager.loadQuizzes(courseId);
 
         return Response.status(200).type("application/json").entity(new Gson().toJson(quizzes)).build();
@@ -25,16 +32,24 @@ public class QuizEndpoint {
     }
         // Method for creating a quiz
     @POST
-    @Path("/{create}")
-    public Response createQuiz(String quizJson) {
+    public Response createQuiz(@HeaderParam("authorization") String token, String quizJson) throws SQLException {
+        CurrentUserContext context = mainController.getUserFromTokens(token);
 
-        Quiz quiz = new Gson().fromJson(quizJson, Quiz.class);
-        boolean quizCreated = adminController.createQuiz(quiz);
+        if (context.isAdmin()) {
+
+            Boolean quizCreated = adminController.createQuiz(quizJson);
+
+            return Response.status(200).type("application/json")
+                    .entity("{\"quizCreated\":\"true\"}")
+                    .build();
+        }
         return Response
-                .status(200)
+                .status(403)
                 .type("application/json")
-                .entity("{\"quizCreated\":\"true\"}")
+                .entity("{\"error\":\"no permissions\"}")
                 .build();
+
+
     }
         // Method for deleting a quiz and all it's sub-tables
     @DELETE

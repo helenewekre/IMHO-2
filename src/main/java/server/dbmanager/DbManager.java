@@ -5,9 +5,9 @@ import server.models.Question;
 import server.models.Option;
 import server.models.Quiz;
 import server.models.User;
+import server.utility.Crypter;
 import server.utility.Globals;
 
-import server.utility.Crypter;
 import server.models.*;
 
 import java.sql.*;
@@ -94,13 +94,10 @@ public class DbManager {
 
         //Try-catch method to avoid the program crashing on exceptions
         try {
-
-            //SQL statement
-            PreparedStatement createUser = connection
-                    .prepareStatement("INSERT INTO User (username, password) VALUES (?,?)");
-            //Setting parameters for user object
-            createUser.setString(1, user.getUsername());
-            createUser.setString(2, user.getPassword());
+            PreparedStatement createUser = connection.prepareStatement("INSERT INTO User (username, password, time_created) VALUES (?,?,?)");
+            createUser.setString(1,user.getUsername());
+            createUser.setString(2,user.getPassword());
+            createUser.setLong(3, user.getTimeCreated());
 
             //rowsAffected
             int rowsAffected = createUser.executeUpdate();
@@ -367,45 +364,84 @@ public class DbManager {
     }
 
 
-    //Method to get a specific userprofile based on a corresponding ID
-    public User getUserProfile(int idUser) {
+    public void addToken(String token, int idUser) {
+        PreparedStatement addTokenStatement;
+        try {
+            addTokenStatement = connection.prepareStatement("INSERT INTO Tokens (token, token_idUser) VALUES (?,?)");
+            addTokenStatement.setString(1, token);
+            addTokenStatement.setInt(2, idUser);
+            addTokenStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public boolean deleteToken(int idUser) throws SQLException {
+        PreparedStatement deleteTokenStatement = connection.prepareStatement("DELETE FROM Tokens WHERE token_idUser = ?");
+        try {
+            deleteTokenStatement.setInt(1, idUser);
+            deleteTokenStatement.executeUpdate();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return true;
+    }
+
+    public User getUserFromToken(String token) throws SQLException {
         ResultSet resultSet = null;
+        User userFromToken = null;
+
+        try {
+
+            PreparedStatement getUserFromToken = connection
+                    .prepareStatement("SELECT username, idUser, `type` FROM `User` u INNER JOIN Tokens t ON t.token_idUser = u.idUser WHERE t.token = ?");
+
+            getUserFromToken.setString(1, token);
+            resultSet = getUserFromToken.executeQuery();
+
+            while (resultSet.next()) {
+
+                userFromToken = new User();
+
+                userFromToken.setIdUser(resultSet.getInt("idUser"));
+                userFromToken.setUsername(resultSet.getString("username"));
+                userFromToken.setType(resultSet.getInt("type"));
+
+            }
+        } catch (SQLException sqlException) {
+            System.out.println(sqlException.getMessage());
+        }
+        return userFromToken;
+
+    }
+
+    public User getTimeCreatedByUsername(String username) {
         User user = null;
 
         //Try-catch
+        ResultSet resultSet = null;
+
         try {
             //SQL statement
             PreparedStatement getUserProfile = connection
                     .prepareStatement("SELECT * FROM User where idUser = ?");
+            PreparedStatement getTimeCreatedByUsername = connection.prepareStatement("SELECT * FROM User WHERE username = ?");
 
+            getTimeCreatedByUsername.setString(1, username);
+            resultSet = getTimeCreatedByUsername.executeQuery();
 
-            getUserProfile.setInt(1, idUser);
-
-            resultSet = getUserProfile.executeQuery();
-
-            //resultSet.next() takes user information from the DB and creates a temporary (user profile)
             while(resultSet.next()) {
                 user = new User();
-                user.setIdUser(resultSet.getInt("idUser"));
-                user.setType(resultSet.getInt("type"));
-                user.setUsername(resultSet.getString("username"));
-                user.setPassword(resultSet.getString("password"));
-
+                user.setTimeCreated(resultSet.getLong("time_created"));
             }
+
+            if (user == null) {
+                throw new IllegalArgumentException();
+            }
+            resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                resultSet.close();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                close();
-            }
-
         }
-
-        //The user is returned
         return user;
     }
         //Method for deleting a quiz and all it's sub-tables

@@ -15,8 +15,8 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-CREATE TABLE IF NOT EXISTS quizDB;
 
+CREATE TABLE IF NOT EXISTS quizDB;
 USE quizDB;
 --
 -- Table structure for table `Answer`
@@ -69,7 +69,7 @@ CREATE TABLE `Course` (
 
 LOCK TABLES `Course` WRITE;
 /*!40000 ALTER TABLE `Course` DISABLE KEYS */;
-INSERT INTO `Course` (`idCourse`, `course_title`) VALUES (2,'DIS'),(3,'Forandringsledelse'),(4,'Makroøkonomi'),(1,'VØS 3');
+INSERT INTO `Course` (`idCourse`, `course_title`) VALUES (2,'DIS'),(3,'Forandringsledelse'),(4,'Makro?konomi'),(1,'V?S 3');
 /*!40000 ALTER TABLE `Course` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -97,10 +97,10 @@ CREATE TABLE `Option` (
 -- Dumping data for table `Options`
 --
 
-LOCK TABLES `Options` WRITE;
-/*!40000 ALTER TABLE `Options` DISABLE KEYS */;
-INSERT INTO `Options` (`idOption`, `option`, `question_id`, `is_correct`) VALUES (1,'En database',1,0),(2,'Begrebet findes ikke',1,0),(3,'Fordeler trafik på serverne',1,1),(4,'Et operativsystem',1,0);
-/*!40000 ALTER TABLE `Options` ENABLE KEYS */;
+LOCK TABLES `Option` WRITE;
+/*!40000 ALTER TABLE `Option` DISABLE KEYS */;
+INSERT INTO `Option` (`idOption`, `option`, `question_id`, `is_correct`) VALUES (1,'En database',1,0),(2,'Begrebet findes ikke',1,0),(3,'Fordeler trafik p? serverne',1,1),(4,'Et operativsystem',1,0);
+/*!40000 ALTER TABLE `Option` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -160,8 +160,32 @@ CREATE TABLE `Quiz` (
 
 LOCK TABLES `Quiz` WRITE;
 /*!40000 ALTER TABLE `Quiz` DISABLE KEYS */;
-INSERT INTO `Quiz` (`idQuiz`, `created_by`, `question_count`, `quiz_title`, `quiz_description`, `idCourse`) VALUES (1,'Henrik Thorn',1,'Skalerbarhed','Tag denne quiz for at øve dig i skalerbarhed',2);
+INSERT INTO `Quiz` (`idQuiz`, `created_by`, `question_count`, `quiz_title`, `quiz_description`, `idCourse`) VALUES (1,'Henrik Thorn',1,'Skalerbarhed','Tag denne quiz for at ?ve dig i skalerbarhed',2);
 /*!40000 ALTER TABLE `Quiz` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `Tokens`
+--
+
+DROP TABLE IF EXISTS `Tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Tokens` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `token` varchar(255) DEFAULT '',
+  `token_idUser` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Tokens`
+--
+
+LOCK TABLES `Tokens` WRITE;
+/*!40000 ALTER TABLE `Tokens` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Tokens` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -176,10 +200,11 @@ CREATE TABLE `User` (
   `username` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
   `type` int(11) NOT NULL DEFAULT '2',
+  `time_created` longtext,
   PRIMARY KEY (`idUser`),
   UNIQUE KEY `idUser_UNIQUE` (`idUser`),
   UNIQUE KEY `username_UNIQUE` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -188,7 +213,7 @@ CREATE TABLE `User` (
 
 LOCK TABLES `User` WRITE;
 /*!40000 ALTER TABLE `User` DISABLE KEYS */;
-INSERT INTO `User` (`idUser`, `username`, `password`, `type`) VALUES (1,'Admin','Admin',1),(2,'User','User',2),(3,'Jens','Hej',2);
+INSERT INTO `User` (`idUser`, `username`, `password`, `type`, `time_created`) VALUES (1,'Admin','Admin',1,NULL),(2,'User','User',2,NULL),(3,'Jens','Hej',2,NULL);
 /*!40000 ALTER TABLE `User` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -201,4 +226,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-12  9:04:22
+-- Dump completed on 2017-10-19 22:36:29
