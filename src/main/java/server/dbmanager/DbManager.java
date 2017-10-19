@@ -1,9 +1,6 @@
 package server.dbmanager;
 
-import server.models.Course;
-import server.models.Question;
-import server.models.Quiz;
-import server.models.User;
+import server.models.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,7 +9,7 @@ public class DbManager {
     // Creating the connection for the database
     private static final String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "hello";
+    private static final String PASSWORD = "root";
     private static Connection connection = null;
 
     public DbManager() {
@@ -203,22 +200,30 @@ public class DbManager {
     public ArrayList<Question> loadQuestions (int quizId) {
         ResultSet resultSet = null;
         ArrayList<Question> questions = new ArrayList<Question>();
+        ArrayList<Option> options = new ArrayList<Option>();
         try {
             PreparedStatement loadQuestions = connection
-                    .prepareStatement("SELECT * FROM Question WHERE quiz_id = ?");
-
+                    .prepareStatement("SELECT q.question, q.idQuestion, o.option FROM Question q INNER JOIN Options o ON q.idQuestion = o.question_id WHERE quiz_id = ?");
 
             loadQuestions.setInt(1, quizId);
             resultSet = loadQuestions.executeQuery();
 
+            Question question = new Question();
+            Option option = new Option();
 
             while (resultSet.next()) {
-                Question question = new Question();
+
+                option.setOption(resultSet.getString("option"));
+                options.add(option);
+
                 question.setIdQuestion(resultSet.getInt("idQuestion"));
                 question.setQuestion(resultSet.getString("question"));
-                question.setQuizIdQuiz(resultSet.getInt("quiz_id"));
+                question.setOptions(options);
                 questions.add(question);
+
+
             }
+
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -229,8 +234,8 @@ public class DbManager {
                 ef.printStackTrace();
                 close();
             }
-            return questions;
         }
+        return questions;
 
     }
 
