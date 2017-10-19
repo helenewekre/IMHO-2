@@ -1,7 +1,7 @@
 package server.endpoints;
 import com.google.gson.Gson;
 import server.controller.AdminController;
-import server.dbmanager.dbmanager3;
+import server.dbmanager.DbManager;
 import server.models.Quiz;
 
 
@@ -14,13 +14,13 @@ import java.util.ArrayList;
 
 @Path("/quiz")
 public class QuizEndpoint {
-    dbmanager3 dbmanager = new dbmanager3();
+    DbManager dbManager = new DbManager();
     AdminController adminController = new AdminController();
 
     @GET
     @Path("/{CourseID}")
     public Response loadQuizzes(@PathParam("CourseID") int courseId){
-        ArrayList<Quiz> quizzes = dbmanager.loadQuizzes(courseId);
+        ArrayList<Quiz> quizzes = dbManager.loadQuizzes(courseId);
 
         return Response.status(200).entity(new Gson().toJson(quizzes)).build();
 
@@ -28,7 +28,6 @@ public class QuizEndpoint {
 
     @POST
     public Response createQuiz(String quizJson) {
-
         Boolean quizCreated = adminController.createQuiz(quizJson);
 
         return Response

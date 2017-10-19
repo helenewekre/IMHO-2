@@ -141,7 +141,7 @@ DROP TABLE IF EXISTS `Quiz`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Quiz` (
   `idQuiz` int(11) NOT NULL AUTO_INCREMENT,
-  `created_by` varchar(100) NOT NULL DEFAULT 'Unknown',
+  `created_by` varchar(100) DEFAULT 'Unknown',
   `question_count` int(11) DEFAULT NULL,
   `quiz_title` varchar(200) DEFAULT 'Unidentified quiz',
   `quiz_description` varchar(1000) DEFAULT 'No description found',
