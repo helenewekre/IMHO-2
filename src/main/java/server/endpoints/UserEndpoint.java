@@ -1,11 +1,16 @@
 package server.endpoints;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.google.gson.Gson;
 import server.controller.MainController;
 import server.dbmanager.DbManager;
 import server.models.User;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
+import java.util.Date;
 
 @Path("/user")
 public class UserEndpoint {
@@ -14,36 +19,54 @@ public class UserEndpoint {
     MainController mainController = new MainController();
     User currentUser = new User();
 
+    @POST
+    @Path("/login")
+    //Authorizing a user
+    public Response authorizeUser(String user) {
+        User userAuth = new Gson().fromJson(user, User.class);
+        String token = mainController.authUser(userAuth);
 
+        return Response.status(200).entity(new Gson().toJson(token)).build();
+    }
 
     @POST
     @Path("/signup")
-    /*
-    Endpoint for creating a user.
-    A user String is given to the maincontroller
-    which handles the logic. Returning a boolean, which decides if
-    the user is created or not.
-     */
-
+    //Creating a new user
     public Response createUser(String user) {
         Boolean userCreated = mainController.createUser(user);
         return Response.status(200).type("application/json").entity("{\"userCreated\":\"true\"}").build();
     }
 
 
+
+    @Path("/profile")
     @GET
-    // User ID as a part of the PATH
-    @Path("{id}")
-    public Response getUserProfile(@PathParam("id") int id){
-        //Creates a currentuser from a user ID, which is logged in.
-        currentUser = dbManager.getUserProfile(id);
+    public Response get(@HeaderParam("authorization") String token, @PathParam("id") int idUser) throws SQLException {
+        User myUser = mainController.getUserFromTokens(token);
 
-        return Response
-                .status(200)
-                .type("application/json")
-                .entity(new Gson().toJson(currentUser))
-                .build();
+        if (myUser != null) {
+            return Response
+                    .status(200)
+                    .type("application/json")
+                    .entity(new Gson().toJson(myUser))
+                    .build();
 
+        } else {
+            return Response
+                    .status(200)
+                    .type("application/json")
+                    .entity("Fejl")
+                    .build();
+        }
     }
 
+    @POST
+    @Path("/logout")
+    public Response logOut(String idUser) throws SQLException {
+        int id = new Gson().fromJson(idUser, Integer.class);
+
+        boolean isOut = dbManager.deleteToken(id);
+            return Response.status(200).entity(isOut).build();
+
+    }
 }

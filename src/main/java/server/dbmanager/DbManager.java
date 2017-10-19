@@ -275,5 +275,56 @@ public class DbManager {
         return user;
     }
 
+    public void addToken(String token, int idUser) {
+        PreparedStatement addTokenStatement;
+        try {
+            addTokenStatement = connection.prepareStatement("INSERT INTO Tokens (token, idUser) VALUES (?,?)");
+            addTokenStatement.setString(1, token);
+            addTokenStatement.setInt(2, idUser);
+            addTokenStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean deleteToken(int idUser) throws SQLException {
+        PreparedStatement deleteTokenStatement = connection.prepareStatement("DELETE FROM Tokens WHERE idUser = ?");
+        try {
+            deleteTokenStatement.setInt(1, idUser);
+            deleteTokenStatement.executeUpdate();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return true;
+    }
+
+    public User getUserFromToken(String token) throws SQLException {
+        ResultSet resultSet = null;
+        User userFromToken = null;
+
+        try {
+
+            PreparedStatement getUserFromToken = connection
+                    .prepareStatement("select Tokens.idUser from Tokens inner join User on Tokens.idUser = User.idUser where Tokens.token = ?");
+            getUserFromToken.setString(1, token);
+            resultSet = getUserFromToken.executeQuery();
+
+            while (resultSet.next()) {
+
+                userFromToken = new User();
+
+                userFromToken.setIdUser(resultSet.getInt("idUser"));
+                userFromToken.setType(resultSet.getInt("type"));
+
+            }
+        } catch (SQLException sqlException) {
+            System.out.println(sqlException.getMessage());
+        }
+        return userFromToken;
+
+    }
+
+
+
 }
 
