@@ -19,21 +19,6 @@ public class Digester {
         }
     }
 
-    //Setting the salt.
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-
-    /**
-     * Hash string with MD5 hashing
-     * @param password input string
-     * @return MD5 hash of string
-     */
-    //Method for hashing the password which is parsed.
-    public  String hash(String password) {
-        return Digester.performHashing(password);
-    }
-
     /**
      * Hash string AND salt with MD5 hash
      * @param password input string

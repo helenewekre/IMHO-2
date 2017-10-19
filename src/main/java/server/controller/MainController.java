@@ -25,7 +25,8 @@ public class MainController {
     }
 
     // Logic behind authorizing user
-    public String authUser(String user) {
+    //public String authUser(User user) {
+        /*
         User userAuth = new Gson().fromJson(user, User.class);
         User authorizedUser = dbManager.authorizeUser(userAuth.getUsername(), userAuth.getPassword());
         String userFound = new Gson().toJson(authorizedUser, User.class);
@@ -36,8 +37,10 @@ public class MainController {
             return null;
         }
     }
+    */
 
-    //Logic behind creating user.
+        //Logic behind creating user.
+
     public Boolean createUser(String user) {
         User userCreated = new Gson().fromJson(user, User.class);
         userCreated.setPassword(digester.hashWithSalt(userCreated.getPassword()));
@@ -52,4 +55,6 @@ public class MainController {
 
 
 
-}
+
+    }
+
