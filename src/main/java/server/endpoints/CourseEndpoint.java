@@ -22,7 +22,6 @@ public class CourseEndpoint {
     Crypter crypter = new Crypter();
     Config config = new Config();
 
-
     @GET
     public Response loadCourses (){
         Globals.log.writeLog(this.getClass().getName(), this, "Loaded courses", 2);
@@ -47,9 +46,10 @@ public class CourseEndpoint {
             ArrayList<Course> courses = dbmanager.loadCourses();
             return Response.status(200).type("application/json").entity(new Gson().toJson(courses)).build();
 
+    }
+}
 
         }
 
 
-    }
-    }
+
