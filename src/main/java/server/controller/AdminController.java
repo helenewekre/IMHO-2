@@ -16,7 +16,7 @@ public class AdminController {
     }
 
     //Method for creating a question
-    public Boolean createQuiz(Quiz quiz) {
+    public Boolean createQuiz(String quiz) {
         Boolean ifCreated = dbManager.createQuiz(quiz);
 
         if(ifCreated) {

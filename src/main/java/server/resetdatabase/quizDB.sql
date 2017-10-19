@@ -213,7 +213,6 @@ CREATE TABLE `User` (
 
 LOCK TABLES `User` WRITE;
 /*!40000 ALTER TABLE `User` DISABLE KEYS */;
-INSERT INTO `User` (`idUser`, `username`, `password`, `type`, `time_created`) VALUES (1,'Admin','Admin',1,NULL),(2,'User','User',2,NULL),(3,'Jens','Hej',2,NULL);
 /*!40000 ALTER TABLE `User` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

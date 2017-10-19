@@ -423,8 +423,6 @@ public class DbManager {
 
         try {
             //SQL statement
-            PreparedStatement getUserProfile = connection
-                    .prepareStatement("SELECT * FROM User where idUser = ?");
             PreparedStatement getTimeCreatedByUsername = connection.prepareStatement("SELECT * FROM User WHERE username = ?");
 
             getTimeCreatedByUsername.setString(1, username);
