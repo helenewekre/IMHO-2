@@ -11,8 +11,8 @@ import java.util.ArrayList;
 public class DbManager {
     // Creating the connection for the database
     private static final String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "hello";
+    private static final String USERNAME = "VibrugerikkeRoot";
+    private static final String PASSWORD = "root1234";
     private static Connection connection = null;
 
     public DbManager() {
@@ -275,5 +275,21 @@ public class DbManager {
         return user;
     }
 
+    public boolean deleteQuiz(int idQuiz) throws IllegalArgumentException {
+        try {
+            PreparedStatement deleteQuiz = connection
+                    .prepareStatement("DELETE FROM Quiz WHERE idQuiz = ?");
+
+            deleteQuiz.setInt(1, idQuiz);
+            int rowsAffected = deleteQuiz.executeUpdate();
+            if (rowsAffected == 1) {
+                return true;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
 

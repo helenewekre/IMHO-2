@@ -37,4 +37,15 @@ public class AdminController {
         }
 
     }
+
+    public Boolean deleteQuiz(int idQuiz) {
+
+        Boolean ifDeleted = dbManager.deleteQuiz(idQuiz);
+
+        if (ifDeleted) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
