@@ -14,11 +14,14 @@ public final class Config {
     private static Integer DATABASE_PORT;
     private static String DATABASE_USERNAME;
     private static String DATABASE_PASSWORD;
-    
+    private static Boolean ENCRYPTION;
+
+
 
 
     /**
      *
+
      * @throws IOException
      */
     public void initConfig() throws IOException {
@@ -49,6 +52,7 @@ public final class Config {
         DATABASE_PORT = Integer.parseInt(json.get("DATABASE_PORT").toString().replace("\"", ""));
         DATABASE_USERNAME = json.get("DATABASE_USERNAME").toString().replace("\"", "");
         DATABASE_PASSWORD = json.get("DATABASE_PASSWORD").toString().replace("\"", "");
+        ENCRYPTION = Boolean.parseBoolean(json.get("ENCRYPTION").toString().replace("\"",""));
     }
 
     public static String getDatabaseHost(){
@@ -62,5 +66,13 @@ public final class Config {
     }
     public static String getDatabasePassword(){
         return DATABASE_PASSWORD;
+    }
+
+    public static Boolean getENCRYPTION() {
+        return ENCRYPTION;
+    }
+
+    public static void setENCRYPTION(Boolean ENCRYPTION) {
+        Config.ENCRYPTION = ENCRYPTION;
     }
 }

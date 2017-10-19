@@ -4,6 +4,7 @@ import server.models.Course;
 import server.models.Question;
 import server.models.Quiz;
 import server.models.User;
+import server.utility.Crypter;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,8 +13,10 @@ public class DbManager {
     // Creating the connection for the database
     private static final String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "hello";
+    private static final String PASSWORD = "1234";
     private static Connection connection = null;
+
+    Crypter crypter = new Crypter();
 
     public DbManager() {
 
@@ -126,6 +129,7 @@ public class DbManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return false;
     }
 
@@ -144,6 +148,7 @@ public class DbManager {
                 course.setIdCourse(resultSet.getInt("idCourse"));
                 course.setCourseTitle(resultSet.getString("course_title"));
                 courses.add(course);
+
             }
 
         } catch (SQLException e) {
@@ -157,6 +162,7 @@ public class DbManager {
                 close();
             }
         }
+
         return courses;
 
     }
