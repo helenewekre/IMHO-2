@@ -3,13 +3,13 @@ package server.models;
 public class Option {
 
     private int idOption;
-    private String option;
+    private String options;
     private int questionIdQuestion;
     private int isCorrect;
 
-    public Option(int idOption, String option, int questionIdQuestion, int isCorrect) {
+    public Option(int idOption, String options, int questionIdQuestion, int isCorrect) {
         this.idOption = idOption;
-        this.option = option;
+        this.options = options;
         this.questionIdQuestion = questionIdQuestion;
         this.isCorrect = isCorrect;
     }
@@ -26,12 +26,12 @@ public class Option {
         this.idOption = idOption;
     }
 
-    public String getOption() {
-        return option;
+    public String getOptions() {
+        return options;
     }
 
-    public void setOption(String option) {
-        this.option = option;
+    public void setOption(String options) {
+        this.options = options;
     }
 
     public int getQuestionIdQuestion() {
@@ -41,6 +41,7 @@ public class Option {
     public void setQuestionIdQuestion(int questionIdQuestion) {
         this.questionIdQuestion = questionIdQuestion;
     }
+
     public int getIsCorrect() {
         return isCorrect;
     }
