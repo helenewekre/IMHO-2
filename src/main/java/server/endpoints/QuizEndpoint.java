@@ -1,6 +1,7 @@
 package server.endpoints;
 import com.google.gson.Gson;
 import server.controller.AdminController;
+import server.controller.UserController;
 import server.dbmanager.DbManager;
 import server.models.Quiz;
 
@@ -36,5 +37,6 @@ public class QuizEndpoint {
                 .entity("{\"quizCreated\":\"true\"}")
                 .build();
     }
+
 
 }

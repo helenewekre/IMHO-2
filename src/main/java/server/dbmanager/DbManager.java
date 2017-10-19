@@ -6,13 +6,16 @@ import server.models.Quiz;
 import server.models.User;
 import server.utility.Globals;
 
+
 import java.sql.*;
 import java.util.ArrayList;
 
 public class DbManager {
     // Creating the connection for the database
     private static final String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+
     private static final String USERNAME = "root";
+
     private static final String PASSWORD = "";
     private static Connection connection = null;
 
@@ -53,7 +56,7 @@ public class DbManager {
             resultSet = authorizeUser.executeQuery();
             System.out.println("RS:" + resultSet);
 
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 user = new User();
                 user.setIdUser(resultSet.getInt("idUser"));
                 user.setUsername(resultSet.getString("username"));
@@ -62,12 +65,12 @@ public class DbManager {
 
             }
 
-        } catch(SQLException exception) {
+        } catch (SQLException exception) {
             exception.printStackTrace();
         } finally {
             try {
                 resultSet.close();
-            } catch(SQLException exception) {
+            } catch (SQLException exception) {
                 exception.printStackTrace();
                 close();
             }
@@ -79,16 +82,17 @@ public class DbManager {
     public boolean createUser(User user) throws IllegalArgumentException {
         try {
             PreparedStatement createUser = connection.prepareStatement("INSERT INTO User (username, password) VALUES (?,?)");
-            createUser.setString(1,user.getUsername());
-            createUser.setString(2,user.getPassword());
+            createUser.setString(1, user.getUsername());
+            createUser.setString(2, user.getPassword());
 
             int rowsAffected = createUser.executeUpdate();
-            if(rowsAffected == 1) {
+            if (rowsAffected == 1) {
                 return true;
             }
         } catch (SQLException exception) {
             exception.printStackTrace();
-        } return false;
+        }
+        return false;
     }
 
     /* Method for creating a quiz */
@@ -113,6 +117,7 @@ public class DbManager {
         }
         return false;
     }
+
     /* Method for creating a question */
     public boolean createQuestion(Question question) throws IllegalArgumentException {
         try {
@@ -203,7 +208,7 @@ public class DbManager {
 
     /*Method for starting quiz - hereby showing questionlist*/
 
-    public ArrayList<Question> loadQuestions (int quizId) {
+    public ArrayList<Question> loadQuestions(int quizId) {
         ResultSet resultSet = null;
         ArrayList<Question> questions = new ArrayList<Question>();
         try {
@@ -254,7 +259,7 @@ public class DbManager {
             resultSet = getUserProfile.executeQuery();
 
             //resultSet.next() takes user information from the DB and creates a temporary (user profile)
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 user = new User();
                 user.setIdUser(resultSet.getInt("idUser"));
                 user.setType(resultSet.getInt("type"));
@@ -278,5 +283,91 @@ public class DbManager {
         return user;
     }
 
-}
+    //the method get the number of corret answers of a quiz using quiz ID og user ID as parameters
+    public int getNrCorectAnswers(int quizID, int userID) {
+        ResultSet resultSet = null;
+        int score = 0;
 
+        //this preparedStatement get all the correct answers the user have on a quiz
+        try {
+            PreparedStatement getNrCorrectAnswers = connection.prepareStatement("SELECT q.quiz_description, o.option, o.idOption, count(*)\n" +
+                    "FROM user u\n" +
+                    "INNER JOIN answer a\n" +
+                    "ON u.idUser = a.user_id\n" +
+                    "INNER JOIN `option` o\n" +
+                    "ON a.option_id = o.idOption\n" +
+                    "INNER JOIN question qt\n" +
+                    "ON o.question_id = qt.idQuestion\n" +
+                    "INNER JOIN quiz q\n" +
+                    "ON qt.quiz_id = q.idQuiz\n" +
+                    "WHERE quiz_id = ? \n" +
+                    "\tAND user_id = ?\n" +
+                    "GROUP BY o.is_correct");
+
+            getNrCorrectAnswers.setInt(1, quizID);
+            getNrCorrectAnswers.setInt(2, userID);
+
+            resultSet = getNrCorrectAnswers.executeQuery();
+
+
+            while (resultSet.next()) {
+                 //gets the count of the total correct answers and writes it to score.
+                score = (resultSet.getInt("count(*)"));
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                resultSet.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                close();
+            }
+
+        }
+        return score;
+    }
+    //the method get the number of question using quiz ID as a parameter
+    public int getNrQuestion(int quizID) {
+
+        ResultSet resultSet = null;
+        int nrQuestions = 0;
+
+        //this preparedStatement get all the questions on a quiz
+        try {
+            PreparedStatement getNrQuestion = connection.prepareStatement("SELECT q.idQuiz, count(*)\n" +
+                    "FROM quiz q\n" +
+                    "INNER JOIN question qt\n" +
+                    "ON q.idQuiz = qt.quiz_id\n" +
+                    "WHERE idQuiz = ?\n" +
+                    "GROUP BY idQuiz");
+
+            getNrQuestion.setInt(1, quizID);
+
+            resultSet = getNrQuestion.executeQuery();
+
+
+            while (resultSet.next()) {
+
+                //gets the count of the total questions and writes it to nrQuestion.
+                nrQuestions = (resultSet.getInt("count(*)"));
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                resultSet.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                close();
+            }
+
+        }
+        return nrQuestions;
+    }
+
+}
