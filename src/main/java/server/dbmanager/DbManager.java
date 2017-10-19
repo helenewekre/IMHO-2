@@ -48,7 +48,6 @@ public class DbManager {
             authorizeUser.setString(2, password);
 
             resultSet = authorizeUser.executeQuery();
-            System.out.println("RS:" + resultSet);
 
             while(resultSet.next()) {
                 user = new User();
