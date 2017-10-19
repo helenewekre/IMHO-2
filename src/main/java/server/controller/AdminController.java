@@ -43,17 +43,12 @@ public class AdminController {
     }
 
     //Method for creating a option
-    public Boolean createOption(String optionJson) {
+    public Option createOption(String optionJson) {
         System.out.println(optionJson);
         Option option = new Gson().fromJson(optionJson, Option.class);
-        Boolean ifCreated = dbManager.createOption(option);
         Globals.log.writeLog(getClass().getName(), this, "Option created", 2);
 
-        if(ifCreated) {
-            return true;
-        } else {
-            return false;
-        }
+        return dbManager.createOption(option);
 
     }
 
