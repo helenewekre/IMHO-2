@@ -5,6 +5,8 @@ import com.google.gson.Gson;
 import server.controller.MainController;
 import server.dbmanager.DbManager;
 import server.models.User;
+import server.utility.CurrentUserContext;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.sql.SQLException;
@@ -38,15 +40,13 @@ public class UserEndpoint {
     @Path("/profile")
     @GET
     public Response get(@HeaderParam("authorization") String token) throws SQLException {
-        User myUser = mainController.getUserFromTokens(token);
-        myUser.getType();
+        CurrentUserContext context = mainController.getUserFromTokens(token);
 
-
-        if (myUser != null) {
+        if (context.getCurrentUser() != null) {
             return Response
                     .status(200)
                     .type("application/json")
-                    .entity(new Gson().toJson(myUser))
+                    .entity(new Gson().toJson(context.getCurrentUser()))
                     .build();
 
         } else {

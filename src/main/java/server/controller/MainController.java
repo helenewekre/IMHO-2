@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.google.gson.Gson;
 import server.dbmanager.DbManager;
 import server.models.User;
+import server.utility.CurrentUserContext;
 import server.utility.Digester;
 
 import java.io.UnsupportedEncodingException;
@@ -27,6 +28,7 @@ public class MainController {
     // Logic behind authorizing user
     public String authUser(User user) {
         String token = null;
+        user.setPassword(digester.hashWithSalt(user.getPassword()));
         User authorizedUser = dbManager.authorizeUser(user.getUsername(), user.getPassword());
 
         try {
@@ -61,12 +63,13 @@ public class MainController {
         }
     }
 
-    public User getUserFromTokens(String token) throws SQLException {
+    public CurrentUserContext getUserFromTokens(String token) throws SQLException {
         User user = dbManager.getUserFromToken(token);
-        return user;
-
-
+        CurrentUserContext context = new CurrentUserContext();
+        context.setCurrentUser(user);
+        return context;
     }
+
 }
 
 
