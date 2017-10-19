@@ -23,7 +23,7 @@ public class CourseEndpoint {
 
         ArrayList<Course> courses = dbmanager.loadCourses();
 
-        return Response.status(200).entity(new Gson().toJson(courses)).build();
+        return Response.status(200).type("application/json").entity(new Gson().toJson(courses)).build();
 
     }
 
