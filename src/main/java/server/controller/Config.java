@@ -52,7 +52,7 @@ public final class Config {
         DATABASE_PORT = Integer.parseInt(json.get("DATABASE_PORT").toString().replace("\"", ""));
         DATABASE_USERNAME = json.get("DATABASE_USERNAME").toString().replace("\"", "");
         DATABASE_PASSWORD = json.get("DATABASE_PASSWORD").toString().replace("\"", "");
-        ENCRYPTION = Boolean.parseBoolean(json.get("ENCRYPTION").toString().replace("\"",""));
+        ENCRYPTION = (json.get("ENCRYPTION").getAsBoolean());
     }
 
     public static String getDatabaseHost(){
@@ -68,7 +68,7 @@ public final class Config {
         return DATABASE_PASSWORD;
     }
 
-    public static Boolean getENCRYPTION() {
+    public static boolean getENCRYPTION() {
         return ENCRYPTION;
     }
 
