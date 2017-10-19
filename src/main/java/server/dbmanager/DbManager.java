@@ -198,31 +198,41 @@ public class DbManager {
         }
     }
 
-    /*Method for starting quiz - hereby showing questionlist and options (made possible by inner join)*/
-
+    //Method for loading questions
     public ArrayList<Question> loadQuestions(int quizId) {
+
+        //Resultset to temporary contain values from SQL statement, first given the value of null
         ResultSet resultSet = null;
+        //Arraylist of question object
         ArrayList<Question> questions = new ArrayList<Question>();
+
+        //Try/catch method to avoid the program crashing on exceoptions
         try {
+            //SQL query sent to SQL to get values from the database. Done thoug the connection method - see top of class.
             PreparedStatement loadQuestions = connection
                     .prepareStatement("SELECT * FROM Question WHERE quiz_id = ?");
 
+            //Gives the SQL statement value to parameter - the quizid integer
             loadQuestions.setInt(1, quizId);
+            //Adds values from SQL statement to resultset (temporarty table)
             resultSet = loadQuestions.executeQuery();
 
+            //Method will run as long as there is content in the next line of the resultset
             while (resultSet.next()) {
+                //Creating questoin object
                 Question question = new Question();
+                //Adding values to parameter variables in the question object
                 question.setQuestion(resultSet.getString("question"));
                 question.setIdQuestion(resultSet.getInt("idQuestion"));
                 question.setQuizIdQuiz(resultSet.getInt("quiz_id"));
+                //Adding the questoin object to the arraylist of question objects
                 questions.add(question);
             }
 
-
-
-
+            //Question to avoid crashes on exceptions
         } catch (SQLException e) {
             e.printStackTrace();
+            //Always close the resultset as it is a temporary table of content
         } finally {
             try {
                 if(resultSet != null) {
@@ -234,40 +244,53 @@ public class DbManager {
             }
         }
 
-      //  for (Question question : questions) {
-      //      System.out.println(question.toString());
-      //  }
+      // Retuning the ArrayList of question objects found in database with given quiz id
         return questions;
 
     }
+
+    //Method for loading options to a given question
     public ArrayList<Option> loadOptions(int questionId) {
+
+        //Resultset to temporary contain values from SQL statement
         ResultSet resultSet = null;
+        //Arraylist of Option object
         ArrayList<Option> options = new ArrayList<Option>();
+
+        //Try-catch to avoid the program crashing on exceptions
         try {
+            //SQL statement sendt to DB via. conncetion method.
             PreparedStatement loadQuestions = connection
                     .prepareStatement("SELECT * FROM `Option` WHERE question_id = ?");
             loadQuestions.setInt(1, questionId);
+            //Resultset gets the value of the SQL statement
             resultSet = loadQuestions.executeQuery();
 
-
+            //The method will run as long as the resultset contains more (next line)
             while (resultSet.next()) {
+                //Adding values in resultset to option objet.
                 Option option = new Option();
                 option.setIdOption(resultSet.getInt("idOption"));
                 option.setQuestionIdQuestion(resultSet.getInt("question_id"));
                 option.setIsCorrect(resultSet.getInt("is_correct"));
                 option.setOption(resultSet.getString("option"));
+                //Adding option object with given parameter values to the arraylist of several option objects.
                 options.add(option);
             }
 
+            //Catch to avoid crashing on exceptions
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
+        }
+            //Always close the resultset as it is a temporary table of content
+        finally {
             try {
                 resultSet.close();
             } catch (SQLException ef) {
                 ef.printStackTrace();
                 close();
             }
+            //Returning the arraylist of option objects
             return options;
         }
 

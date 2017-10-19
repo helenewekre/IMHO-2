@@ -28,13 +28,17 @@ public class QuestionEndpoint {
                 .build();
     }
 
+    //GET method for loading questions bc. SQL statements is SELECT.
     @GET
     @Path("/{quizId}")
     public Response loadQuestions(@PathParam("quizId") int quizId) {
 
+        //Instance of dbmanager to get access to loadQuestions method
         DbManager dbManager = new DbManager();
+        //New arraylist, gives it the value of the questions loaded in loadQuestions (dbmanager), takes the integer quizId as param
         ArrayList<Question> questions = dbManager.loadQuestions(quizId);
 
+        //Returning as Json
         return Response.status(200).type("application/json").entity(new Gson().toJson(questions)).build();
     }
 }
