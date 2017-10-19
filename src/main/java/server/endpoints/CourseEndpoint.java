@@ -27,14 +27,9 @@ public class CourseEndpoint {
         Globals.log.writeLog(this.getClass().getName(), this, "Loaded courses", 2);
 
 
-     /*   try {
-            config.initConfig();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } */
 
-        //IF-statement som afhænger af hvorvidt ENCRYPTION er sat til True eller False
-       if (Config.getEncryption()) {
+
+
             ArrayList<Course> courses = dbmanager.loadCourses();
             String newCourses = new Gson().toJson(courses);
             newCourses = crypter.encryptAndDecryptXor(newCourses);
@@ -42,14 +37,12 @@ public class CourseEndpoint {
 
             return Response.status(200).type("application/json").entity(newCourses).build();
 
-        } else {
-            ArrayList<Course> courses = dbmanager.loadCourses();
-            return Response.status(200).type("application/json").entity(new Gson().toJson(courses)).build();
+
 
     }
 }
 
-        }
+
 
 
 
