@@ -1,5 +1,7 @@
 package server.utility;
 import server.controller.Config;
+
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.io.IOException;
@@ -30,7 +32,7 @@ public class Globals implements ServletContextListener {
 
         //Here we can initialize our Logger class and write to our Logging.txt that the system has been started
         System.out.println("Context is initialized");
-        log.writeLog(this.getClass().getName(), this, "We've started the system", 2);
+        log.writeLog(this.getClass().getName(), this, "We've started the system", 1);
     }
 
     @Override

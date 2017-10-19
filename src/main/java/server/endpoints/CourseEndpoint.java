@@ -16,15 +16,12 @@ public class CourseEndpoint {
 
     DbManager dbmanager = new DbManager();
 
-
     @GET
     public Response loadCourses (){
-        Globals.log.writeLog("DbManager", this.getClass(), "WORKS", 2);
+        Globals.log.writeLog(this.getClass().getName(), this, "WORKS", 2);
 
         ArrayList<Course> courses = dbmanager.loadCourses();
 
         return Response.status(200).entity(new Gson().toJson(courses)).build();
-
     }
-
 }
