@@ -518,4 +518,20 @@ public class DbManager {
         return nrQuestions;
     }
 
+    public boolean deleteAnswer(int idUser) throws IllegalArgumentException {
+        try {
+            PreparedStatement deleteAnswer = connection
+                    .prepareStatement("DELETE FROM Answer WHERE user_id = ?");
+
+            deleteAnswer.setInt(1, idUser);
+            int rowsAffected = deleteAnswer.executeUpdate();
+            if (rowsAffected == 1) {
+                return true;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
