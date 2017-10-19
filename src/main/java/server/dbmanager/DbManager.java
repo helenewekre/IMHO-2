@@ -4,7 +4,7 @@ import server.models.Course;
 import server.models.Question;
 import server.models.Quiz;
 import server.models.User;
-import server.utility.Logging;
+import server.utility.Globals;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,11 +15,10 @@ public class DbManager {
     private static final String USERNAME = "root";
     private static final String PASSWORD = "";
     private static Connection connection = null;
-    private static Logging log = new Logging();
 
 
     public DbManager() {
-        log.writeLog(this.getClass().getName(), this, "Database connected", 2);
+        Globals.log.writeLog(this.getClass().getName(), this, "Database connected", 2);
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
