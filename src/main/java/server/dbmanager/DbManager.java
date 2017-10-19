@@ -306,7 +306,8 @@ public class DbManager {
                     "INNER JOIN quiz q\n" +
                     "ON qt.quiz_id = q.idQuiz\n" +
                     "WHERE quiz_id = ? \n" +
-                    "\tAND user_id = ?\n"
+                    "\tAND user_id = ?\n" +
+                    "GROUP BY o.is_correct"
             );
 
             getNrCorrectAnswers.setInt(1, quizID);
