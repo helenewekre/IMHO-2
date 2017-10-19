@@ -281,7 +281,7 @@ public class DbManager {
 
         //this preparedStatement get all the correct answers the user have on a quiz
         try {
-            PreparedStatement getNrCorectAnswers = connection.prepareStatement("SELECT q.quiz_description, o.option, o.idOption, count(*)\n" +
+            PreparedStatement getNrCorrectAnswers = connection.prepareStatement("SELECT q.quiz_description, o.option, o.idOption, count(*)\n" +
                     "FROM user u\n" +
                     "INNER JOIN answer a\n" +
                     "ON u.idUser = a.user_id\n" +
@@ -295,10 +295,10 @@ public class DbManager {
                     "\tAND user_id = ?\n" +
                     "GROUP BY o.is_correct");
 
-            getNrCorectAnswers.setInt(1, quizID);
-            getNrCorectAnswers.setInt(2, userID);
+            getNrCorrectAnswers.setInt(1, quizID);
+            getNrCorrectAnswers.setInt(2, userID);
 
-            resultSet = getNrCorectAnswers.executeQuery();
+            resultSet = getNrCorrectAnswers.executeQuery();
 
 
             while (resultSet.next()) {
