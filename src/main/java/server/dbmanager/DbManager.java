@@ -89,39 +89,35 @@ public class DbManager {
         return user;
     }
 
-    // Method for creating a user - Boolean returned, which decides if the user is created or not
-    public boolean createUser(User user) throws IllegalArgumentException {
+    // Method for creating a user - user object returned
+    public User createUser(User user) throws IllegalArgumentException {
 
         //Try-catch method to avoid the program crashing on exceptions
         try {
 
-            //SQL statement
+            //SQL statement. Return generated keys returns auto incremented keys (id)
             PreparedStatement createUser = connection
-                    .prepareStatement("INSERT INTO User (username, password) VALUES (?,?)");
+                    .prepareStatement("INSERT INTO User (username, password) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
             //Setting parameters for user object
             createUser.setString(1, user.getUsername());
             createUser.setString(2, user.getPassword());
 
-            //rowsAffected
-            int rowsAffected = createUser.executeUpdate();
-            if (rowsAffected == 1) {
-                return true;
-            }
+            //Adds id values to the user object
+            user.setIdUser(createUser.executeUpdate());
 
         //Exception to avoid crashing
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
-        return false;
     }
 
     // Method for creating a quiz
-    public boolean createQuiz(Quiz quiz) throws IllegalArgumentException {
+    public Quiz createQuiz(Quiz quiz) {
         //Try-catch
         try {
-            //SQL statement to create a quiz
+            //SQL statement to create a quiz. RETURN_GENERATED_KEYS returns auto incremented keys (id)
             PreparedStatement createQuiz = connection
-                    .prepareStatement("INSERT INTO Quiz (created_by, question_count, quiz_title, quiz_description, idCourse) VALUES (?,?,?,?,?)");
+                    .prepareStatement("INSERT INTO Quiz (created_by, question_count, quiz_title, quiz_description, idCourse) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             //Setting parameters for quiz object
             createQuiz.setString(1, quiz.getCreatedBy());
             createQuiz.setInt(2, quiz.getQuestionCount());
@@ -129,62 +125,59 @@ public class DbManager {
             createQuiz.setString(4, quiz.getQuizDescription());
             createQuiz.setInt(5, quiz.getIdCourse());
 
-            int rowsAffected = createQuiz.executeUpdate();
-            if (rowsAffected == 1) {
-                return true;
-            }
-
+            //Adds id value to object (from auto incremented)
+            quiz.setIdQuiz(createQuiz.executeUpdate());
+            //Returns quiz object with id value.
+            return quiz;
         //Exception to avoid crashing
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
     }
     // Method for creating a question
-    public boolean createQuestion(Question question) throws IllegalArgumentException {
+    public Question createQuestion(Question question) {
         //Try-catch
         try {
             //SQL statement
             PreparedStatement createQuestion = connection
-                    .prepareStatement("INSERT INTO Question (question, quiz_id) VALUES (?, ?)");
-            //Setting parameters
+                    .prepareStatement("INSERT INTO Question (question, quiz_id) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+            //Setting parameters and giving value
             createQuestion.setString(1, question.getQuestion());
             createQuestion.setInt(2, question.getQuizIdQuiz());
 
-            int rowsAffected = createQuestion.executeUpdate();
-            if (rowsAffected == 1) {
-                return true;
-            }
+            //Sets the quiz objects id to be the autoincremented value, this is returned to user.
+            question.setIdQuestion(createQuestion.executeUpdate());
+
+            //Returns the question object containing the id value.
+            return question;
 
         //Exception to avoid crashing
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
     }
 
     /* Method for creating a option */
-    public boolean createOption(Option option) throws IllegalArgumentException {
+    public Option createOption(Option option) {
         //Try-catch
         try {
             //SQL statement
             PreparedStatement createOption = connection
-                    .prepareStatement("INSERT INTO `Option` (`option`, question_id, is_correct) VALUES (?, ?, ?);");
-                //Setting parameters for user object
-                createOption.setString(1, option.getOptions());
-                createOption.setInt(2, option.getQuestionIdQuestion());
-                createOption.setInt(3, option.getIsCorrect());
+                    .prepareStatement("INSERT INTO `Option` (`option`, question_id, is_correct) VALUES (?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
+            //Setting parameters for user object, adding values
+            createOption.setString(1, option.getOptions());
+            createOption.setInt(2, option.getQuestionIdQuestion());
+            createOption.setInt(3, option.getIsCorrect());
 
-                int rowsAffected = createOption.executeUpdate();
+            //Adda id value to the option object
+            option.setIdOption(createOption.executeUpdate());
 
-        if (rowsAffected == 1) {
-            return true;
-        }
+            //Returning the option object
+            return option;
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
     }
 
     // Method for loading courses
