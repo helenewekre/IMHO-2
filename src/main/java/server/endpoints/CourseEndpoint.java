@@ -35,6 +35,7 @@ public class CourseEndpoint {
             String newCourses = new Gson().toJson(courses);
             newCourses = crypter.encryptAndDecryptXor(newCourses);
             newCourses = new Gson().toJson(newCourses);
+
             return Response.status(200).entity(newCourses).build();
 
         } else {

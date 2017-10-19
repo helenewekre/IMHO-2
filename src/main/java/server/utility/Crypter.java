@@ -5,7 +5,7 @@ public class Crypter {
 
     //Metode til kryptering
     public static String encryptAndDecryptXor(String input) {
-        char[] key = {'H', 'I', 'J'};
+        char[] key = {'L', 'Y', 'N'};
         StringBuilder output = new StringBuilder();
 
         for (int i = 0; i < input.length(); i++) {
