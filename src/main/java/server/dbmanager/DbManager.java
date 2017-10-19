@@ -16,7 +16,7 @@ public class DbManager {
 
     private static final String USERNAME = "root";
 
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = "fiemus9582";
     private static Connection connection = null;
 
 
