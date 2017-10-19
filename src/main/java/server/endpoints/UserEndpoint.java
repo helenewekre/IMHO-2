@@ -1,23 +1,19 @@
 package server.endpoints;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
+
 import com.google.gson.Gson;
 import server.controller.MainController;
 import server.dbmanager.DbManager;
 import server.models.User;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
-import java.util.Date;
 
 @Path("/user")
 public class UserEndpoint {
     //Creating objects of database manager and MainController
     DbManager dbManager = new DbManager();
     MainController mainController = new MainController();
-    User currentUser = new User();
 
     @POST
     @Path("/login")
@@ -41,8 +37,10 @@ public class UserEndpoint {
 
     @Path("/profile")
     @GET
-    public Response get(@HeaderParam("authorization") String token, @PathParam("id") int idUser) throws SQLException {
+    public Response get(@HeaderParam("authorization") String token) throws SQLException {
         User myUser = mainController.getUserFromTokens(token);
+        myUser.getType();
+
 
         if (myUser != null) {
             return Response

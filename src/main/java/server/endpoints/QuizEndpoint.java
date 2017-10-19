@@ -1,21 +1,23 @@
 package server.endpoints;
 import com.google.gson.Gson;
 import server.controller.AdminController;
+import server.controller.MainController;
 import server.dbmanager.DbManager;
 import server.models.Quiz;
+import server.models.User;
 
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 @Path("/quiz")
 public class QuizEndpoint {
     DbManager dbManager = new DbManager();
     AdminController adminController = new AdminController();
+    MainController mainController = new MainController();
+
 
     @GET
     @Path("/{CourseID}")
@@ -27,8 +29,9 @@ public class QuizEndpoint {
     }
 
     @POST
-    public Response createQuiz(String quizJson) {
+    public Response createQuiz(@HeaderParam("authorization") String quizJson, String token) throws SQLException {
         Boolean quizCreated = adminController.createQuiz(quizJson);
+        User myUser = mainController.getUserFromTokens(token);
 
         return Response
                 .status(200)

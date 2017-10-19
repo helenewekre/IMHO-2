@@ -10,14 +10,9 @@ import server.utility.Digester;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.Scanner;
 
 
 public class MainController {
-    private AdminController adminController;
-    private UserController userController;
-    private User currentUser;
-    private Scanner input;
     private DbManager dbManager;
     private Digester digester;
 

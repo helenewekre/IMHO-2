@@ -234,51 +234,10 @@ public class DbManager {
 
     }
 
-    //to get a specific userprofile based on a corresponding ID
-    public User getUserProfile(int idUser) {
-
-        ResultSet resultSet = null;
-        User user = null;
-
-        //PreparedStatements which communicates with the database
-        try {
-            PreparedStatement getUserProfile = connection
-                    .prepareStatement("SELECT * FROM User where idUser = ?");
-
-
-            getUserProfile.setInt(1, idUser);
-
-            resultSet = getUserProfile.executeQuery();
-
-            //resultSet.next() takes user information from the DB and creates a temporary (user profile)
-            while(resultSet.next()) {
-                user = new User();
-                user.setIdUser(resultSet.getInt("idUser"));
-                user.setType(resultSet.getInt("type"));
-                user.setUsername(resultSet.getString("username"));
-                user.setPassword(resultSet.getString("password"));
-
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                resultSet.close();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                close();
-            }
-
-        }
-
-        //The user is returned
-        return user;
-    }
-
     public void addToken(String token, int idUser) {
         PreparedStatement addTokenStatement;
         try {
-            addTokenStatement = connection.prepareStatement("INSERT INTO Tokens (token, idUser) VALUES (?,?)");
+            addTokenStatement = connection.prepareStatement("INSERT INTO Tokens (token, token_idUser) VALUES (?,?)");
             addTokenStatement.setString(1, token);
             addTokenStatement.setInt(2, idUser);
             addTokenStatement.executeUpdate();
@@ -288,7 +247,7 @@ public class DbManager {
     }
 
     public boolean deleteToken(int idUser) throws SQLException {
-        PreparedStatement deleteTokenStatement = connection.prepareStatement("DELETE FROM Tokens WHERE idUser = ?");
+        PreparedStatement deleteTokenStatement = connection.prepareStatement("DELETE FROM Tokens WHERE token_idUser = ?");
         try {
             deleteTokenStatement.setInt(1, idUser);
             deleteTokenStatement.executeUpdate();
@@ -305,7 +264,8 @@ public class DbManager {
         try {
 
             PreparedStatement getUserFromToken = connection
-                    .prepareStatement("select Tokens.idUser from Tokens inner join User on Tokens.idUser = User.idUser where Tokens.token = ?");
+                    .prepareStatement("SELECT username, idUser, `type` FROM `User` u INNER JOIN Tokens t ON t.token_idUser = u.idUser WHERE t.token = ?");
+
             getUserFromToken.setString(1, token);
             resultSet = getUserFromToken.executeQuery();
 
@@ -314,6 +274,7 @@ public class DbManager {
                 userFromToken = new User();
 
                 userFromToken.setIdUser(resultSet.getInt("idUser"));
+                userFromToken.setUsername(resultSet.getString("username"));
                 userFromToken.setType(resultSet.getInt("type"));
 
             }
