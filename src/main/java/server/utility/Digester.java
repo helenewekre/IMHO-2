@@ -1,15 +1,16 @@
 package server.utility;
 
 import java.security.MessageDigest;
+import java.util.Date;
 
 public class Digester {
 
     private String salt;
     private static MessageDigest digester;
 
-    // Setting the default salt.
     public Digester() {
-        this.salt = "hashingtest";
+
+
     }
     static {
         try {
@@ -26,9 +27,6 @@ public class Digester {
      */
     //Method for hashing the password with the salt.
     public String hashWithSalt(String password){
-
-        password = password + this.salt;
-
         return Digester.performHashing(password);
     }
 

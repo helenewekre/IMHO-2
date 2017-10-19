@@ -75,9 +75,10 @@ public class DbManager {
     // Method for creating a user. Boolean returned, which decides if the user is created or not.
     public boolean createUser(User user) throws IllegalArgumentException {
         try {
-            PreparedStatement createUser = connection.prepareStatement("INSERT INTO User (username, password) VALUES (?,?)");
+            PreparedStatement createUser = connection.prepareStatement("INSERT INTO User (username, password, time_created) VALUES (?,?,?)");
             createUser.setString(1,user.getUsername());
             createUser.setString(2,user.getPassword());
+            createUser.setLong(3, user.getTimeCreated());
 
             int rowsAffected = createUser.executeUpdate();
             if(rowsAffected == 1) {
@@ -283,6 +284,32 @@ public class DbManager {
         }
         return userFromToken;
 
+    }
+
+    public User getTimeCreatedByUsername(String username) {
+        User user = null;
+
+        ResultSet resultSet = null;
+
+        try {
+            PreparedStatement getTimeCreatedByUsername = connection.prepareStatement("SELECT * FROM User WHERE username = ?");
+
+            getTimeCreatedByUsername.setString(1, username);
+            resultSet = getTimeCreatedByUsername.executeQuery();
+
+            while(resultSet.next()) {
+                user = new User();
+                user.setTimeCreated(resultSet.getLong("time_created"));
+            }
+
+            if (user == null) {
+                throw new IllegalArgumentException();
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
     }
 
 

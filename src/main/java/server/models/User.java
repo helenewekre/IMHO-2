@@ -8,12 +8,14 @@ public class User {
     private int type;
     private String username;
     private String password;
+    private long timeCreated;
 
-    public User(String username, String password) {
+    public User(String username, String password, long timeCreated) {
         this.idUser = idUser;
         this.type = type;
         this.username = username;
         this.password = password;
+        this.timeCreated = timeCreated;
     }
 
     public User() {
@@ -52,6 +54,13 @@ public class User {
         Digester digester = new Digester();
         this.password = digester.hashWithSalt(password);
 
+    }
+    public long getTimeCreated() {
+        return timeCreated;
+    }
+
+    public void setTimeCreated(long time) {
+        this.timeCreated = time;
     }
 
 }

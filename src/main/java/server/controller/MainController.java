@@ -28,7 +28,8 @@ public class MainController {
     // Logic behind authorizing user
     public String authUser(User user) {
         String token = null;
-        user.setPassword(digester.hashWithSalt(user.getPassword()));
+        User foundUser = dbManager.getTimeCreatedByUsername(user.getUsername());
+        user.setPassword(digester.hashWithSalt(user.getPassword() + foundUser.getTimeCreated()));
         User authorizedUser = dbManager.authorizeUser(user.getUsername(), user.getPassword());
 
         try {
@@ -53,14 +54,13 @@ public class MainController {
 
     public Boolean createUser(String user) {
         User userCreated = new Gson().fromJson(user, User.class);
-        userCreated.setPassword(digester.hashWithSalt(userCreated.getPassword()));
-        Boolean ifCreated = dbManager.createUser(userCreated);
 
-        if (ifCreated) {
-            return true;
-        } else {
-            return false;
-        }
+        long unixTime = (long) Math.floor(System.currentTimeMillis() / 10000);
+
+        userCreated.setTimeCreated(unixTime);
+        userCreated.setPassword(digester.hashWithSalt(userCreated.getPassword()+userCreated.getTimeCreated()));
+
+        return dbManager.createUser(userCreated);
     }
 
     public CurrentUserContext getUserFromTokens(String token) throws SQLException {
