@@ -1,13 +1,5 @@
 package server.controller;
 
-import server.dbmanager.dbmanager4;
-import server.models.Answer;
-import server.models.Option;
-import server.models.Question;
-import server.models.Quiz;
-
-import java.util.ArrayList;
-
 public class UserController {
 
     /*

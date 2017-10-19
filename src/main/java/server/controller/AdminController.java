@@ -1,24 +1,22 @@
 package server.controller;
 
 import com.google.gson.Gson;
-import server.dbmanager.dbmanager2;
+import server.dbmanager.DbManager;
 import server.models.Question;
 import server.models.Quiz;
 
 public class AdminController {
 
-    private dbmanager2 db2;
+    private DbManager dbManager;
 
     public AdminController() {
-        db2 = new dbmanager2();
+        dbManager = new DbManager();
 
     }
 
     public Boolean createQuiz(String quizJson) {
-
         Quiz quiz = new Gson().fromJson(quizJson, Quiz.class);
-
-        Boolean ifCreated = db2.createQuiz(quiz);
+        Boolean ifCreated = dbManager.createQuiz(quiz);
 
         if(ifCreated) {
             return true;
@@ -29,10 +27,8 @@ public class AdminController {
     }
 
     public Boolean createQuestion(String questionJson) {
-
         Question question = new Gson().fromJson(questionJson, Question.class);
-
-        Boolean ifCreated = db2.createQuestion(question);
+        Boolean ifCreated = dbManager.createQuestion(question);
 
         if(ifCreated) {
             return true;
