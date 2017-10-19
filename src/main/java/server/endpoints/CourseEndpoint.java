@@ -16,7 +16,6 @@ public class CourseEndpoint {
 
     DbManager dbmanager = new DbManager();
 
-
     @GET
     public Response loadCourses (){
         Globals.log.writeLog(this.getClass().getName(), this, "Loaded courses", 2);
@@ -26,5 +25,4 @@ public class CourseEndpoint {
         return Response.status(200).type("application/json").entity(new Gson().toJson(courses)).build();
 
     }
-
 }
