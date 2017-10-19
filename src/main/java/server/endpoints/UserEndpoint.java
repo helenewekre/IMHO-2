@@ -24,7 +24,7 @@ public class UserEndpoint {
      */
     public Response authorizeUser(String user) {
         String userFound = mainController.authUser(user);
-        return Response.status(200).entity(userFound).build();
+        return Response.status(200).type("application/json").entity(userFound).build();
     }
 
     @POST

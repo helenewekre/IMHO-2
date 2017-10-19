@@ -41,11 +41,11 @@ public class CourseEndpoint {
             newCourses = crypter.encryptAndDecryptXor(newCourses);
             newCourses = new Gson().toJson(newCourses);
 
-            return Response.status(200).entity(newCourses).build();
+            return Response.status(200).type("application/json").entity(newCourses).build();
 
         } else {
             ArrayList<Course> courses = dbmanager.loadCourses();
-            return Response.status(200).entity(new Gson().toJson(courses)).build();
+            return Response.status(200).type("application/json").entity(new Gson().toJson(courses)).build();
 
 
         }

@@ -23,7 +23,7 @@ public class QuizEndpoint {
     public Response loadQuizzes(@PathParam("CourseID") int courseId){
         ArrayList<Quiz> quizzes = dbManager.loadQuizzes(courseId);
 
-        return Response.status(200).entity(new Gson().toJson(quizzes)).build();
+        return Response.status(200).type("application/json").entity(new Gson().toJson(quizzes)).build();
 
     }
 
