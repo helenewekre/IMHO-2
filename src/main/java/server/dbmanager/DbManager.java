@@ -394,20 +394,20 @@ public class DbManager {
         int score = 0;
 
         //this preparedStatement get all the correct answers the user have on a quiz
-        try {
+        try { //In the SELECT part we define that we need the DB to return quiz description and count. we use count
             PreparedStatement getNrCorrectAnswers = connection.prepareStatement("SELECT q.quiz_description, count(*)\n" +
-                    "FROM user u\n" +
-                    "INNER JOIN answer a\n" +
-                    "ON u.idUser = a.user_id\n" +
-                    "INNER JOIN `option` o\n" +
-                    "ON a.option_id = o.idOption\n" +
-                    "INNER JOIN question qt\n" +
-                    "ON o.question_id = qt.idQuestion\n" +
-                    "INNER JOIN quiz q\n" +
-                    "ON qt.quiz_id = q.idQuiz\n" +
-                    "WHERE quiz_id = ? \n" +
-                    "\tAND user_id = ?\n" +
-                    "GROUP BY o.is_correct"
+                    "FROM user u\n" + // we define that it is from user, her after known as u.
+                    "INNER JOIN answer a\n" + // we inner join the statement with answer. now know as a.
+                    "ON u.idUser = a.user_id\n" + // and that is should do it where user id from the user table = user id from answer table
+                    "INNER JOIN `option` o\n" + // the statement is continued with option o.
+                    "ON a.option_id = o.idOption\n" +//where a option id = o option id.
+                    "INNER JOIN question qt\n" + // same as before with question qt.
+                    "ON o.question_id = qt.idQuestion\n" + // where o question id = qt question id.
+                    "INNER JOIN quiz q\n" + // finally inner join with quiz q.
+                    "ON qt.quiz_id = q.idQuiz\n" + // on qt quiz id = q id quiz
+                    "WHERE quiz_id = ? \n" + // where quiz id = ?. ? is defined by the user.
+                    "\tAND user_id = ?\n" + // and user id = + ?. also defined by the user.
+                    "GROUP BY o.is_correct" // in the end it is sortet by o is correct. so the final count is returned.
             );
 
             getNrCorrectAnswers.setInt(1, quizID);
