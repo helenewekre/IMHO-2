@@ -17,7 +17,7 @@ public class DbManager {
 
     private static final String USERNAME = "root";
 
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = "1234";
     private static Connection connection = null;
 
     Crypter crypter = new Crypter();
@@ -289,13 +289,13 @@ public class DbManager {
     }
 
     //the method get the number of corret answers of a quiz using quiz ID og user ID as parameters
-    public int getNrCorectAnswers(int quizID, int userID) {
+    public int getNrCorrectAnswers(int quizID, int userID) {
         ResultSet resultSet = null;
         int score = 0;
 
         //this preparedStatement get all the correct answers the user have on a quiz
         try {
-            PreparedStatement getNrCorrectAnswers = connection.prepareStatement("SELECT q.quiz_description, o.option, o.idOption, count(*)\n" +
+            PreparedStatement getNrCorrectAnswers = connection.prepareStatement("SELECT q.quiz_description, count(*)\n" +
                     "FROM user u\n" +
                     "INNER JOIN answer a\n" +
                     "ON u.idUser = a.user_id\n" +
@@ -306,8 +306,8 @@ public class DbManager {
                     "INNER JOIN quiz q\n" +
                     "ON qt.quiz_id = q.idQuiz\n" +
                     "WHERE quiz_id = ? \n" +
-                    "\tAND user_id = ?\n" +
-                    "GROUP BY o.is_correct");
+                    "\tAND user_id = ?\n"
+            );
 
             getNrCorrectAnswers.setInt(1, quizID);
             getNrCorrectAnswers.setInt(2, userID);
