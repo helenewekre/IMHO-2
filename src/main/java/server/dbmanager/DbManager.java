@@ -1,9 +1,6 @@
 package server.dbmanager;
 
-import server.models.Course;
-import server.models.Question;
-import server.models.Quiz;
-import server.models.User;
+import server.models.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,7 +9,7 @@ public class DbManager {
     // Creating the connection for the database
     private static final String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "hello";
+    private static final String PASSWORD = "1234";
     private static Connection connection = null;
 
     public DbManager() {
@@ -114,7 +111,7 @@ public class DbManager {
     public boolean createQuestion(Question question) throws IllegalArgumentException {
         try {
             PreparedStatement createQuestion = connection
-                    .prepareStatement("INSERT INTO Question (question, quiz_id) VALUES (?, ?)");
+                    .prepareStatement("INSERT INTO Question (question, quiz_id, is_correct) VALUES (?, ?)");
             createQuestion.setString(1, question.getQuestion());
             createQuestion.setInt(2, question.getQuizIdQuiz());
 
@@ -128,6 +125,30 @@ public class DbManager {
         }
         return false;
     }
+
+    public boolean createOptions(Option option) throws IllegalArgumentException {
+        ArrayList<Option> options = new ArrayList<Option>();
+        try {
+            //FOR LOOP HER
+            PreparedStatement createOption = connection
+                    .prepareStatement("INSERT INTO Options (idOption, option , question_id, is_correct) VALUES (?,?,?,?)");
+                            createOption.setInt(1, option.getIdOption());
+                            createOption.setString(2, option.getOption());
+                            createOption.setInt(3, option.getIdOption());
+                            createOption.setInt(4, option.getIsCorrect());
+            
+            int rowsAffected = createOption.executeUpdate();
+            if (rowsAffected == options.size()) {
+                return true;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+        }
+
+
 
     /* Method for loading courses. */
     public ArrayList<Course> loadCourses() {   //loadCourses
