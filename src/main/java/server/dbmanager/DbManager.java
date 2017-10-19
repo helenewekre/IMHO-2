@@ -205,31 +205,17 @@ public class DbManager {
         ArrayList<Question> questions = new ArrayList<Question>();
         try {
             PreparedStatement loadQuestions = connection
-                    .prepareStatement("SELECT question.question, question.idQuestion, o.option FROM quizdb.question INNER JOIN quizdb.optionh o ON question.idQuestion = o.question_id WHERE question.quiz_id = ?");
+                    .prepareStatement("SELECT * FROM Question WHERE quiz_id = ?");
 
             loadQuestions.setInt(1, quizId);
             resultSet = loadQuestions.executeQuery();
 
-            //HashMap<Integer, Question> map = new HashMap<>();
-            int currentId = -1;
-            Question question = null;
             while (resultSet.next()) {
-
-                if(currentId != resultSet.getInt("idQuestion")){
-                    question = new Question();
-                    question.setIdQuestion(resultSet.getInt("idQuestion"));
-                    question.setOption(resultSet.getString("option"));
-                    question.setQuestion(resultSet.getString("question"));
-                    currentId = resultSet.getInt("idQuestion");
-                    questions.add(question);
-                }
-                else {
-                    question.setIdQuestion(resultSet.getInt("idQuestion"));
-                    question.setOption(resultSet.getString("option"));
-                    question.setQuestion(resultSet.getString("question"));
-                }
-
-
+                Question question = new Question();
+                question.setQuestion(resultSet.getString("question"));
+                question.setIdQuestion(resultSet.getInt("idQuestion"));
+                question.setQuizIdQuiz(resultSet.getInt("quiz_id"));
+                questions.add(question);
             }
 
 
@@ -254,6 +240,39 @@ public class DbManager {
         return questions;
 
     }
+    public ArrayList<Option> loadOptions(int questionId) {
+        ResultSet resultSet = null;
+        ArrayList<Option> options = new ArrayList<Option>();
+        try {
+            PreparedStatement loadQuestions = connection
+                    .prepareStatement("SELECT * FROM `Option` WHERE question_id = ?");
+            loadQuestions.setInt(1, questionId);
+            resultSet = loadQuestions.executeQuery();
+
+
+            while (resultSet.next()) {
+                Option option = new Option();
+                option.setIdOption(resultSet.getInt("idOption"));
+                option.setQuestionIdQuestion(resultSet.getInt("question_id"));
+                option.setIsCorrect(resultSet.getInt("is_correct"));
+                option.setOption(resultSet.getString("option"));
+                options.add(option);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                resultSet.close();
+            } catch (SQLException ef) {
+                ef.printStackTrace();
+                close();
+            }
+            return options;
+        }
+
+    }
+
 
     //to get a specific userprofile based on a corresponding ID
     public User getUserProfile(int idUser) {

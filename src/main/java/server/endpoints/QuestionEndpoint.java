@@ -29,11 +29,11 @@ public class QuestionEndpoint {
     }
 
     @GET
-    @Path("/{questionId}/options")
-    public Response loadQuestions(@PathParam("questionId") int questionId) {
+    @Path("/{quizId}")
+    public Response loadQuestions(@PathParam("quizId") int quizId) {
 
         DbManager dbManager = new DbManager();
-        ArrayList<Question> questions = dbManager.loadQuestions(questionId);
+        ArrayList<Question> questions = dbManager.loadQuestions(quizId);
 
         return Response.status(200).type("application/json").entity(new Gson().toJson(questions)).build();
     }
