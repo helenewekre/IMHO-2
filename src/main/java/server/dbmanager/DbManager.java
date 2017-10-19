@@ -10,7 +10,7 @@ public class DbManager {
     // Creating the connection for the database
     private static final String URL = "jdbc:mysql://localhost:3306/quizdb?useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "mysql123";
+    private static final String PASSWORD = "root";
     private static Connection connection = null;
 
     public DbManager() {
@@ -205,7 +205,7 @@ public class DbManager {
         ArrayList<Question> questions = new ArrayList<Question>();
         try {
             PreparedStatement loadQuestions = connection
-                    .prepareStatement("SELECT question.question, question.idQuestion, o.option FROM quizdb.question INNER JOIN quizdb.option o ON question.idQuestion = o.question_id WHERE question.quiz_id = ?");
+                    .prepareStatement("SELECT question.question, question.idQuestion, o.option FROM quizdb.question INNER JOIN quizdb.optionh o ON question.idQuestion = o.question_id WHERE question.quiz_id = ?");
 
             loadQuestions.setInt(1, quizId);
             resultSet = loadQuestions.executeQuery();
@@ -247,6 +247,10 @@ public class DbManager {
                 close();
             }
         }
+
+      //  for (Question question : questions) {
+      //      System.out.println(question.toString());
+      //  }
         return questions;
 
     }
