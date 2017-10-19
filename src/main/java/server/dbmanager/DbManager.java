@@ -1,9 +1,6 @@
 package server.dbmanager;
 
-import server.models.Course;
-import server.models.Question;
-import server.models.Quiz;
-import server.models.User;
+import server.models.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,8 +8,8 @@ import java.util.ArrayList;
 public class DbManager {
     // Creating the connection for the database
     private static final String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "hello";
+    private static final String USERNAME = "test";
+    private static final String PASSWORD = " ";
     private static Connection connection = null;
 
     public DbManager() {
@@ -273,6 +270,45 @@ public class DbManager {
 
         //The user is returned
         return user;
+    }
+
+    //creates an arrayList based on options and use the question´s ID, to find the corresponding options
+    public ArrayList<Option> getOption(int question){
+        ResultSet resultSet = null;
+        ArrayList<Option> options = new ArrayList<>();
+
+        //PreparedStatements which communicates with the database
+        try{
+            PreparedStatement getOption = connection.prepareStatement("SELECT * FROM Option WHERE question_id = ?");
+
+            getOption.setInt(1,question);
+            resultSet = getOption.executeQuery();
+
+            //add all tables from DB to specific option and finally add the option to the array.
+            //the result.next() does this for each option.
+            while(resultSet.next()){
+                Option option = new Option();
+                option.setIdOption(resultSet.getInt("idQuestion"));
+                option.setOption(resultSet.getString("option"));
+                option.setQuestionIdQuestion(resultSet.getInt("question_id"));
+                option.setIsCorrect(resultSet.getInt("is_correct"));
+
+                options.add(option);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                resultSet.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                close();
+            }
+
+        }
+        return options;
+
     }
 
 }
