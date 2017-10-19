@@ -97,7 +97,7 @@ public class DbManager {
         return false;
     }
 
-    /* Method for creating a quiz */
+    // Method for creating a quiz. Boolean returned, which decides if the user is created or not.
     public boolean createQuiz(Quiz quiz) throws IllegalArgumentException {
         try {
             PreparedStatement createQuiz = connection
@@ -119,8 +119,7 @@ public class DbManager {
         }
         return false;
     }
-
-    /* Method for creating a question */
+    // Method for creating a question. Boolean returned, which decides if the user is created or not.
     public boolean createQuestion(Question question) throws IllegalArgumentException {
         try {
             PreparedStatement createQuestion = connection
@@ -287,7 +286,23 @@ public class DbManager {
         //The user is returned
         return user;
     }
+        //Method for deleting a quiz and all it's sub-tables. Boolean returned, which decides if the user is created or not.
+    public boolean deleteQuiz(int idQuiz) throws IllegalArgumentException {
+        try {
+            PreparedStatement deleteQuiz = connection
+                    .prepareStatement("DELETE FROM Quiz WHERE idQuiz = ?");
 
+            deleteQuiz.setInt(1, idQuiz);
+            int rowsAffected = deleteQuiz.executeUpdate();
+            if (rowsAffected == 1) {
+                return true;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     //the method get the number of corret answers of a quiz using quiz ID og user ID as parameters
     public int getNrCorrectAnswers(int quizID, int userID) {
         ResultSet resultSet = null;

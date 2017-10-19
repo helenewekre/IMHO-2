@@ -33,7 +33,7 @@ CREATE TABLE `Answer` (
   UNIQUE KEY `idAnswer_UNIQUE` (`idAnswer`),
   KEY `userRef` (`user_id`),
   KEY `optionRef` (`option_id`),
-  CONSTRAINT `optionRef` FOREIGN KEY (`option_id`) REFERENCES `Option` (`idOption`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `optionRef` FOREIGN KEY (`option_id`) REFERENCES `Option` (`idOption`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `userRef` FOREIGN KEY (`user_id`) REFERENCES `User` (`idUser`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -89,7 +89,7 @@ CREATE TABLE `Option` (
   UNIQUE KEY `idOption_UNIQUE` (`idOption`),
   UNIQUE KEY `option_UNIQUE` (`option`),
   KEY `questionRef` (`question_id`),
-  CONSTRAINT `questionRef` FOREIGN KEY (`question_id`) REFERENCES `Question` (`idQuestion`)
+  CONSTRAINT `questionRef` FOREIGN KEY (`question_id`) REFERENCES `Question` (`idQuestion`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -118,7 +118,7 @@ CREATE TABLE `Question` (
   UNIQUE KEY `idQuestion_UNIQUE` (`idQuestion`),
   UNIQUE KEY `question_UNIQUE` (`question`),
   KEY `quizRef` (`quiz_id`),
-  CONSTRAINT `quizRef` FOREIGN KEY (`quiz_id`) REFERENCES `Quiz` (`idQuiz`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `quizRef` FOREIGN KEY (`quiz_id`) REFERENCES `Quiz` (`idQuiz`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -149,7 +149,8 @@ CREATE TABLE `Quiz` (
   PRIMARY KEY (`idQuiz`),
   UNIQUE KEY `idQuiz_UNIQUE` (`idQuiz`),
   KEY `idRef` (`idCourse`),
-  CONSTRAINT `idRef` FOREIGN KEY (`idCourse`) REFERENCES `Course` (`idCourse`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  /* Changed on delete no action to on delete CASCADE. Which cascades all foreign key relations. */
+  CONSTRAINT `idRef` FOREIGN KEY (`idCourse`) REFERENCES `Course` (`idCourse`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
