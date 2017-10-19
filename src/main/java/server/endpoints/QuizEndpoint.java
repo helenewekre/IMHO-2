@@ -17,7 +17,6 @@ import java.util.ArrayList;
 public class QuizEndpoint {
     DbManager dbManager = new DbManager();
     AdminController adminController = new AdminController();
-    UserController userController = new UserController();
 
     @GET
     @Path("/{CourseID}")
@@ -38,18 +37,6 @@ public class QuizEndpoint {
                 .entity("{\"quizCreated\":\"true\"}")
                 .build();
     }
-    @GET
-    //
-    @Path("{quizID}/{userID}")
-    public Response getUserScore(@PathParam("quizID") int quizID, @PathParam("userID") int userID){
-        //
 
-        return Response
-                .status(200)
-                .type("application/json")
-                .entity(new Gson().toJson( userController.getResult(quizID,userID)))
-                .build();
-
-    }
 
 }

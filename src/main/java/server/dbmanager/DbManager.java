@@ -274,10 +274,12 @@ public class DbManager {
         return user;
     }
 
-
+    //the method get the number of corret answers of a quiz using quiz ID og user ID as parameters
     public int getNrCorectAnswers(int quizID, int userID) {
         ResultSet resultSet = null;
         int score = 0;
+
+        //this preparedStatement get all the correct answers the user have on a quiz
         try {
             PreparedStatement getNrCorectAnswers = connection.prepareStatement("SELECT q.quiz_description, o.is_correct, count(*)\n" +
                     "FROM user u\n" +
@@ -298,10 +300,9 @@ public class DbManager {
 
             resultSet = getNrCorectAnswers.executeQuery();
 
-            //add all tables from DB to specific option and finally add the option to the array.
-            //the result.next() does this for each option.
-            while (resultSet.next()) {
 
+            while (resultSet.next()) {
+                 //gets the count of the total correct answers and writes it to score.
                 score = (resultSet.getInt("count(*)"));
 
             }
@@ -319,10 +320,13 @@ public class DbManager {
         }
         return score;
     }
-
+    //the method get the number of question using quiz ID as a parameter
     public int getNrQuestion(int quizID) {
+
         ResultSet resultSet = null;
         int nrQuestions = 0;
+
+        //this preparedStatement get all the questions on a quiz
         try {
             PreparedStatement getNrQuestion = connection.prepareStatement("SELECT q.idQuiz, count(*)\n" +
                     "FROM quiz q\n" +
@@ -335,10 +339,10 @@ public class DbManager {
 
             resultSet = getNrQuestion.executeQuery();
 
-            //add all tables from DB to specific option and finally add the option to the array.
-            //the result.next() does this for each option.
+
             while (resultSet.next()) {
 
+                //gets the count of the total questions and writes it to nrQuestion.
                 nrQuestions = (resultSet.getInt("count(*)"));
 
             }
