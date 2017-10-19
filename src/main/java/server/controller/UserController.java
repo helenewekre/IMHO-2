@@ -18,11 +18,11 @@ public class UserController {
         DbManager dbManager = new DbManager();
         Option option = new Option();
        Answer answer = new Answer();
-
+        answer = tempAnswer();
         int result = 0;
         int nrQuestion = 0;
         int quizId = quiz.getIdQuiz();
-        ArrayList<Answer> answers = new ArrayList<>();
+       // ArrayList<Answer> answers = new ArrayList<>(); Skal nok bruges i fremtiden.
         ArrayList<Option> options = new ArrayList<>();
         ArrayList<Question> questions = new ArrayList();
 
@@ -33,7 +33,7 @@ public class UserController {
             for(int o = 0; o < options.size(); o++){
                 option = options.get(o);
                 if(option.getIsCorrect() == 1) {
-                    if(answer.getIdAnswer() == option.getIdOption()){
+                    if(answer.getOptionIdOption() == option.getIdOption()){
                         result++; nrQuestion++;
                     }else nrQuestion++;
                 }
@@ -42,10 +42,13 @@ public class UserController {
        return result + nrQuestion;
         }
 
-        private ArrayList<Answer> tempAnswer (){
-        ArrayList<Answer> tempAnswer = new ArrayList<>();
+        private Answer tempAnswer (){
+        Answer a = new Answer();
+        a.setAnswerResult(1);
+        a.setIdAnswer(1);
+        a.setOptionIdOption(1);
 
-       return tempAnswer;
+       return a;
         }
 
 }
