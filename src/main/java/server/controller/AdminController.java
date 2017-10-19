@@ -16,7 +16,8 @@ public class AdminController {
     }
 
     //Method for creating a question
-    public Boolean createQuiz(String quiz) {
+    public Boolean createQuiz(String quizJson) {
+        Quiz quiz = new Gson().fromJson(quizJson, Quiz.class);
         Boolean ifCreated = dbManager.createQuiz(quiz);
 
         if(ifCreated) {

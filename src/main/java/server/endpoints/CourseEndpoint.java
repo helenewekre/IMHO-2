@@ -26,10 +26,6 @@ public class CourseEndpoint {
     public Response loadCourses (){
         Globals.log.writeLog(this.getClass().getName(), this, "Loaded courses", 2);
 
-
-
-
-
             ArrayList<Course> courses = dbmanager.loadCourses();
             String newCourses = new Gson().toJson(courses);
             newCourses = crypter.encryptAndDecryptXor(newCourses);
