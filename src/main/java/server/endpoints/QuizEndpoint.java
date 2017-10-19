@@ -1,6 +1,7 @@
 package server.endpoints;
 import com.google.gson.Gson;
 import server.controller.AdminController;
+import server.controller.UserController;
 import server.dbmanager.DbManager;
 import server.models.Quiz;
 
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 public class QuizEndpoint {
     DbManager dbManager = new DbManager();
     AdminController adminController = new AdminController();
+    UserController userController = new UserController();
 
     @GET
     @Path("/{CourseID}")
@@ -35,6 +37,19 @@ public class QuizEndpoint {
                 .type("application/json")
                 .entity("{\"quizCreated\":\"true\"}")
                 .build();
+    }
+    @GET
+    //
+    @Path("{quizID}/{userID}")
+    public Response getUserScore(@PathParam("quizID") int quizID, @PathParam("userID") int userID){
+        //
+
+        return Response
+                .status(200)
+                .type("application/json")
+                .entity(new Gson().toJson( userController.getResult(quizID,userID)))
+                .build();
+
     }
 
 }

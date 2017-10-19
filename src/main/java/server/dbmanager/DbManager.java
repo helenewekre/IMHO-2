@@ -9,7 +9,7 @@ public class DbManager {
     // Creating the connection for the database
     private static final String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private static final String USERNAME = "test";
-    private static final String PASSWORD = " ";
+    private static final String PASSWORD = "";
     private static Connection connection = null;
 
     public DbManager() {
@@ -47,7 +47,7 @@ public class DbManager {
             resultSet = authorizeUser.executeQuery();
             System.out.println("RS:" + resultSet);
 
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 user = new User();
                 user.setIdUser(resultSet.getInt("idUser"));
                 user.setUsername(resultSet.getString("username"));
@@ -56,12 +56,12 @@ public class DbManager {
 
             }
 
-        } catch(SQLException exception) {
+        } catch (SQLException exception) {
             exception.printStackTrace();
         } finally {
             try {
                 resultSet.close();
-            } catch(SQLException exception) {
+            } catch (SQLException exception) {
                 exception.printStackTrace();
                 close();
             }
@@ -73,16 +73,17 @@ public class DbManager {
     public boolean createUser(User user) throws IllegalArgumentException {
         try {
             PreparedStatement createUser = connection.prepareStatement("INSERT INTO User (username, password) VALUES (?,?)");
-            createUser.setString(1,user.getUsername());
-            createUser.setString(2,user.getPassword());
+            createUser.setString(1, user.getUsername());
+            createUser.setString(2, user.getPassword());
 
             int rowsAffected = createUser.executeUpdate();
-            if(rowsAffected == 1) {
+            if (rowsAffected == 1) {
                 return true;
             }
         } catch (SQLException exception) {
             exception.printStackTrace();
-        } return false;
+        }
+        return false;
     }
 
     /* Method for creating a quiz */
@@ -107,6 +108,7 @@ public class DbManager {
         }
         return false;
     }
+
     /* Method for creating a question */
     public boolean createQuestion(Question question) throws IllegalArgumentException {
         try {
@@ -197,7 +199,7 @@ public class DbManager {
 
     /*Method for starting quiz - hereby showing questionlist*/
 
-    public ArrayList<Question> loadQuestions (int quizId) {
+    public ArrayList<Question> loadQuestions(int quizId) {
         ResultSet resultSet = null;
         ArrayList<Question> questions = new ArrayList<Question>();
         try {
@@ -248,7 +250,7 @@ public class DbManager {
             resultSet = getUserProfile.executeQuery();
 
             //resultSet.next() takes user information from the DB and creates a temporary (user profile)
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 user = new User();
                 user.setIdUser(resultSet.getInt("idUser"));
                 user.setType(resultSet.getInt("type"));
@@ -272,50 +274,11 @@ public class DbManager {
         return user;
     }
 
-    //creates an arrayList based on options and use the question´s ID, to find the corresponding options
-    public ArrayList<Option> getOption(int question){
-        ResultSet resultSet = null;
-        ArrayList<Option> options = new ArrayList<>();
 
-
-        //PreparedStatements which communicates with the database
-        try{
-            PreparedStatement getOption = connection.prepareStatement("SELECT * FROM Option WHERE question_id = ?");
-
-            getOption.setInt(1,question);
-            resultSet = getOption.executeQuery();
-
-            //add all tables from DB to specific option and finally add the option to the array.
-            //the result.next() does this for each option.
-            while(resultSet.next()){
-                Option option = new Option();
-                option.setIdOption(resultSet.getInt("idQuestion"));
-                option.setOption(resultSet.getString("option"));
-                option.setQuestionIdQuestion(resultSet.getInt("question_id"));
-                option.setIsCorrect(resultSet.getInt("is_correct"));
-
-                options.add(option);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                resultSet.close();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                close();
-            }
-
-        }
-        return options;
-
-    }
-
-    public int getNrCorectAnswers (int quizID, int userID){
+    public int getNrCorectAnswers(int quizID, int userID) {
         ResultSet resultSet = null;
         int score = 0;
-        try{
+        try {
             PreparedStatement getNrCorectAnswers = connection.prepareStatement("SELECT q.quiz_description, o.is_correct, count(*)\n" +
                     "FROM user u\n" +
                     "INNER JOIN answer a\n" +
@@ -330,14 +293,14 @@ public class DbManager {
                     "\tAND user_id = ?\n" +
                     "GROUP BY o.is_correct");
 
-            getNrCorectAnswers.setInt(1,quizID);
-            getNrCorectAnswers.setInt(2,userID);
+            getNrCorectAnswers.setInt(1, quizID);
+            getNrCorectAnswers.setInt(2, userID);
 
             resultSet = getNrCorectAnswers.executeQuery();
 
             //add all tables from DB to specific option and finally add the option to the array.
             //the result.next() does this for each option.
-            while(resultSet.next()){
+            while (resultSet.next()) {
 
                 score = (resultSet.getInt("count(*)"));
 
@@ -357,24 +320,24 @@ public class DbManager {
         return score;
     }
 
-    public int getNrQuestion (int quizID){
+    public int getNrQuestion(int quizID) {
         ResultSet resultSet = null;
         int nrQuestions = 0;
-        try{
-            PreparedStatement getNrQuestion = connection.prepareStatement("SELECT q.idQuiz, count(*)"+
-            "FROM quiz q" +
-            "INNER JOIN question qt" +
-            "ON q.idQuiz = qt.quiz_id" +
-            "WHERE idQuiz = ?" +
-            "GROUP BY idQuiz");
+        try {
+            PreparedStatement getNrQuestion = connection.prepareStatement("SELECT q.idQuiz, count(*)\n" +
+                    "FROM quiz q\n" +
+                    "INNER JOIN question qt\n" +
+                    "ON q.idQuiz = qt.quiz_id\n" +
+                    "WHERE idQuiz = ?\n" +
+                    "GROUP BY idQuiz");
 
-            getNrQuestion.setInt(1,quizID);
+            getNrQuestion.setInt(1, quizID);
 
             resultSet = getNrQuestion.executeQuery();
 
             //add all tables from DB to specific option and finally add the option to the array.
             //the result.next() does this for each option.
-            while(resultSet.next()){
+            while (resultSet.next()) {
 
                 nrQuestions = (resultSet.getInt("count(*)"));
 
@@ -392,5 +355,6 @@ public class DbManager {
 
         }
         return nrQuestions;
-        }
-    )
+    }
+
+}
