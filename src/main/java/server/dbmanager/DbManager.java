@@ -281,7 +281,7 @@ public class DbManager {
 
         //this preparedStatement get all the correct answers the user have on a quiz
         try {
-            PreparedStatement getNrCorectAnswers = connection.prepareStatement("SELECT q.quiz_description, o.is_correct, count(*)\n" +
+            PreparedStatement getNrCorectAnswers = connection.prepareStatement("SELECT q.quiz_description, o.option, o.idOption, count(*)\n" +
                     "FROM user u\n" +
                     "INNER JOIN answer a\n" +
                     "ON u.idUser = a.user_id\n" +
