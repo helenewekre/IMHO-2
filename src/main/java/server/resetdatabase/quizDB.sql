@@ -149,6 +149,7 @@ CREATE TABLE `Quiz` (
   PRIMARY KEY (`idQuiz`),
   UNIQUE KEY `idQuiz_UNIQUE` (`idQuiz`),
   KEY `idRef` (`idCourse`),
+  /* Changed on delete no action to on delete CASCADE. Which cascades all foreign key relations. */
   CONSTRAINT `idRef` FOREIGN KEY (`idCourse`) REFERENCES `Course` (`idCourse`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
