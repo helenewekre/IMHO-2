@@ -19,7 +19,7 @@ public class CourseEndpoint {
 
     @GET
     public Response loadCourses (){
-        Globals.log.writeLog("DbManager", this.getClass(), "WORKS", 2);
+        Globals.log.writeLog(this.getClass().getName(), this, "Loaded courses", 2);
 
         ArrayList<Course> courses = dbmanager.loadCourses();
 

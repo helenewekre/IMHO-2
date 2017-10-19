@@ -13,13 +13,13 @@ public class DbManager {
     // Creating the connection for the database
     private static final String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "fiemus9582";
+    private static final String PASSWORD = "";
     private static Connection connection = null;
     private static Logging log = new Logging();
 
 
     public DbManager() {
-        log.writeLog("DbManager", this.getClass(), "WORKS", 2);
+        log.writeLog(this.getClass().getName(), this, "Database connected", 2);
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");

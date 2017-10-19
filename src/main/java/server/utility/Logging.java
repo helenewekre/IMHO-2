@@ -7,19 +7,19 @@ public class Logging {
     //Declaring the log variable of class Logger
     private Logger log ;
 
-    /**
-     * Method responsible for writing the actual log with a switch for different events
-     * @param className name of Class to be logged in
-     * @param eventObject the object which the event occurs "in"
-     * @param eventDescription description of what happens at the event in question (e.g. "Server printed: ---"
-     * @param logLevel the level of logging needed, from everything to the most severe (used for the switch)
+    //Method for writing the actual log with a switch for different events
+    /*
+     * className = name of class to be logged in
+     * eventObject = the object where the event occurs "in"
+     * eventDescription = description of what happens at the event
+     * logLevel = the level of logging needed (used for the switch)
      */
     public void writeLog(String className, Object eventObject, String eventDescription, Integer logLevel) {
 
-        //Initializes the log variable with the class in question
+        //Initializes the log variable with the logClass
         log = LoggerFactory.getLogger(className);
 
-        //Switch responsible for choosing the correct logging according to severity
+        //Switch responsible for choosing the correct logLevel
         switch (logLevel) {
             case 2:
                 log.debug(eventDescription, eventObject);
