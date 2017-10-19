@@ -13,9 +13,9 @@ public class AdminController {
 
     public AdminController() {
         dbManager = new DbManager();
-
     }
-        //Method for creating a question
+
+    //Method for creating a question
     public Boolean createQuiz(Quiz quiz) {
         Boolean ifCreated = dbManager.createQuiz(quiz);
 
@@ -27,7 +27,8 @@ public class AdminController {
         }
 
     }
-        //Method for creating a question
+
+    //Method for creating a question
     public Boolean createQuestion(Question question) {
 
         Boolean ifCreated = dbManager.createQuestion(question);
@@ -40,18 +41,8 @@ public class AdminController {
         }
 
     }
-        //Method for deleting a quiz and all it's sub-tables
-    public Boolean deleteQuiz(int idQuiz) {
 
-        Boolean ifDeleted = dbManager.deleteQuiz(idQuiz);
-
-        if (ifDeleted) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
+    //Method for creating a option
     public Boolean createOption(String optionJson) {
         System.out.println(optionJson);
         Option option = new Gson().fromJson(optionJson, Option.class);
@@ -64,6 +55,18 @@ public class AdminController {
             return false;
         }
 
+    }
+
+    //Method for deleting a quiz and all it's sub-tables
+    public Boolean deleteQuiz(int idQuiz) {
+
+        Boolean ifDeleted = dbManager.deleteQuiz(idQuiz);
+
+        if (ifDeleted) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

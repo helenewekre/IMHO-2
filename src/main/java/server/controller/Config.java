@@ -17,9 +17,7 @@ public final class Config {
     private static Boolean ENCRYPTION;
 
 
-    /**
-     *
-
+    /*
      * @throws IOException
      */
     public void initConfig() throws IOException {
