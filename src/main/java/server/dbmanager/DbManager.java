@@ -1,9 +1,6 @@
 package server.dbmanager;
 
-import server.models.Course;
-import server.models.Question;
-import server.models.Quiz;
-import server.models.User;
+import server.models.*;
 import server.utility.Globals;
 
 import server.utility.Crypter;
@@ -243,6 +240,38 @@ public class DbManager {
                 close();
             }
             return questions;
+        }
+
+    }
+    public ArrayList<Option> loadOptions(int questionId) {
+        ResultSet resultSet = null;
+        ArrayList<Option> options = new ArrayList<Option>();
+        try {
+            PreparedStatement loadQuestions = connection
+                    .prepareStatement("SELECT * FROM `Option WHERE question_id = ?");
+            loadQuestions.setInt(1, questionId);
+            resultSet = loadQuestions.executeQuery();
+
+
+            while (resultSet.next()) {
+                Option option = new Option();
+                option.setIdOption(resultSet.getInt("idOption"));
+                option.setQuestionIdQuestion(resultSet.getInt("question_id"));
+                option.setIsCorrect(resultSet.getInt("is_correct"));
+                option.setOption(resultSet.getString("option"));
+                options.add(option);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                resultSet.close();
+            } catch (SQLException ef) {
+                ef.printStackTrace();
+                close();
+            }
+            return options;
         }
 
     }
