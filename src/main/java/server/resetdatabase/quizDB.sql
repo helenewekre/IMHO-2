@@ -32,8 +32,8 @@ CREATE TABLE `Answer` (
   PRIMARY KEY (`idAnswer`),
   UNIQUE KEY `idAnswer_UNIQUE` (`idAnswer`),
   KEY `userRef` (`user_id`),
-  KEY `optionRef` (`option_id`),
-  CONSTRAINT `optionRef` FOREIGN KEY (`option_id`) REFERENCES `Option` (`idOption`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  KEY `optionsRef` (`option_id`),
+  CONSTRAINT `optionsRef` FOREIGN KEY (`option_id`) REFERENCES `Options` (`idOption`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `userRef` FOREIGN KEY (`user_id`) REFERENCES `User` (`idUser`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -74,13 +74,13 @@ INSERT INTO `Course` (`idCourse`, `course_title`) VALUES (2,'DIS'),(3,'Forandrin
 UNLOCK TABLES;
 
 --
--- Table structure for table `Option`
+-- Table structure for table `Options`
 --
 
-DROP TABLE IF EXISTS `Option`;
+DROP TABLE IF EXISTS `Options`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Option` (
+CREATE TABLE `Options` (
   `idOption` int(11) NOT NULL AUTO_INCREMENT,
   `option` varchar(400) NOT NULL,
   `question_id` int(11) DEFAULT NULL,
@@ -94,13 +94,13 @@ CREATE TABLE `Option` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Option`
+-- Dumping data for table `Options`
 --
 
-LOCK TABLES `Option` WRITE;
-/*!40000 ALTER TABLE `Option` DISABLE KEYS */;
-INSERT INTO `Option` (`idOption`, `option`, `question_id`, `is_correct`) VALUES (1,'En database',1,0),(2,'Begrebet findes ikke',1,0),(3,'Fordeler trafik på serverne',1,1),(4,'Et operativsystem',1,0);
-/*!40000 ALTER TABLE `Option` ENABLE KEYS */;
+LOCK TABLES `Options` WRITE;
+/*!40000 ALTER TABLE `Options` DISABLE KEYS */;
+INSERT INTO `Options` (`idOption`, `option`, `question_id`, `is_correct`) VALUES (1,'En database',1,0),(2,'Begrebet findes ikke',1,0),(3,'Fordeler trafik på serverne',1,1),(4,'Et operativsystem',1,0);
+/*!40000 ALTER TABLE `Options` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

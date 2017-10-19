@@ -1,10 +1,16 @@
 package server.endpoints;
 
+import com.google.gson.Gson;
 import server.controller.AdminController;
+import server.dbmanager.DbManager;
+import server.models.Question;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 
 
 @Path("/question")
@@ -20,5 +26,15 @@ public class QuestionEndpoint {
                 .type("application/json")
                 .entity("{\"questionCreated\":\"true\"}")
                 .build();
+    }
+
+    @GET
+    @Path("/{questionId}/options")
+    public Response loadQuestions(@PathParam("questionId") int questionId) {
+
+        DbManager dbManager = new DbManager();
+        ArrayList<Question> questions = dbManager.loadQuestions(questionId);
+
+        return Response.status(200).type("application/json").entity(new Gson().toJson(questions)).build();
     }
 }

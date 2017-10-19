@@ -1,18 +1,16 @@
 package server.dbmanager;
 
-import server.models.Course;
-import server.models.Question;
-import server.models.Quiz;
-import server.models.User;
+import server.models.*;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DbManager {
     // Creating the connection for the database
     private static final String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "hello";
+    private static final String PASSWORD = "root";
     private static Connection connection = null;
 
     public DbManager() {
@@ -50,7 +48,7 @@ public class DbManager {
             resultSet = authorizeUser.executeQuery();
             System.out.println("RS:" + resultSet);
 
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 user = new User();
                 user.setIdUser(resultSet.getInt("idUser"));
                 user.setUsername(resultSet.getString("username"));
@@ -59,12 +57,12 @@ public class DbManager {
 
             }
 
-        } catch(SQLException exception) {
+        } catch (SQLException exception) {
             exception.printStackTrace();
         } finally {
             try {
                 resultSet.close();
-            } catch(SQLException exception) {
+            } catch (SQLException exception) {
                 exception.printStackTrace();
                 close();
             }
@@ -76,16 +74,17 @@ public class DbManager {
     public boolean createUser(User user) throws IllegalArgumentException {
         try {
             PreparedStatement createUser = connection.prepareStatement("INSERT INTO User (username, password) VALUES (?,?)");
-            createUser.setString(1,user.getUsername());
-            createUser.setString(2,user.getPassword());
+            createUser.setString(1, user.getUsername());
+            createUser.setString(2, user.getPassword());
 
             int rowsAffected = createUser.executeUpdate();
-            if(rowsAffected == 1) {
+            if (rowsAffected == 1) {
                 return true;
             }
         } catch (SQLException exception) {
             exception.printStackTrace();
-        } return false;
+        }
+        return false;
     }
 
     /* Method for creating a quiz */
@@ -110,6 +109,7 @@ public class DbManager {
         }
         return false;
     }
+
     /* Method for creating a question */
     public boolean createQuestion(Question question) throws IllegalArgumentException {
         try {
@@ -198,27 +198,42 @@ public class DbManager {
         }
     }
 
-    /*Method for starting quiz - hereby showing questionlist*/
+    /*Method for starting quiz - hereby showing questionlist and options (made possible by inner join)*/
 
-    public ArrayList<Question> loadQuestions (int quizId) {
+    public ArrayList<Question> loadQuestions(int quizId) {
         ResultSet resultSet = null;
         ArrayList<Question> questions = new ArrayList<Question>();
         try {
             PreparedStatement loadQuestions = connection
-                    .prepareStatement("SELECT * FROM Question WHERE quiz_id = ?");
-
+                    .prepareStatement("SELECT q.question, q.idQuestion, o.option FROM Question q INNER JOIN Options o ON q.idQuestion = o.question_id WHERE q.quiz_id = ?");
 
             loadQuestions.setInt(1, quizId);
             resultSet = loadQuestions.executeQuery();
 
-
+            //HashMap<Integer, Question> map = new HashMap<>();
+            int currentId = -1;
+            Question question = null;
             while (resultSet.next()) {
-                Question question = new Question();
-                question.setIdQuestion(resultSet.getInt("idQuestion"));
-                question.setQuestion(resultSet.getString("question"));
-                question.setQuizIdQuiz(resultSet.getInt("quiz_id"));
-                questions.add(question);
+
+                if(currentId != resultSet.getInt("idQuestion")){
+                    question = new Question();
+                    question.setIdQuestion(resultSet.getInt("idQuestion"));
+                    question.setOption(resultSet.getString("option"));
+                    question.setQuestion(resultSet.getString("question"));
+                    currentId = resultSet.getInt("idQuestion");
+                    questions.add(question);
+                }
+                else {
+                    question.setIdQuestion(resultSet.getInt("idQuestion"));
+                    question.setOption(resultSet.getString("option"));
+                    question.setQuestion(resultSet.getString("question"));
+                }
+
+
             }
+
+
+
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -229,8 +244,8 @@ public class DbManager {
                 ef.printStackTrace();
                 close();
             }
-            return questions;
         }
+        return questions;
 
     }
 
@@ -251,7 +266,7 @@ public class DbManager {
             resultSet = getUserProfile.executeQuery();
 
             //resultSet.next() takes user information from the DB and creates a temporary (user profile)
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 user = new User();
                 user.setIdUser(resultSet.getInt("idUser"));
                 user.setType(resultSet.getInt("type"));
