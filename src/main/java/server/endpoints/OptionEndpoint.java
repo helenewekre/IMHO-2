@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
         //GET method for loading options bc. SQL statements is SELECT.
         @GET
+        //Specifies path
         @Path("/{question_id}")
         public Response loadOptions (@PathParam("question_id") int questionId){
             //Instance of dbmanager to get access to loadOptions method

@@ -219,7 +219,7 @@ public class DbManager {
 
             //Method will run as long as there is content in the next line of the resultset
             while (resultSet.next()) {
-                //Creating questoin object
+                //Creating question object
                 Question question = new Question();
                 //Adding values to parameter variables in the question object
                 question.setQuestion(resultSet.getString("question"));
