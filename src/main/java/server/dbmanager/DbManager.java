@@ -1,6 +1,11 @@
 package server.dbmanager;
 
-import server.models.*;
+import server.models.Course;
+import server.models.Question;
+import server.models.Quiz;
+import server.models.User;
+import server.utility.Globals;
+
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -8,11 +13,15 @@ import java.util.ArrayList;
 public class DbManager {
     // Creating the connection for the database
     private static final String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-    private static final String USERNAME = "test";
+
+    private static final String USERNAME = "root";
+
     private static final String PASSWORD = "";
     private static Connection connection = null;
 
+
     public DbManager() {
+        Globals.log.writeLog(this.getClass().getName(), this, "Database connected", 2);
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");

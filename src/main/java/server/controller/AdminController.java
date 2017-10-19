@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import server.dbmanager.DbManager;
 import server.models.Question;
 import server.models.Quiz;
+import server.utility.Globals;
 
 public class AdminController {
 
@@ -19,6 +20,7 @@ public class AdminController {
         Boolean ifCreated = dbManager.createQuiz(quiz);
 
         if(ifCreated) {
+            Globals.log.writeLog(getClass().getName(), this, "Quiz created", 2);
             return true;
         } else {
             return false;
@@ -29,6 +31,7 @@ public class AdminController {
     public Boolean createQuestion(String questionJson) {
         Question question = new Gson().fromJson(questionJson, Question.class);
         Boolean ifCreated = dbManager.createQuestion(question);
+        Globals.log.writeLog(getClass().getName(), this, "Question created", 2);
 
         if(ifCreated) {
             return true;
