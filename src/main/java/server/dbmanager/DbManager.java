@@ -4,6 +4,7 @@ import server.models.Course;
 import server.models.Question;
 import server.models.Quiz;
 import server.models.User;
+import server.utility.Logging;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,8 +15,11 @@ public class DbManager {
     private static final String USERNAME = "root";
     private static final String PASSWORD = "";
     private static Connection connection = null;
+    private static Logging log = new Logging();
+
 
     public DbManager() {
+        log.writeLog("DbManager", this.getClass(), "WORKS", 2);
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");

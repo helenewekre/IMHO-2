@@ -3,6 +3,8 @@ package server.endpoints;
 import com.google.gson.Gson;
 import server.dbmanager.DbManager;
 import server.models.Course;
+import server.utility.Logging;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
@@ -12,9 +14,12 @@ import java.util.ArrayList;
 public class CourseEndpoint {
 
     DbManager dbmanager = new DbManager();
+    private static Logging log = new Logging();
 
     @GET
     public Response loadCourses (){
+        log.writeLog("DbManager", this.getClass(), "WORKS", 2);
+
         ArrayList<Course> courses = dbmanager.loadCourses();
 
         return Response.status(200).entity(new Gson().toJson(courses)).build();
