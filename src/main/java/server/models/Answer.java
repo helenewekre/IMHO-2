@@ -5,17 +5,11 @@ public class Answer {
     private int idAnswer;
     private int answerResult;
     private int optionIdOption;
-    private int optionQuestionIdQuestion;
-    private int optionQuestionQuizIdQuiz;
-    private int optionQuestionQuizTopicIdTopic;
 
-    public Answer(int idAnswer, int answerResult, int optionIdOption, int optionQuestionIdQuestion, int optionQuestionQuizIdQuiz, int optionQuestionQuizTopicIdTopic) {
+    public Answer(int idAnswer, int answerResult, int optionIdOption) {
         this.idAnswer = idAnswer;
         this.answerResult = answerResult;
         this.optionIdOption = optionIdOption;
-        this.optionQuestionIdQuestion = optionQuestionIdQuestion;
-        this.optionQuestionQuizIdQuiz = optionQuestionQuizIdQuiz;
-        this.optionQuestionQuizTopicIdTopic = optionQuestionQuizTopicIdTopic;
     }
 
     public Answer() {
@@ -46,27 +40,5 @@ public class Answer {
         this.optionIdOption = optionIdOption;
     }
 
-    public int getOptionQuestionIdQuestion() {
-        return optionQuestionIdQuestion;
-    }
 
-    public void setOptionQuestionIdQuestion(int optionQuestionIdQuestion) {
-        this.optionQuestionIdQuestion = optionQuestionIdQuestion;
-    }
-
-    public int getOptionQuestionQuizIdQuiz() {
-        return optionQuestionQuizIdQuiz;
-    }
-
-    public void setOptionQuestionQuizIdQuiz(int optionQuestionQuizIdQuiz) {
-        this.optionQuestionQuizIdQuiz = optionQuestionQuizIdQuiz;
-    }
-
-    public int getOptionQuestionQuizTopicIdTopic() {
-        return optionQuestionQuizTopicIdTopic;
-    }
-
-    public void setOptionQuestionQuizTopicIdTopic(int optionQuestionQuizTopicIdTopic) {
-        this.optionQuestionQuizTopicIdTopic = optionQuestionQuizTopicIdTopic;
-    }
 }

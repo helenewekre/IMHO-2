@@ -18,9 +18,11 @@ public class UserController {
         DbManager dbManager = new DbManager();
         Option option = new Option();
        Answer answer = new Answer();
+
         int result = 0;
         int nrQuestion = 0;
         int quizId = quiz.getIdQuiz();
+        ArrayList<Answer> answers = new ArrayList<>();
         ArrayList<Option> options = new ArrayList<>();
         ArrayList<Question> questions = new ArrayList();
 
@@ -38,6 +40,12 @@ public class UserController {
             }
         }
        return result + nrQuestion;
+        }
+
+        private ArrayList<Answer> tempAnswer (){
+        ArrayList<Answer> tempAnswer = new ArrayList<>();
+
+       return tempAnswer;
         }
 
 }
