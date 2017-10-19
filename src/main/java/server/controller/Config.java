@@ -17,8 +17,6 @@ public final class Config {
     private static Boolean ENCRYPTION;
 
 
-
-
     /**
      *
 
@@ -52,7 +50,8 @@ public final class Config {
         DATABASE_PORT = Integer.parseInt(json.get("DATABASE_PORT").toString().replace("\"", ""));
         DATABASE_USERNAME = json.get("DATABASE_USERNAME").toString().replace("\"", "");
         DATABASE_PASSWORD = json.get("DATABASE_PASSWORD").toString().replace("\"", "");
-        ENCRYPTION = (json.get("ENCRYPTION").getAsBoolean());
+        ENCRYPTION = json.get("ENCRYPTION").getAsBoolean();
+       // ENCRYPTION = Boolean.parseBoolean(json.get("ENCRYPTION").toString().replace("\"", ""));
     }
 
     public static String getDatabaseHost(){
@@ -68,11 +67,11 @@ public final class Config {
         return DATABASE_PASSWORD;
     }
 
-    public static boolean getENCRYPTION() {
+    public static Boolean getEncryption() {
         return ENCRYPTION;
     }
 
-    public static void setENCRYPTION(Boolean ENCRYPTION) {
+    public static void setEncryption(Boolean ENCRYPTION) {
         Config.ENCRYPTION = ENCRYPTION;
     }
 }

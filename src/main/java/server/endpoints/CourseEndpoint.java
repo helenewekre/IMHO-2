@@ -9,6 +9,7 @@ import server.utility.Crypter;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.util.ArrayList;
 
 @Path("/courses")
@@ -20,20 +21,30 @@ public class CourseEndpoint {
 
     @GET
     public Response loadCourses () {
-        ArrayList<Course> courses = dbmanager.loadCourses();
+      //  ArrayList<Course> courses = dbmanager.loadCourses();
 
-        if (config.getENCRYPTION()) {
+        try {
+            config.initConfig();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //IF-statement som afhænger af hvorvidt ENCRYPTION er sat til True eller False
+       if (Config.getEncryption()) {
+            ArrayList<Course> courses = dbmanager.loadCourses();
             String newCourses = new Gson().toJson(courses);
             newCourses = crypter.encryptAndDecryptXor(newCourses);
 
             return Response.status(200).entity(newCourses).build();
 
         } else {
-
-        }
+            ArrayList<Course> courses = dbmanager.loadCourses();
             return Response.status(200).entity(new Gson().toJson(courses)).build();
 
+
         }
 
-
+      //  ArrayList<Course> courses = dbmanager.loadCourses();
+        // return Response.status(200).entity(new Gson().toJson(courses)).build();
+    }
     }
