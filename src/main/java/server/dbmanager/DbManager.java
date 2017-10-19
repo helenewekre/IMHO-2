@@ -277,6 +277,7 @@ public class DbManager {
         ResultSet resultSet = null;
         ArrayList<Option> options = new ArrayList<>();
 
+
         //PreparedStatements which communicates with the database
         try{
             PreparedStatement getOption = connection.prepareStatement("SELECT * FROM Option WHERE question_id = ?");
@@ -311,5 +312,85 @@ public class DbManager {
 
     }
 
-}
+    public int getNrCorectAnswers (int quizID, int userID){
+        ResultSet resultSet = null;
+        int score = 0;
+        try{
+            PreparedStatement getNrCorectAnswers = connection.prepareStatement("SELECT q.quiz_description, o.is_correct, count(*)\n" +
+                    "FROM user u\n" +
+                    "INNER JOIN answer a\n" +
+                    "ON u.idUser = a.user_id\n" +
+                    "INNER JOIN `option` o\n" +
+                    "ON a.option_id = o.idOption\n" +
+                    "INNER JOIN question qt\n" +
+                    "ON o.question_id = qt.idQuestion\n" +
+                    "INNER JOIN quiz q\n" +
+                    "ON qt.quiz_id = q.idQuiz\n" +
+                    "WHERE quiz_id = ? \n" +
+                    "\tAND user_id = ?\n" +
+                    "GROUP BY o.is_correct");
 
+            getNrCorectAnswers.setInt(1,quizID);
+            getNrCorectAnswers.setInt(2,userID);
+
+            resultSet = getNrCorectAnswers.executeQuery();
+
+            //add all tables from DB to specific option and finally add the option to the array.
+            //the result.next() does this for each option.
+            while(resultSet.next()){
+
+                score = (resultSet.getInt("count(*)"));
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                resultSet.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                close();
+            }
+
+        }
+        return score;
+    }
+
+    public int getNrQuestion (int quizID){
+        ResultSet resultSet = null;
+        int nrQuestions = 0;
+        try{
+            PreparedStatement getNrQuestion = connection.prepareStatement("SELECT q.idQuiz, count(*)"+
+            "FROM quiz q" +
+            "INNER JOIN question qt" +
+            "ON q.idQuiz = qt.quiz_id" +
+            "WHERE idQuiz = ?" +
+            "GROUP BY idQuiz");
+
+            getNrQuestion.setInt(1,quizID);
+
+            resultSet = getNrQuestion.executeQuery();
+
+            //add all tables from DB to specific option and finally add the option to the array.
+            //the result.next() does this for each option.
+            while(resultSet.next()){
+
+                nrQuestions = (resultSet.getInt("count(*)"));
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                resultSet.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                close();
+            }
+
+        }
+        return nrQuestions;
+        }
+    )
