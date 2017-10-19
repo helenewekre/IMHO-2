@@ -33,7 +33,7 @@ public class QuestionEndpoint {
     public Response loadQuestions(@PathParam("quizId") int quizId) {
 
         DbManager dbManager = new DbManager();
-        ArrayList<Question> questions = dbManager.loadQuestions(quizId);
-        return Response.status(200).type("application/json").entity(new Gson().toJson(questions)).build();
+        Question question = dbManager.loadQuestion(quizId);
+        return Response.status(200).type("application/json").entity(new Gson().toJson(question)).build();
     }
 }

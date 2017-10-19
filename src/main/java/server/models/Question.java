@@ -11,24 +11,24 @@ public class Question {
     /*private int quizTopicIdTopic;*/
 
     /*evt tilføj til parameter (slettet pr 17/10) int quizTopicIdTopic)*/
-    public Question(int idQuestion, String question, int quizIdQuiz, ArrayList<Option> options) {
+    public Question(int idQuestion, String question, int quizIdQuiz) {
         this.idQuestion = idQuestion;
         this.question = question;
         this.quizIdQuiz = quizIdQuiz;
-        this.options = options;
+        this.options = new ArrayList<Option>();
        /* this.quizTopicIdTopic = quizTopicIdTopic; */
     }
 
     public Question(){
-
+        this.options = new ArrayList<Option>();
     }
 
     public ArrayList<Option> getOptions() {
         return options;
     }
 
-    public void setOptions(ArrayList<Option> options) {
-        this.options = options;
+    public void addOption(Option option) {
+        this.options.add(option);
     }
 
     public int getIdQuestion() {

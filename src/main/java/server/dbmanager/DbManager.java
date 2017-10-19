@@ -47,7 +47,7 @@ public class DbManager {
             resultSet = authorizeUser.executeQuery();
             System.out.println("RS:" + resultSet);
 
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 user = new User();
                 user.setIdUser(resultSet.getInt("idUser"));
                 user.setUsername(resultSet.getString("username"));
@@ -56,12 +56,12 @@ public class DbManager {
 
             }
 
-        } catch(SQLException exception) {
+        } catch (SQLException exception) {
             exception.printStackTrace();
         } finally {
             try {
                 resultSet.close();
-            } catch(SQLException exception) {
+            } catch (SQLException exception) {
                 exception.printStackTrace();
                 close();
             }
@@ -73,16 +73,17 @@ public class DbManager {
     public boolean createUser(User user) throws IllegalArgumentException {
         try {
             PreparedStatement createUser = connection.prepareStatement("INSERT INTO User (username, password) VALUES (?,?)");
-            createUser.setString(1,user.getUsername());
-            createUser.setString(2,user.getPassword());
+            createUser.setString(1, user.getUsername());
+            createUser.setString(2, user.getPassword());
 
             int rowsAffected = createUser.executeUpdate();
-            if(rowsAffected == 1) {
+            if (rowsAffected == 1) {
                 return true;
             }
         } catch (SQLException exception) {
             exception.printStackTrace();
-        } return false;
+        }
+        return false;
     }
 
     /* Method for creating a quiz */
@@ -107,6 +108,7 @@ public class DbManager {
         }
         return false;
     }
+
     /* Method for creating a question */
     public boolean createQuestion(Question question) throws IllegalArgumentException {
         try {
@@ -197,30 +199,26 @@ public class DbManager {
 
     /*Method for starting quiz - hereby showing questionlist*/
 
-    public ArrayList<Question> loadQuestions (int quizId) {
+    public Question loadQuestion(int quizId) {
         ResultSet resultSet = null;
-        ArrayList<Question> questions = new ArrayList<Question>();
-        ArrayList<Option> options = new ArrayList<Option>();
+        Question question = new Question();
+
         try {
-            PreparedStatement loadQuestions = connection
-                    .prepareStatement("SELECT q.question, q.idQuestion, o.option FROM Question q INNER JOIN Options o ON q.idQuestion = o.question_id WHERE quiz_id = ?");
+            PreparedStatement loadQuestion = connection
+                        .prepareStatement("SELECT q.question, q.idQuestion, o.option FROM Question q INNER JOIN optionh o ON q.idQuestion = o.question_id WHERE quiz_id = ?");
 
-            loadQuestions.setInt(1, quizId);
-            resultSet = loadQuestions.executeQuery();
+            loadQuestion.setInt(1, quizId);
+            resultSet = loadQuestion.executeQuery();
 
-            Question question = new Question();
-            Option option = new Option();
 
             while (resultSet.next()) {
 
+                Option option = new Option();
                 option.setOption(resultSet.getString("option"));
-                options.add(option);
+                question.addOption(option);
 
                 question.setIdQuestion(resultSet.getInt("idQuestion"));
                 question.setQuestion(resultSet.getString("question"));
-                question.setOptions(options);
-                questions.add(question);
-
 
             }
 
@@ -235,7 +233,7 @@ public class DbManager {
                 close();
             }
         }
-        return questions;
+        return question;
 
     }
 
@@ -256,7 +254,7 @@ public class DbManager {
             resultSet = getUserProfile.executeQuery();
 
             //resultSet.next() takes user information from the DB and creates a temporary (user profile)
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 user = new User();
                 user.setIdUser(resultSet.getInt("idUser"));
                 user.setType(resultSet.getInt("type"));
