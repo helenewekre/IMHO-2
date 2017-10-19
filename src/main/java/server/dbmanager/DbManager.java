@@ -90,7 +90,7 @@ public class DbManager {
     }
 
     // Method for creating a user - user object returned
-    public User createUser(User user) throws IllegalArgumentException {
+    public User createUser(User user) {
 
         //Try-catch method to avoid the program crashing on exceptions
         try {
@@ -109,6 +109,7 @@ public class DbManager {
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
+        return user;
     }
 
     // Method for creating a quiz
@@ -127,12 +128,14 @@ public class DbManager {
 
             //Adds id value to object (from auto incremented)
             quiz.setIdQuiz(createQuiz.executeUpdate());
-            //Returns quiz object with id value.
-            return quiz;
+
+
         //Exception to avoid crashing
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        //Returns quiz object with id value.
+        return quiz;
     }
     // Method for creating a question
     public Question createQuestion(Question question) {
@@ -148,13 +151,14 @@ public class DbManager {
             //Sets the quiz objects id to be the autoincremented value, this is returned to user.
             question.setIdQuestion(createQuestion.executeUpdate());
 
-            //Returns the question object containing the id value.
-            return question;
 
         //Exception to avoid crashing
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        //Returns the question object containing the id value.
+        return question;
+
     }
 
     /* Method for creating a option */
@@ -172,12 +176,11 @@ public class DbManager {
             //Adda id value to the option object
             option.setIdOption(createOption.executeUpdate());
 
-            //Returning the option object
-            return option;
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        //Returning the option object
+        return option;
     }
 
     // Method for loading courses
@@ -269,7 +272,7 @@ public class DbManager {
         //Arraylist of question object
         ArrayList<Question> questions = new ArrayList<Question>();
 
-        ///Try-catch
+        //Try-catch
         try {
             //SQL query sent to SQL to get values from the database. Done thoug the connection method - see top of class.
             PreparedStatement loadQuestions = connection
