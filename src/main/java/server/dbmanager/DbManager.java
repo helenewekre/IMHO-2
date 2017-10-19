@@ -6,6 +6,7 @@ import server.models.Quiz;
 import server.models.User;
 import server.utility.Globals;
 
+import server.utility.Crypter;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class DbManager {
     private static final String PASSWORD = "";
     private static Connection connection = null;
 
+    Crypter crypter = new Crypter();
 
     public DbManager() {
         Globals.log.writeLog(this.getClass().getName(), this, "Database connected", 2);
@@ -134,6 +136,7 @@ public class DbManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return false;
     }
 
@@ -152,6 +155,7 @@ public class DbManager {
                 course.setIdCourse(resultSet.getInt("idCourse"));
                 course.setCourseTitle(resultSet.getString("course_title"));
                 courses.add(course);
+
             }
 
         } catch (SQLException e) {
@@ -165,6 +169,7 @@ public class DbManager {
                 close();
             }
         }
+
         return courses;
 
     }
