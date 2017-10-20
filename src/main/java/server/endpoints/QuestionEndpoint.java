@@ -21,15 +21,23 @@ public class QuestionEndpoint {
     //Method for creating a question
     @POST
     public Response createQuestion(String questionJson) {
-
         Question question = new Gson().fromJson(questionJson, Question.class);
-        Boolean questionCreated = adminController.createQuestion(question);
 
-        return Response
-                .status(200)
-                .type("application/json")
-                .entity("{\"questionCreated\":\"true\"}")
-                .build();
+        Question questionCreated = adminController.createQuestion(question);
+
+        if (questionCreated != null) {
+            return Response
+                    .status(200)
+                    .type("application/json")
+                    .entity(new Gson().toJson(questionCreated))
+                    .build();
+        } else {
+            return Response
+                    .status(200)
+                    .type("application/json")
+                    .entity("Could not create question")
+                    .build();
+        }
     }
 
     //GET method for loading questions bc. SQL statements is SELECT.

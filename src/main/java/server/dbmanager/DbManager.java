@@ -113,7 +113,7 @@ public class DbManager {
     }
 
     // Method for creating a quiz
-    public boolean createQuiz(Quiz quiz) throws IllegalArgumentException {
+    public Quiz createQuiz(Quiz quiz) throws IllegalArgumentException {
         //Try-catch
         try {
             //SQL statement to create a quiz
@@ -128,17 +128,17 @@ public class DbManager {
 
             int rowsAffected = createQuiz.executeUpdate();
             if (rowsAffected == 1) {
-                return true;
+                return quiz;
             }
 
         //Exception to avoid crashing
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
     // Method for creating a question
-    public boolean createQuestion(Question question) throws IllegalArgumentException {
+    public Question createQuestion(Question question) throws IllegalArgumentException {
         //Try-catch
         try {
             //SQL statement
@@ -150,14 +150,14 @@ public class DbManager {
 
             int rowsAffected = createQuestion.executeUpdate();
             if (rowsAffected == 1) {
-                return true;
+                return question;
             }
 
         //Exception to avoid crashing
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
     /* Method for creating a option */
