@@ -16,51 +16,50 @@ public class AdminController {
     }
 
     //Method for creating a question
-    public Boolean createQuiz(String quizJson) {
+    public Quiz createQuiz(String quizJson) {
         Quiz quiz = new Gson().fromJson(quizJson, Quiz.class);
-        Boolean ifCreated = dbManager.createQuiz(quiz);
+        Quiz createdQuiz = dbManager.createQuiz(quiz);
 
-        if(ifCreated) {
+        if(createdQuiz != null ) {
             Globals.log.writeLog(getClass().getName(), this, "Quiz created", 2);
-            return true;
+            return createdQuiz;
         } else {
-            return false;
+            return null;
         }
 
     }
 
     //Method for creating a question
-    public Boolean createQuestion(Question question) {
+    public Question createQuestion(Question question) {
 
-        Boolean ifCreated = dbManager.createQuestion(question);
+        Question createdQuestion = dbManager.createQuestion(question);
         Globals.log.writeLog(getClass().getName(), this, "Question created", 2);
 
-        if(ifCreated) {
-            return true;
+        if(createdQuestion != null) {
+            return createdQuestion;
         } else {
-            return false;
+            return null;
         }
 
     }
 
     //Method for creating a option
-    public Boolean createOption(String optionJson) {
+    public Option createOption(String optionJson) {
         System.out.println(optionJson);
         Option option = new Gson().fromJson(optionJson, Option.class);
-        Boolean ifCreated = dbManager.createOption(option);
+        Option newOption = dbManager.createOption(option);
         Globals.log.writeLog(getClass().getName(), this, "Option created", 2);
 
-        if(ifCreated) {
-            return true;
+        if(newOption != null) {
+            return newOption;
         } else {
-            return false;
+            return null;
         }
 
     }
 
     //Method for deleting a quiz and all it's sub-tables
     public Boolean deleteQuiz(int idQuiz) {
-
         Boolean ifDeleted = dbManager.deleteQuiz(idQuiz);
 
         if (ifDeleted) {
@@ -69,5 +68,7 @@ public class AdminController {
             return false;
         }
     }
+
+
 
 }

@@ -36,17 +36,16 @@ public class QuizEndpoint {
         CurrentUserContext context = mainController.getUserFromTokens(token);
 
         if (context.isAdmin()) {
-
-            Boolean quizCreated = adminController.createQuiz(quizJson);
+            Quiz quizCreated = adminController.createQuiz(quizJson);
 
             return Response.status(200).type("application/json")
-                    .entity("{\"quizCreated\":\"true\"}")
+                    .entity(new Gson().toJson(quizCreated))
                     .build();
         }
         return Response
                 .status(403)
                 .type("application/json")
-                .entity("{\"error\":\"no permissions\"}")
+                .entity("{\"error\":\"No permissions\"}")
                 .build();
 
 
@@ -58,11 +57,20 @@ public class QuizEndpoint {
 
         Boolean quizDeleted = adminController.deleteQuiz(quizJson);
 
-        return Response
-                .status(200)
-                .type("application/json")
-                .entity("{\"quizDeleted\":\"true\"}")
-                .build();
+
+        if (quizDeleted = true) {
+            return Response
+                    .status(200)
+                    .type("application/json")
+                    .entity("Quiz is deleted")
+                    .build();
+        } else {
+            return Response
+                    .status(500)
+                    .type("application/json")
+                    .entity("Error deleting quiz")
+                    .build();
+        }
     }
 
 

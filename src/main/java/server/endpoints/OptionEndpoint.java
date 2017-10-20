@@ -5,7 +5,6 @@ import server.controller.AdminController;
 import server.controller.UserController;
 import server.dbmanager.DbManager;
 import server.models.Option;
-
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -20,26 +19,35 @@ import java.util.ArrayList;
     AdminController adminController = new AdminController();
     UserController userController = new UserController();
 
+    //Creating a new option for a quiz.
     @POST
-    public Response createOption(String optionJson) {
-        Boolean optionCreated = adminController.createOption(optionJson);
-        //GET method for loading options bc. SQL statements is SELECT.
-        return Response
+    public Response createOption(String option) {
+        Option optionCreated = adminController.createOption(option);
+
+        if(optionCreated != null) {
+            return Response
                     .status(200)
                     .type("application/json")
-                    .entity("{\"optionCreated\":\"true\"}")
+                    .entity(new Gson().toJson(optionCreated))
                     .build();
+        } else {
+                return Response
+                        .status(500)
+                        .type("application/json")
+                        .entity("Error in creating option")
+                        .build();
+            }
     }
+
     @DELETE
     @Path("{deleteId}")
     public Response deleteAnswer(@PathParam("deleteId")int answerJson) {
-
         Boolean quizDeleted = userController.deleteAnswer(answerJson);
 
         return Response
                 .status(200)
                 .type("application/json")
-                .entity("{\"quizDeleted\":\"true\"}")
+                .entity(new Gson().toJson(quizDeleted))
                 .build();
     }
 
@@ -48,13 +56,15 @@ import java.util.ArrayList;
         @Path("/{question_id}")
         public Response loadOptions (@PathParam("question_id") int questionId){
             //Instance of dbmanager to get access to loadOptions method
-            DbManager dbmanager = new DbManager();
             //New arraylist of Option objects. Gives arraylist the value of the options loaded in loadOptions (dbmanager)
-            ArrayList<Option> options = dbmanager.loadOptions(questionId);
-
+            ArrayList options = userController.getOptions(questionId);
 
             //Returns options object in arraylist as json
+        if(options != null) {
             return Response.status(200).type("application/json").entity(new Gson().toJson(options)).build();
-
-            }
         }
+            else {
+            return Response.status(200).type("application/json").entity("No options").build();
+        }
+    }
+}
