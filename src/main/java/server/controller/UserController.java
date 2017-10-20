@@ -26,13 +26,22 @@ public class UserController {
         }
 
     public Boolean deleteAnswer(int idUser) {
-
         Boolean ifDeleted = dbManager.deleteAnswer(idUser);
 
         if (ifDeleted) {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public ArrayList<Option> getOptions(int idQuestion) {
+        ArrayList<Option> options = dbManager.loadOptions(idQuestion);
+
+        if(options !=null) {
+            return options;
+        } else {
+            return null;
         }
     }
 

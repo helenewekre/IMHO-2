@@ -161,7 +161,7 @@ public class DbManager {
     }
 
     /* Method for creating a option */
-    public boolean createOption(Option option) throws IllegalArgumentException {
+    public Option createOption(Option option) throws IllegalArgumentException {
         //Try-catch
         try {
             //SQL statement
@@ -175,13 +175,13 @@ public class DbManager {
                 int rowsAffected = createOption.executeUpdate();
 
         if (rowsAffected == 1) {
-            return true;
+            return option;
         }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
     // Method for loading courses
