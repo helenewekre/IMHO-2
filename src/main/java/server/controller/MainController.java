@@ -19,7 +19,7 @@ public class MainController {
     private Digester digester;
 
 
-    //The constructor for instantation
+    //The constructor for instantiation
     public MainController() {
         dbManager = new DbManager();
         digester = new Digester();

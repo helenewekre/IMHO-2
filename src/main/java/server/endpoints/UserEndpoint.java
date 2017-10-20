@@ -24,7 +24,11 @@ public class UserEndpoint {
         User userAuth = new Gson().fromJson(user, User.class);
         User authorizedUser = mainController.authUser(userAuth);
 
-        return Response.status(200).entity(new Gson().toJson(authorizedUser)).build();
+        if (authorizedUser != null) {
+            return Response.status(200).entity(new Gson().toJson(authorizedUser)).build();
+        } else {
+            return Response.status(500).entity("There was an error").build();
+        }
     }
 
     @POST
@@ -53,7 +57,6 @@ public class UserEndpoint {
                     .type("application/json")
                     .entity(new Gson().toJson(context.getCurrentUser()))
                     .build();
-
         } else {
             return Response
                     .status(200)
@@ -67,9 +70,12 @@ public class UserEndpoint {
     @Path("/logout")
     public Response logOut(String idUser) throws SQLException {
         int id = new Gson().fromJson(idUser, Integer.class);
+        if(dbManager.deleteToken(id) == true) {
+            return Response.status(200).entity("You are now logged out").build();
+        } else {
+            return Response.status(500).entity("There was an error").build();
+        }
 
-        boolean isOut = dbManager.deleteToken(id);
-            return Response.status(200).entity(isOut).build();
 
     }
 }
