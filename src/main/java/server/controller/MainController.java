@@ -27,7 +27,7 @@ public class MainController {
     }
 
     // Logic behind authorizing user
-    public String authUser(User user) {
+    public User authUser(User user) {
         String token = null;
         User foundUser = dbManager.getTimeCreatedByUsername(user.getUsername());
         user.setPassword(digester.hashWithSalt(user.getPassword() + foundUser.getTimeCreated()));
@@ -46,7 +46,7 @@ public class MainController {
         }
         if (token != null) {
             Globals.log.writeLog(getClass().getName(), this, "Auth. user", 2);
-            return token;
+            return authorizedUser;
         } else {
             return null;
         }
@@ -54,7 +54,7 @@ public class MainController {
 
     //Logic behind creating user.
 
-    public Boolean createUser(String user) {
+    public User createUser(String user) {
         User userCreated = new Gson().fromJson(user, User.class);
 
         long unixTime = (long) Math.floor(System.currentTimeMillis() / 10000);

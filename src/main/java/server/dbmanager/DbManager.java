@@ -90,7 +90,7 @@ public class DbManager {
     }
 
     // Method for creating a user - Boolean returned, which decides if the user is created or not
-    public boolean createUser(User user) throws IllegalArgumentException {
+    public User createUser(User user) throws IllegalArgumentException {
 
         //Try-catch method to avoid the program crashing on exceptions
         try {
@@ -102,14 +102,14 @@ public class DbManager {
             //rowsAffected
             int rowsAffected = createUser.executeUpdate();
             if (rowsAffected == 1) {
-                return true;
+                return user;
             }
 
         //Exception to avoid crashing
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
-        return false;
+        return null;
     }
 
     // Method for creating a quiz
@@ -392,7 +392,6 @@ public class DbManager {
         User userFromToken = null;
 
         try {
-
             PreparedStatement getUserFromToken = connection
                     .prepareStatement("SELECT username, idUser, `type` FROM `User` u INNER JOIN Tokens t ON t.token_idUser = u.idUser WHERE t.token = ?");
 
@@ -400,9 +399,7 @@ public class DbManager {
             resultSet = getUserFromToken.executeQuery();
 
             while (resultSet.next()) {
-
                 userFromToken = new User();
-
                 userFromToken.setIdUser(resultSet.getInt("idUser"));
                 userFromToken.setUsername(resultSet.getString("username"));
                 userFromToken.setType(resultSet.getInt("type"));
