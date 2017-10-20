@@ -19,7 +19,7 @@ public class UserEndpoint {
 
     @POST
     @Path("/login")
-    //Authorizing a user
+    //Endpoint for authorizing a user
     public Response authorizeUser(String user) {
         User userAuth = new Gson().fromJson(user, User.class);
         String token = mainController.authUser(userAuth);
