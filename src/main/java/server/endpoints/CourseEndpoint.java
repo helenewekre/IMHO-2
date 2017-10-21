@@ -20,7 +20,7 @@ public class CourseEndpoint {
 
     DbManager dbmanager = new DbManager();
     Crypter crypter = new Crypter();
-    Config config = new Config();
+
 
     @GET
     public Response loadCourses (){
@@ -30,7 +30,7 @@ public class CourseEndpoint {
             String newCourses = new Gson().toJson(courses);
             newCourses = crypter.encryptAndDecryptXor(newCourses);
 
-        
+
                     return Response
                     .status(200)
                     .type("application/json")
