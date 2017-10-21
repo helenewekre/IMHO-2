@@ -2,9 +2,11 @@ package server.endpoints;
 
 import com.google.gson.Gson;
 import server.controller.AdminController;
+import server.controller.Config;
 import server.controller.UserController;
 import server.dbmanager.DbManager;
 import server.models.Option;
+import server.utility.Crypter;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -19,6 +21,9 @@ import java.util.ArrayList;
     public class OptionEndpoint {
     AdminController adminController = new AdminController();
     UserController userController = new UserController();
+    Crypter crypter = new Crypter();
+    Config config = new Config();
+
 
     @POST
     public Response createOption(String optionJson) {
@@ -52,9 +57,26 @@ import java.util.ArrayList;
             //New arraylist of Option objects. Gives arraylist the value of the options loaded in loadOptions (dbmanager)
             ArrayList<Option> options = dbmanager.loadOptions(questionId);
 
+            if (config.getEncryption()) {
+                String newOptions = new Gson().toJson(options);
+                newOptions = crypter.encryptAndDecryptXor(newOptions);
 
-            //Returns options object in arraylist as json
-            return Response.status(200).type("application/json").entity(new Gson().toJson(options)).build();
+                return Response.status(200)
+                        .type("application/json")
+                        .entity(new Gson().toJson(newOptions))
+                        .build();
+
+            } else {
+
+                //Returns options object in arraylist as json
+                return Response.status(200)
+                        .type("application/json")
+                        .entity(new Gson().toJson(options))
+                        .build();
+
+            }
+
+
 
             }
         }
