@@ -2,11 +2,13 @@ package server.endpoints;
 
 import com.google.gson.Gson;
 import server.controller.AdminController;
+import server.controller.Config;
 import server.controller.MainController;
 import server.controller.UserController;
 import server.dbmanager.DbManager;
 import server.models.Quiz;
 import server.models.User;
+import server.utility.Crypter;
 import server.utility.CurrentUserContext;
 
 
@@ -20,6 +22,8 @@ public class QuizEndpoint {
     DbManager dbManager = new DbManager();
     AdminController adminController = new AdminController();
     MainController mainController = new MainController();
+    Config config = new Config();
+    Crypter crypter = new Crypter();
 
 
     @GET
@@ -27,7 +31,23 @@ public class QuizEndpoint {
     public Response loadQuizzes(@PathParam("CourseID") int courseId) {
         ArrayList<Quiz> quizzes = dbManager.loadQuizzes(courseId);
 
-        return Response.status(200).type("application/json").entity(new Gson().toJson(quizzes)).build();
+        if (config.getEncryption()) {
+            String newQuizzes = new Gson().toJson(quizzes);
+            newQuizzes = crypter.encryptAndDecryptXor(newQuizzes);
+
+            return Response
+                    .status(200)
+                    .type("application/json")
+                    .entity(new Gson().toJson(newQuizzes))
+                    .build();
+
+        }
+
+        return Response
+                .status(200)
+                .type("application/json")
+                .entity(new Gson().toJson(quizzes))
+                .build();
 
     }
         // Method for creating a quiz
