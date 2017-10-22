@@ -27,10 +27,13 @@ public class QuestionEndpoint {
         Question question = new Gson().fromJson(questionJson, Question.class);
         adminController.createQuestion(question);
 
+        String newQuestion = new Gson().toJson(question);
+        newQuestion = crypter.encryptAndDecryptXor(newQuestion);
+
         return Response
                 .status(200)
                 .type("application/json")
-                .entity("{\"questionCreated\":\"true\"}")
+                .entity(new Gson().toJson(newQuestion))
                 .build();
     }
 
