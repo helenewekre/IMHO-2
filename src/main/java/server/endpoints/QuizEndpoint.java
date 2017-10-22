@@ -24,54 +24,83 @@ public class QuizEndpoint {
 
     @GET
     @Path("/{CourseID}")
-    public Response loadQuizzes(@PathParam("CourseID") int courseId) {
-        ArrayList<Quiz> quizzes = dbManager.loadQuizzes(courseId);
+    public Response loadQuizzes(@HeaderParam("authorization") String token, @PathParam("CourseID") int courseId) throws SQLException {
+        CurrentUserContext context = mainController.getUserFromTokens(token);
 
-        return Response.status(200).type("application/json").entity(new Gson().toJson(quizzes)).build();
+        if (context.getCurrentUser() != null) {
+            ArrayList<Quiz> quizzes = dbManager.loadQuizzes(courseId);
 
+            if (quizzes != null) {
+                return Response.status(200).type("application/json").entity(new Gson().toJson(quizzes)).build();
+            } else {
+                return Response.status(200).type("application/json").entity("No quiz found").build();
+            }
+        } else {
+            return Response
+                    .status(200)
+                    .type("application/json")
+                    .entity("Error loading profile")
+                    .build();
+        }
     }
-        // Method for creating a quiz
+
+    // Method for creating a quiz
     @POST
     public Response createQuiz(@HeaderParam("authorization") String token, String quizJson) throws SQLException {
         CurrentUserContext context = mainController.getUserFromTokens(token);
 
-        if (context.isAdmin()) {
-            Quiz quizCreated = adminController.createQuiz(quizJson);
+        if (context.getCurrentUser() != null) {
+            if (context.isAdmin()) {
+                Quiz quizCreated = adminController.createQuiz(quizJson);
 
-            return Response.status(200).type("application/json")
-                    .entity(new Gson().toJson(quizCreated))
-                    .build();
-        }
-        return Response
-                .status(403)
-                .type("application/json")
-                .entity("{\"error\":\"No permissions\"}")
-                .build();
-
-
-    }
-        // Method for deleting a quiz and all it's sub-tables
-    @DELETE
-    @Path("{deleteId}")
-    public Response deleteQuiz(@PathParam("deleteId")int quizJson) {
-
-        Boolean quizDeleted = adminController.deleteQuiz(quizJson);
-
-
-        if (quizDeleted = true) {
-            return Response
-                    .status(200)
-                    .type("application/json")
-                    .entity("Quiz is deleted")
-                    .build();
+                return Response.status(200).type("application/json")
+                        .entity(new Gson().toJson(quizCreated))
+                        .build();
+            } else {
+                return Response
+                        .status(403)
+                        .type("application/json")
+                        .entity("Error creating quiz")
+                        .build();
+            }
         } else {
             return Response
-                    .status(500)
+                    .status(403)
                     .type("application/json")
-                    .entity("Error deleting quiz")
+                    .entity("Error loading profile")
                     .build();
         }
     }
 
+
+    // Method for deleting a quiz and all it's sub-tables
+    @DELETE
+    @Path("{deleteId}")
+    public Response deleteQuiz(@HeaderParam("authorization") String token, @PathParam("deleteId")int quizJson) throws SQLException {
+        CurrentUserContext context = mainController.getUserFromTokens(token);
+
+        if (context.getCurrentUser() != null) {
+            Boolean quizDeleted = adminController.deleteQuiz(quizJson);
+            if (quizDeleted = true) {
+                return Response
+                        .status(200)
+                        .type("application/json")
+                        .entity("Quiz is deleted")
+                        .build();
+            } else {
+                return Response
+                        .status(500)
+                        .type("application/json")
+                        .entity("Error deleting quiz")
+                        .build();
+            }
+        } else {
+            return Response
+                    .status(403)
+                    .type("application/json")
+                    .entity("Error loading profile")
+                    .build();
+        }
+    }
 
 }

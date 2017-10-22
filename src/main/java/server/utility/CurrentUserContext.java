@@ -5,7 +5,6 @@ import server.models.User;
 import java.sql.SQLException;
 
 public class CurrentUserContext {
-
     private User currentUser;
 
     public User getCurrentUser() {

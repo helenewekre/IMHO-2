@@ -54,15 +54,13 @@ public class MainController {
 
     //Logic behind creating user.
 
-    public User createUser(String user) {
-        User userCreated = new Gson().fromJson(user, User.class);
-
+    public User createUser(User user) {
         long unixTime = (long) Math.floor(System.currentTimeMillis() / 10000);
 
-        userCreated.setTimeCreated(unixTime);
-        userCreated.setPassword(digester.hashWithSalt(userCreated.getPassword()+userCreated.getTimeCreated()));
+        user.setTimeCreated(unixTime);
+        user.setPassword(digester.hashWithSalt(user.getPassword()+user.getTimeCreated()));
 
-        return dbManager.createUser(userCreated);
+        return dbManager.createUser(user);
     }
 
     public CurrentUserContext getUserFromTokens(String token) throws SQLException {
