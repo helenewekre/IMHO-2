@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import server.controller.MainController;
 import server.dbmanager.DbManager;
 import server.models.User;
+import server.utility.Globals;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
@@ -23,6 +25,8 @@ public class UserEndpoint {
     which handles the logic. Returning a string with the found user.
      */
     public Response authorizeUser(String user) {
+        Globals.log.writeLog(getClass().getName(), this, "User authorized", 2);
+
         String userFound = mainController.authUser(user);
         return Response.status(200).entity(userFound).build();
     }
@@ -36,6 +40,8 @@ public class UserEndpoint {
     the user is created or not.
      */
     public Response createUser(String user) {
+        Globals.log.writeLog(getClass().getName(), this, "User created", 2);
+
         Boolean userCreated = mainController.createUser(user);
         return Response.status(200).type("application/json").entity("{\"userCreated\":\"true\"}").build();
     }
@@ -44,6 +50,8 @@ public class UserEndpoint {
     // User ID as a part of the PATH
     @Path("{id}")
     public Response getUserProfile(@PathParam("id") int id){
+        Globals.log.writeLog(getClass().getName(), this, "Get user profile", 2);
+
         //Creates a currentuser from a user ID, which is logged in.
         currentUser = dbManager.getUserProfile(id);
 

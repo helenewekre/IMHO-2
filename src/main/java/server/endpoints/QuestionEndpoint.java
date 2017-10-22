@@ -1,6 +1,7 @@
 package server.endpoints;
 
 import server.controller.AdminController;
+import server.utility.Globals;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -13,6 +14,8 @@ public class QuestionEndpoint {
 
     @POST
     public Response createQuestion(String questionJson) {
+        Globals.log.writeLog(getClass().getName(), this, "Quiz question created", 2);
+
         Boolean questionCreated = adminController.createQuestion(questionJson);
 
         return Response

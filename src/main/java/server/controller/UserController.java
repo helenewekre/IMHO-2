@@ -2,6 +2,7 @@ package server.controller;
 
 import server.dbmanager.DbManager;
 import server.models.*;
+import server.utility.Globals;
 
 import java.util.ArrayList;
 
@@ -16,6 +17,7 @@ public class UserController {
 
         result.setResult(dbManager.getNrCorectAnswers(quizID, userID));
         result.setNrQuestions(dbManager.getNrQuestion(quizID));
+        Globals.log.writeLog(getClass().getName(), this, "Get result", 2);
 
         return result;
         }

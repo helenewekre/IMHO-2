@@ -4,6 +4,7 @@ import server.controller.AdminController;
 import server.controller.UserController;
 import server.dbmanager.DbManager;
 import server.models.Quiz;
+import server.utility.Globals;
 
 
 import javax.ws.rs.GET;
@@ -21,7 +22,10 @@ public class QuizEndpoint {
     @GET
     @Path("/{CourseID}")
     public Response loadQuizzes(@PathParam("CourseID") int courseId){
+        Globals.log.writeLog(getClass().getName(), this, "Get course ID", 2);
+
         ArrayList<Quiz> quizzes = dbManager.loadQuizzes(courseId);
+
 
         return Response.status(200).entity(new Gson().toJson(quizzes)).build();
 
