@@ -59,17 +59,23 @@ import java.util.ArrayList;
     @GET
         //Specifies path
         @Path("/{question_id}")
-        public Response loadOptions (@PathParam("question_id") int questionId){
+        public Response loadOptions (@HeaderParam("authorization") String token, @PathParam("question_id") int questionId) throws SQLException {
+        CurrentUserContext context = mainController.getUserFromTokens(token);
+
+        if(context.getCurrentUser() != null) {
             //Instance of dbmanager to get access to loadOptions method
             //New arraylist of Option objects. Gives arraylist the value of the options loaded in loadOptions (dbmanager)
             ArrayList options = userController.getOptions(questionId);
 
             //Returns options object in arraylist as json
-        if(options != null) {
-            return Response.status(200).type("application/json").entity(new Gson().toJson(options)).build();
-        }
-            else {
-            return Response.status(200).type("application/json").entity("No options").build();
+            if (options != null) {
+                return Response.status(200).type("application/json").entity(new Gson().toJson(options)).build();
+            } else {
+                return Response.status(200).type("application/json").entity("No options").build();
+            }
+        } else {
+            return Response.status(500).type("application/json").entity("Error loading profile").build();
+
         }
     }
 }
