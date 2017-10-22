@@ -25,7 +25,7 @@ public class QuestionEndpoint {
         CurrentUserContext context = mainController.getUserFromTokens(token);
 
         if(context.getCurrentUser() != null) {
-            if(context.getCurrentUser().getType() == 1) {
+            if(context.isAdmin()) {
                 Question questionCreated = adminController.createQuestion(new Gson().fromJson(questionJson, Question.class));
 
                 if (questionCreated != null) {

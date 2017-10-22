@@ -25,7 +25,7 @@ import java.util.ArrayList;
     public Response createOption(@HeaderParam("authorization") String token, String option) throws SQLException {
         CurrentUserContext context = mainController.getUserFromTokens(token);
         if(context.getCurrentUser() != null) {
-            if (context.getCurrentUser().getType() == 1) {
+            if (context.isAdmin()) {
                 Option optionCreated = adminController.createOption(option);
                 if (optionCreated != null) {
                     return Response.status(200).type("application/json").entity(new Gson().toJson(optionCreated)).build();
@@ -45,7 +45,7 @@ import java.util.ArrayList;
     public Response deleteAnswer(@HeaderParam("authorization") String token, @PathParam("deleteId") int answerJson) throws SQLException {
         CurrentUserContext context = mainController.getUserFromTokens(token);
         if(context.getCurrentUser() != null) {
-            if(context.getCurrentUser().getType() == 2) {
+            if(context.isAdmin()) {
                 Boolean quizDeleted = userController.deleteAnswer(answerJson);
                 return Response.status(200).type("application/json").entity(new Gson().toJson(quizDeleted)).build();
             } else {
