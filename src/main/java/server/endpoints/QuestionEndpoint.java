@@ -2,8 +2,10 @@ package server.endpoints;
 
 import com.google.gson.Gson;
 import server.controller.AdminController;
+import server.controller.Config;
 import server.dbmanager.DbManager;
 import server.models.Question;
+import server.utility.Crypter;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -16,14 +18,15 @@ import java.util.ArrayList;
 @Path("/question")
 public class QuestionEndpoint {
     AdminController adminController = new AdminController();
-
+    Config config = new Config();
+    Crypter crypter = new Crypter();
 
     //Method for creating a question
     @POST
     public Response createQuestion(String questionJson) {
 
         Question question = new Gson().fromJson(questionJson, Question.class);
-        Boolean questionCreated = adminController.createQuestion(question);
+        adminController.createQuestion(question);
 
         return Response
                 .status(200)
@@ -42,7 +45,22 @@ public class QuestionEndpoint {
         //New arraylist, gives it the value of the questions loaded in loadQuestions (dbmanager), takes the integer quizId as param
         ArrayList<Question> questions = dbManager.loadQuestions(quizId);
 
+        if (config.getEncryption()) {
+            String newQuestions = new Gson().toJson(questions);
+            newQuestions = crypter.encryptAndDecryptXor(newQuestions);
+
+            return Response
+                    .status(200)
+                    .type("application/json")
+                    .entity(new Gson().toJson(newQuestions))
+                    .build();
+        }
+
         //Returning as Json
-        return Response.status(200).type("application/json").entity(new Gson().toJson(questions)).build();
+            return Response
+                    .status(200)
+                    .type("application/json")
+                    .entity(new Gson().toJson(questions))
+                    .build();
     }
 }

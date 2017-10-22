@@ -29,11 +29,12 @@ import java.util.ArrayList;
     public Response createOption(String optionJson) {
        // Boolean optionCreated = adminController.createOption(optionJson);
         //GET method for loading options bc. SQL statements is SELECT.
-        adminController.createOption(optionJson);
+        Option option = new Gson().fromJson(optionJson, Option.class);
+        adminController.createOption(option);
 
 
         if (config.getEncryption()) {
-            Option option = new Gson().fromJson(optionJson, Option.class);
+
             String newOption = new Gson().toJson(option);
             newOption = crypter.encryptAndDecryptXor(newOption);
 
