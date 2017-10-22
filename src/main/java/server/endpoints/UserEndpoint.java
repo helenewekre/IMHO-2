@@ -35,10 +35,10 @@ public class UserEndpoint {
     @Path("/signup")
     //Creating a new user
     public Response createUser(String user) {
-        User userCreated = mainController.createUser(user);
+        User newUser = mainController.createUser(new Gson().fromJson(user, User.class));
 
-        if (userCreated != null) {
-            return Response.status(200).type("application/json").entity(new Gson().toJson(userCreated)).build();
+        if (newUser != null) {
+            return Response.status(200).type("application/json").entity(new Gson().toJson(newUser)).build();
         } else {
             return Response.status(500).type("application/json").entity("Could not create user").build();
         }
@@ -48,7 +48,7 @@ public class UserEndpoint {
     @Path("/profile")
     @GET
     //Getting own profile by token
-    public Response get(@HeaderParam("authorization") String token) throws SQLException {
+    public Response getProfile(@HeaderParam("authorization") String token) throws SQLException {
         CurrentUserContext context = mainController.getUserFromTokens(token);
 
         if (context.getCurrentUser() != null) {
