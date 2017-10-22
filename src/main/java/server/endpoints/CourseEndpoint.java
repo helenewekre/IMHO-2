@@ -37,12 +37,12 @@ public class CourseEndpoint {
                         .type("application/json")
                         .entity(new Gson().toJson(newCourses))
                         .build();
-            } else {
+            }
                 return Response.status(200)
                         .type("application/json")
                         .entity(new Gson().toJson(courses))
                         .build();
-            }
+
     }
 }
 

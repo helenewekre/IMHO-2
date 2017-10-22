@@ -27,13 +27,31 @@ import java.util.ArrayList;
 
     @POST
     public Response createOption(String optionJson) {
-        Boolean optionCreated = adminController.createOption(optionJson);
+       // Boolean optionCreated = adminController.createOption(optionJson);
         //GET method for loading options bc. SQL statements is SELECT.
-        return Response
+        adminController.createOption(optionJson);
+
+
+        if (config.getEncryption()) {
+            Option option = new Gson().fromJson(optionJson, Option.class);
+            String newOption = new Gson().toJson(option);
+            newOption = crypter.encryptAndDecryptXor(newOption);
+
+            return Response
+                    .status(200)
+                    .type("application/json")
+                    .entity(new Gson().toJson(newOption))
+                    .build();
+
+        }
+            return Response
                     .status(200)
                     .type("application/json")
                     .entity("{\"optionCreated\":\"true\"}")
                     .build();
+
+
+
     }
     @DELETE
     @Path("{deleteId}")
@@ -66,17 +84,11 @@ import java.util.ArrayList;
                         .entity(new Gson().toJson(newOptions))
                         .build();
 
-            } else {
-
+            }
                 //Returns options object in arraylist as json
                 return Response.status(200)
                         .type("application/json")
                         .entity(new Gson().toJson(options))
                         .build();
-
-            }
-
-
-
             }
         }
