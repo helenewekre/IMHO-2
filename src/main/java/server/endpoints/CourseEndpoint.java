@@ -29,7 +29,7 @@ public class CourseEndpoint {
 
             ArrayList<Course> courses = dbmanager.loadCourses();
 
-            if (config.getEncryption()) {
+
                 String newCourses = new Gson().toJson(courses);
                 newCourses = crypter.encryptAndDecryptXor(newCourses);
 
@@ -37,11 +37,8 @@ public class CourseEndpoint {
                         .type("application/json")
                         .entity(new Gson().toJson(newCourses))
                         .build();
-            }
-                return Response.status(200)
-                        .type("application/json")
-                        .entity(new Gson().toJson(courses))
-                        .build();
+
+
 
     }
 }

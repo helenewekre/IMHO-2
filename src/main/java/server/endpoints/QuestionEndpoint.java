@@ -18,7 +18,6 @@ import java.util.ArrayList;
 @Path("/question")
 public class QuestionEndpoint {
     AdminController adminController = new AdminController();
-    Config config = new Config();
     Crypter crypter = new Crypter();
 
     //Method for creating a question
@@ -45,7 +44,6 @@ public class QuestionEndpoint {
         //New arraylist, gives it the value of the questions loaded in loadQuestions (dbmanager), takes the integer quizId as param
         ArrayList<Question> questions = dbManager.loadQuestions(quizId);
 
-        if (config.getEncryption()) {
             String newQuestions = new Gson().toJson(questions);
             newQuestions = crypter.encryptAndDecryptXor(newQuestions);
 
@@ -56,11 +54,6 @@ public class QuestionEndpoint {
                     .build();
         }
 
-        //Returning as Json
-            return Response
-                    .status(200)
-                    .type("application/json")
-                    .entity(new Gson().toJson(questions))
-                    .build();
-    }
+
+
 }

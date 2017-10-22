@@ -22,7 +22,6 @@ public class QuizEndpoint {
     DbManager dbManager = new DbManager();
     AdminController adminController = new AdminController();
     MainController mainController = new MainController();
-    Config config = new Config();
     Crypter crypter = new Crypter();
 
 
@@ -31,7 +30,7 @@ public class QuizEndpoint {
     public Response loadQuizzes(@PathParam("CourseID") int courseId) {
         ArrayList<Quiz> quizzes = dbManager.loadQuizzes(courseId);
 
-        if (config.getEncryption()) {
+
             String newQuizzes = new Gson().toJson(quizzes);
             newQuizzes = crypter.encryptAndDecryptXor(newQuizzes);
 
@@ -41,13 +40,9 @@ public class QuizEndpoint {
                     .entity(new Gson().toJson(newQuizzes))
                     .build();
 
-        }
 
-        return Response
-                .status(200)
-                .type("application/json")
-                .entity(new Gson().toJson(quizzes))
-                .build();
+
+
 
     }
         // Method for creating a quiz

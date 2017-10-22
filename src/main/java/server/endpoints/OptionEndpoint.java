@@ -22,7 +22,6 @@ import java.util.ArrayList;
     AdminController adminController = new AdminController();
     UserController userController = new UserController();
     Crypter crypter = new Crypter();
-    Config config = new Config();
 
 
     @POST
@@ -33,8 +32,6 @@ import java.util.ArrayList;
         adminController.createOption(option);
 
 
-        if (config.getEncryption()) {
-
             String newOption = new Gson().toJson(option);
             newOption = crypter.encryptAndDecryptXor(newOption);
 
@@ -42,13 +39,6 @@ import java.util.ArrayList;
                     .status(200)
                     .type("application/json")
                     .entity(new Gson().toJson(newOption))
-                    .build();
-
-        }
-            return Response
-                    .status(200)
-                    .type("application/json")
-                    .entity("{\"optionCreated\":\"true\"}")
                     .build();
 
 
@@ -76,7 +66,6 @@ import java.util.ArrayList;
             //New arraylist of Option objects. Gives arraylist the value of the options loaded in loadOptions (dbmanager)
             ArrayList<Option> options = dbmanager.loadOptions(questionId);
 
-            if (config.getEncryption()) {
                 String newOptions = new Gson().toJson(options);
                 newOptions = crypter.encryptAndDecryptXor(newOptions);
 
@@ -85,11 +74,7 @@ import java.util.ArrayList;
                         .entity(new Gson().toJson(newOptions))
                         .build();
 
-            }
-                //Returns options object in arraylist as json
-                return Response.status(200)
-                        .type("application/json")
-                        .entity(new Gson().toJson(options))
-                        .build();
+
+
             }
         }
