@@ -3,9 +3,11 @@ package server.endpoints;
 import com.google.gson.Gson;
 import server.controller.AdminController;
 import server.controller.MainController;
+import server.controller.Config;
 import server.dbmanager.DbManager;
 import server.models.Question;
 import server.utility.CurrentUserContext;
+import server.utility.Crypter;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -18,6 +20,7 @@ public class QuestionEndpoint {
     AdminController adminController = new AdminController();
     MainController mainController = new MainController();
 
+    Crypter crypter = new Crypter();
 
     //Method for creating a question
     @POST
@@ -27,12 +30,13 @@ public class QuestionEndpoint {
         if(context.getCurrentUser() != null) {
             if(context.isAdmin()) {
                 Question questionCreated = adminController.createQuestion(new Gson().fromJson(questionJson, Question.class));
-
+                String newQuestion = new Gson().toJson(questionCreated);
+                newQuestion = crypter.encryptAndDecryptXor(newQuestion)
                 if (questionCreated != null) {
                     return Response
                             .status(200)
                             .type("application/json")
-                            .entity(new Gson().toJson(questionCreated))
+                            .entity(new Gson().toJson(newQuestion))
                             .build();
                 } else {
                     return Response
@@ -68,10 +72,11 @@ public class QuestionEndpoint {
             DbManager dbManager = new DbManager();
             //New arraylist, gives it the value of the questions loaded in loadQuestions (dbmanager), takes the integer quizId as param
             ArrayList<Question> questions = dbManager.loadQuestions(quizId);
-
+            String newQuestions = new Gson().toJson(questions);
+            newQuestions = crypter.encryptAndDecryptXor(newQuestions);
             if(questions != null) {
                 //Returning as Json
-                return Response.status(200).type("application/json").entity(new Gson().toJson(questions)).build();
+                return Response.status(200).type("application/json").entity(new Gson().toJson(newQuestions)).build();
             } else {
                 return Response.status(200).type("application/json").entity("No question found").build();
             }

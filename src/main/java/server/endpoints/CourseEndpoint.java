@@ -22,6 +22,7 @@ public class CourseEndpoint {
     Crypter crypter = new Crypter();
     MainController mainController = new MainController();
 
+
     @GET
     public Response loadCourses(@HeaderParam("authorization") String token) throws SQLException {
         CurrentUserContext context = mainController.getUserFromTokens(token);

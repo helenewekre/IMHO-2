@@ -7,6 +7,7 @@ import server.controller.UserController;
 import server.dbmanager.DbManager;
 import server.models.Quiz;
 import server.models.User;
+import server.utility.Crypter;
 import server.utility.CurrentUserContext;
 
 
@@ -20,6 +21,7 @@ public class QuizEndpoint {
     DbManager dbManager = new DbManager();
     AdminController adminController = new AdminController();
     MainController mainController = new MainController();
+    Crypter crypter = new Crypter();
 
 
     @GET
@@ -29,9 +31,10 @@ public class QuizEndpoint {
 
         if (context.getCurrentUser() != null) {
             ArrayList<Quiz> quizzes = dbManager.loadQuizzes(courseId);
-
+            String newQuizzes = new Gson().toJson(quizzes);
+            newQuizzes = crypter.encryptAndDecryptXor(newQuizzes);
             if (quizzes != null) {
-                return Response.status(200).type("application/json").entity(new Gson().toJson(quizzes)).build();
+                return Response.status(200).type("application/json").entity(new Gson().toJson(newQuizzes)).build();
             } else {
                 return Response.status(200).type("application/json").entity("No quiz found").build();
             }
@@ -52,9 +55,10 @@ public class QuizEndpoint {
         if (context.getCurrentUser() != null) {
             if (context.isAdmin()) {
                 Quiz quizCreated = adminController.createQuiz(quizJson);
-
+                String newQuiz = new Gson().toJson(quizCreated);
+                newQuiz = crypter.encryptAndDecryptXor(newQuiz);
                 return Response.status(200).type("application/json")
-                        .entity(new Gson().toJson(quizCreated))
+                        .entity(new Gson().toJson(newQuiz))
                         .build();
             } else {
                 return Response

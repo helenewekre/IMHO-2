@@ -3,10 +3,12 @@ package server.endpoints;
 import com.google.gson.Gson;
 import server.controller.AdminController;
 import server.controller.MainController;
+import server.controller.Config;
 import server.controller.UserController;
 import server.dbmanager.DbManager;
 import server.models.Option;
 import server.utility.CurrentUserContext;
+import server.utility.Crypter;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
     public class OptionEndpoint {
     AdminController adminController = new AdminController();
     UserController userController = new UserController();
+    Crypter crypter = new Crypter();
     MainController mainController = new MainController();
 
     //Creating a new option for a quiz.
@@ -27,8 +30,10 @@ import java.util.ArrayList;
         if(context.getCurrentUser() != null) {
             if (context.isAdmin()) {
                 Option optionCreated = adminController.createOption(option);
+                String newOption = new Gson().toJson(optionCreated);
+                newOption = crypter.encryptAndDecryptXor(newOption);
                 if (optionCreated != null) {
-                    return Response.status(200).type("application/json").entity(new Gson().toJson(optionCreated)).build();
+                    return Response.status(200).type("application/json").entity(new Gson().toJson(newOption)).build();
                 } else {
                     return Response.status(500).type("application/json").entity("Error in creating option").build();
                 }
@@ -66,10 +71,11 @@ import java.util.ArrayList;
             //Instance of dbmanager to get access to loadOptions method
             //New arraylist of Option objects. Gives arraylist the value of the options loaded in loadOptions (dbmanager)
             ArrayList options = userController.getOptions(questionId);
-
+            String newLoadedOptions = new Gson().toJson(options);
+            newLoadedOptions = crypter.encryptAndDecryptXor(newLoadedOptions);
             //Returns options object in arraylist as json
             if (options != null) {
-                return Response.status(200).type("application/json").entity(new Gson().toJson(options)).build();
+                return Response.status(200).type("application/json").entity(new Gson().toJson(newLoadedOptions)).build();
             } else {
                 return Response.status(200).type("application/json").entity("No options").build();
             }
