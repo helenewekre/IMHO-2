@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import server.controller.MainController;
 import server.controller.UserController;
 import server.models.Result;
+import server.utility.Crypter;
 import server.utility.CurrentUserContext;
 
 import javax.ws.rs.GET;
@@ -17,6 +18,8 @@ import java.sql.SQLException;
 public class ResultEndpoint {
     UserController userController = new UserController();
     MainController mainController = new MainController();
+    Crypter crypter = new Crypter();
+
 
     @GET
     //send totale number of correct answer and questions back to the user.
@@ -27,10 +30,12 @@ public class ResultEndpoint {
         if (context.getCurrentUser() != null) {
             if(!context.isAdmin()) {
                 Result result = userController.getResult(quizID, userID);
+                String myResult = new Gson().toJson(result);
+                myResult = crypter.encryptAndDecryptXor(myResult);
                 return Response
                         .status(200)
                         .type("application/json")
-                        .entity(new Gson().toJson(result))
+                        .entity(new Gson().toJson(myResult))
                         .build();
             } else {
                 return Response

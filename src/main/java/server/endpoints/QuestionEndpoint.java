@@ -31,7 +31,7 @@ public class QuestionEndpoint {
             if(context.isAdmin()) {
                 Question questionCreated = adminController.createQuestion(new Gson().fromJson(questionJson, Question.class));
                 String newQuestion = new Gson().toJson(questionCreated);
-                newQuestion = crypter.encryptAndDecryptXor(newQuestion)
+                newQuestion = crypter.encryptAndDecryptXor(newQuestion);
                 if (questionCreated != null) {
                     return Response
                             .status(200)
