@@ -88,13 +88,13 @@ public class QuizEndpoint {
             if (quizDeleted = true) {
                 return Response
                         .status(200)
-                        .type("application/json")
+                        .type("text/plain")
                         .entity("Quiz is deleted")
                         .build();
             } else {
                 return Response
                         .status(500)
-                        .type("application/json")
+                        .type("text/plain")
                         .entity("Error deleting quiz")
                         .build();
             }
