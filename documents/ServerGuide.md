@@ -1,5 +1,6 @@
 # Test af server
-*Opdateret d. 23/10/2017 kl. 23.43*
+*Opdateret d. 23/10/2017 kl. 23.51*
+*Server på Master OK!*
 
 ## Intro
 - Før I kan teste server skal I have have et værktøj installeret, som kan agere klient. I gennemgangen vil *Advanced REST client* - en udvidelse til Chrome blive anvendt. Af andre kan *Postman* anbefales. 
