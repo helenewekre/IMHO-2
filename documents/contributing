@@ -43,3 +43,7 @@ Husk hele tiden at gemme det du laver, når du koder. Hellere for mange commits 
 - Hellere for mange commits end for få
 - Aldrig merge uden en ansvarlig har godkendt koden
 - Husk beskrivende commits - for din egen skyld også
+
+## Ved redigering af fil
+- Gem dine ændringer i programmet `git commit -m"kommentar"`
+- Skriv `git fetch` i din terminal/git bash, for at hente de nyeste ændringer ned, som f.eks.nye branch og dokumenter osv...  
