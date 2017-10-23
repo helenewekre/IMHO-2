@@ -1,5 +1,6 @@
 package server.dbmanager;
 
+import server.controller.Config;
 import server.models.Course;
 import server.models.Question;
 import server.models.Option;
@@ -17,9 +18,12 @@ import java.util.HashMap;
 public class DbManager {
 
     // Creating the connection for the database
-    private static final String URL = "jdbc:mysql://localhost:3306/quizDB?useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "hello";
+    private static final String URL =  "jdbc:mysql://"
+            + Globals.config.getDatabaseHost() + ":"
+            + Globals.config.getDatabasePort() + "/"
+            + Globals.config.getDatabaseName() + "?useSSL=false&serverTimezone=GMT";
+    private static final String USERNAME = Globals.config.getDatabaseUsername();
+    private static final String PASSWORD = Globals.config.getDatabasePassword();
     private static Connection connection = null;
 
     Crypter crypter = new Crypter();

@@ -5,6 +5,7 @@ import server.controller.Config;
 import server.controller.MainController;
 import server.dbmanager.DbManager;
 import server.models.Course;
+import server.models.User;
 import server.utility.CurrentUserContext;
 import server.utility.Globals;
 import server.utility.Crypter;
