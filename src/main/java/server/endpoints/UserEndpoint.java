@@ -7,6 +7,7 @@ import server.dbmanager.DbManager;
 import server.models.User;
 import server.utility.Crypter;
 import server.utility.CurrentUserContext;
+import server.utility.Globals;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -23,6 +24,8 @@ public class UserEndpoint {
     @Path("/login")
     //Endpoint for authorizing a user
     public Response authorizeUser(String user) {
+        Globals.log.writeLog(this.getClass().getName(), this, "User authorized", 2);
+
         User userAuth = new Gson().fromJson(user, User.class);
         User authorizedUser = mainController.authUser(userAuth);
 
@@ -40,6 +43,8 @@ public class UserEndpoint {
     @Path("/signup")
     //Creating a new user
     public Response createUser(String user) {
+        Globals.log.writeLog(this.getClass().getName(), this, "User created", 2);
+
         User newUser = mainController.createUser(new Gson().fromJson(user, User.class));
 
         if (newUser != null) {
@@ -54,6 +59,8 @@ public class UserEndpoint {
     @GET
     //Getting own profile by token
     public Response getProfile(@HeaderParam("authorization") String token) throws SQLException {
+        Globals.log.writeLog(this.getClass().getName(), this, "Got profile", 2);
+
         CurrentUserContext context = mainController.getUserFromTokens(token);
 
         String myProfile = new Gson().toJson(context.getCurrentUser());
@@ -76,6 +83,8 @@ public class UserEndpoint {
     @POST
     @Path("/logout")
     public Response logOut(String idUser) throws SQLException {
+        Globals.log.writeLog(this.getClass().getName(), this, "Logged out", 2);
+
         int id = new Gson().fromJson(idUser, Integer.class);
         if(dbManager.deleteToken(id) == true) {
             return Response.status(200).entity("You are now logged out").build();

@@ -9,6 +9,7 @@ import server.models.Quiz;
 import server.models.User;
 import server.utility.Crypter;
 import server.utility.CurrentUserContext;
+import server.utility.Globals;
 
 
 import javax.ws.rs.*;
@@ -27,6 +28,8 @@ public class QuizEndpoint {
     @GET
     @Path("/{CourseID}")
     public Response loadQuizzes(@HeaderParam("authorization") String token, @PathParam("CourseID") int courseId) throws SQLException {
+        Globals.log.writeLog(this.getClass().getName(), this, "Quizzes loaded", 2);
+
         CurrentUserContext context = mainController.getUserFromTokens(token);
 
         if (context.getCurrentUser() != null) {
@@ -50,6 +53,8 @@ public class QuizEndpoint {
     // Method for creating a quiz
     @POST
     public Response createQuiz(@HeaderParam("authorization") String token, String quizJson) throws SQLException {
+        Globals.log.writeLog(this.getClass().getName(), this, "Quiz created", 2);
+
         CurrentUserContext context = mainController.getUserFromTokens(token);
 
         if (context.getCurrentUser() != null) {
@@ -81,6 +86,8 @@ public class QuizEndpoint {
     @DELETE
     @Path("{deleteId}")
     public Response deleteQuiz(@HeaderParam("authorization") String token, @PathParam("deleteId")int quizJson) throws SQLException {
+        Globals.log.writeLog(this.getClass().getName(), this, "Quiz deleted", 2);
+
         CurrentUserContext context = mainController.getUserFromTokens(token);
 
         if (context.getCurrentUser() != null) {
