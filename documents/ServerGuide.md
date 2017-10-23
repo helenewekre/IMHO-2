@@ -4,6 +4,7 @@
 ## Intro
 - Før I kan teste server skal I have have et værktøj installeret, som kan agere klient. I gennemgangen vil *Advanced REST client* - en udvidelse til Chrome blive anvendt. Af andre kan *Postman* anbefales. 
 - Det anbefales yderligere at anvende at værktøj, som kan administrere database - eventuelt *SequelPro* eller *Workbench*. Denne kan I starte op med det samme. 
+- Det kan være forvirrende at følge guiden, især med tal - har siddet med disse test fejl i flere timer. Det handler hele tiden om at kigge tilbage til jeres database, og se om jeres tal giver mening. Eksempelvis giver det ikke mening at sætte course id til 10000, når vi kun har 1-4 id i courses. 
 - Sidst, husk at starte jeres server med *Tomcat*. 
 
 ### Kryptering 
