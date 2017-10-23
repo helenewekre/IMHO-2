@@ -8,3 +8,5 @@
 
 1. Navigér til `IMHO-2/src/main/java/resources/config.json`
 2. Sæt kryptering til/fra ved at skrive `true` eller `false`
+
+## Signup
