@@ -47,3 +47,4 @@ Husk hele tiden at gemme det du laver, når du koder. Hellere for mange commits 
 ## Ved redigering af fil
 - Gem dine ændringer i programmet `git commit -m"kommentar"`
 - Skriv `git fetch` i din terminal/git bash, for at hente de nyeste ændringer ned, som f.eks.nye branch og dokumenter osv...  
+- Man kan nu arbejde i de nyeste ændringer.
