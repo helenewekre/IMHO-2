@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import server.controller.MainController;
 import server.dbmanager.DbManager;
 import server.models.User;
+import server.utility.Crypter;
 import server.utility.CurrentUserContext;
 
 import javax.ws.rs.*;
@@ -16,6 +17,7 @@ public class UserEndpoint {
     //Creating objects of database manager and MainController
     DbManager dbManager = new DbManager();
     MainController mainController = new MainController();
+    Crypter crypter = new Crypter();
 
     @POST
     @Path("/login")
@@ -24,8 +26,11 @@ public class UserEndpoint {
         User userAuth = new Gson().fromJson(user, User.class);
         User authorizedUser = mainController.authUser(userAuth);
 
+        String myUser = new Gson().toJson(authorizedUser);
+        myUser = crypter.encryptAndDecryptXor(myUser);
+
         if (authorizedUser != null) {
-            return Response.status(200).entity(new Gson().toJson(authorizedUser)).build();
+            return Response.status(200).entity(new Gson().toJson(myUser)).build();
         } else {
             return Response.status(500).entity("There was an error").build();
         }
@@ -51,11 +56,13 @@ public class UserEndpoint {
     public Response getProfile(@HeaderParam("authorization") String token) throws SQLException {
         CurrentUserContext context = mainController.getUserFromTokens(token);
 
+        String myProfile = new Gson().toJson(context.getCurrentUser());
+        myProfile = crypter.encryptAndDecryptXor(myProfile);
         if (context.getCurrentUser() != null) {
             return Response
                     .status(200)
                     .type("application/json")
-                    .entity(new Gson().toJson(context.getCurrentUser()))
+                    .entity(new Gson().toJson(myProfile))
                     .build();
         } else {
             return Response
