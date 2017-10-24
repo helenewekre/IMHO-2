@@ -14,6 +14,7 @@ public final class Config {
     private static Integer DATABASE_PORT;
     private static String DATABASE_USERNAME;
     private static String DATABASE_PASSWORD;
+    private static String DATABASE_NAME;
     private static Boolean ENCRYPTION;
 
 
@@ -48,6 +49,7 @@ public final class Config {
         DATABASE_PORT = Integer.parseInt(json.get("DATABASE_PORT").toString().replace("\"", ""));
         DATABASE_USERNAME = json.get("DATABASE_USERNAME").toString().replace("\"", "");
         DATABASE_PASSWORD = json.get("DATABASE_PASSWORD").toString().replace("\"", "");
+        DATABASE_NAME = json.get("DATABASE_NAME").toString().replace("\"", "");
         ENCRYPTION = json.get("ENCRYPTION").getAsBoolean();
        // ENCRYPTION = Boolean.parseBoolean(json.get("ENCRYPTION").toString().replace("\"", ""));
     }
@@ -64,6 +66,7 @@ public final class Config {
     public static String getDatabasePassword(){
         return DATABASE_PASSWORD;
     }
+    public static String getDatabaseName(){return DATABASE_NAME;}
 
     public static Boolean getEncryption() {
         return ENCRYPTION;
