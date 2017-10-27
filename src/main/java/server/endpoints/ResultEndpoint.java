@@ -6,6 +6,7 @@ import server.controller.UserController;
 import server.models.Result;
 import server.utility.Crypter;
 import server.utility.CurrentUserContext;
+import server.utility.Globals;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -25,6 +26,8 @@ public class ResultEndpoint {
     //send totale number of correct answer and questions back to the user.
     @Path("{quizID}/{userID}")
     public Response getUserScore(@HeaderParam("authorization") String token, @PathParam("quizID") int quizID, @PathParam("userID") int userID) throws SQLException {
+        Globals.log.writeLog(this.getClass().getName(), this, "Got User Score", 2);
+
         CurrentUserContext context = mainController.getUserFromTokens(token);
 
         if (context.getCurrentUser() != null) {

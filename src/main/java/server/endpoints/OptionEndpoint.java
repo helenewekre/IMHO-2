@@ -9,6 +9,7 @@ import server.dbmanager.DbManager;
 import server.models.Option;
 import server.utility.CurrentUserContext;
 import server.utility.Crypter;
+import server.utility.Globals;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -26,6 +27,8 @@ import java.util.ArrayList;
     //Creating a new option for a quiz.
     @POST
     public Response createOption(@HeaderParam("authorization") String token, String option) throws SQLException {
+        Globals.log.writeLog(this.getClass().getName(), this, "Option created", 2);
+
         CurrentUserContext context = mainController.getUserFromTokens(token);
         if(context.getCurrentUser() != null) {
             if (context.isAdmin()) {
@@ -48,6 +51,8 @@ import java.util.ArrayList;
     @DELETE
     @Path("{deleteId}")
     public Response deleteAnswer(@HeaderParam("authorization") String token, @PathParam("deleteId") int answerJson) throws SQLException {
+        Globals.log.writeLog(this.getClass().getName(), this, "Answer deleted", 2);
+
         CurrentUserContext context = mainController.getUserFromTokens(token);
         if(context.getCurrentUser() != null) {
             if(context.isAdmin()) {
@@ -65,6 +70,8 @@ import java.util.ArrayList;
         //Specifies path
         @Path("/{question_id}")
         public Response loadOptions (@HeaderParam("authorization") String token, @PathParam("question_id") int questionId) throws SQLException {
+        Globals.log.writeLog(this.getClass().getName(), this, "Options loaded", 2);
+
         CurrentUserContext context = mainController.getUserFromTokens(token);
 
         if(context.getCurrentUser() != null) {

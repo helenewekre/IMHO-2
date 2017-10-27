@@ -25,6 +25,8 @@ public class CourseEndpoint {
 
     @GET
     public Response loadCourses(@HeaderParam("authorization") String token) throws SQLException {
+        Globals.log.writeLog(this.getClass().getName(), this, "Courses loaded", 2);
+
         CurrentUserContext context = mainController.getUserFromTokens(token);
 
         if (context.getCurrentUser() != null) {
