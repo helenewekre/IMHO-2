@@ -3,6 +3,7 @@ package server.dbmanager;
 import server.models.*;
 import server.utility.Crypter;
 import server.utility.Globals;
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -71,7 +72,7 @@ public class DbManager {
                 user.setTimeCreated(resultSet.getInt("time_created"));
 
             }
-        //Exception to avoid crashing
+            //Exception to avoid crashing
             Globals.log.writeLog(this.getClass().getName(), this, "Authorize user catch", 2);
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -94,15 +95,15 @@ public class DbManager {
         //Try-catch method to avoid the program crashing on exceptions
         try {
             PreparedStatement createUser = connection.prepareStatement("INSERT INTO User (username, password, time_created) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            createUser.setString(1,user.getUsername());
-            createUser.setString(2,user.getPassword());
+            createUser.setString(1, user.getUsername());
+            createUser.setString(2, user.getPassword());
             createUser.setLong(3, user.getTimeCreated());
 
             //rowsAffected
             int rowsAffected = createUser.executeUpdate();
             if (rowsAffected == 1) {
                 ResultSet rs = createUser.getGeneratedKeys();
-                if(rs != null && rs.next()) {
+                if (rs != null && rs.next()) {
                     int autoIncrementedUserId = rs.getInt(1);
                     user.setUserId(autoIncrementedUserId);
                 } else {
@@ -113,7 +114,7 @@ public class DbManager {
                 return user;
             }
 
-        //Exception to avoid crashing
+            //Exception to avoid crashing
             Globals.log.writeLog(this.getClass().getName(), this, "Create user catch", 2);
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -139,7 +140,7 @@ public class DbManager {
             int rowsAffected = createQuiz.executeUpdate();
             if (rowsAffected == 1) {
                 ResultSet rs = createQuiz.getGeneratedKeys();
-                if(rs != null && rs.next()) {
+                if (rs != null && rs.next()) {
                     int autoIncrementedQuizId = rs.getInt(1);
                     quiz.setQuizId(autoIncrementedQuizId);
                 } else {
@@ -148,13 +149,14 @@ public class DbManager {
                 return quiz;
             }
 
-        //Exception to avoid crashing
+            //Exception to avoid crashing
             Globals.log.writeLog(this.getClass().getName(), this, "Create quiz catch", 2);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
+
     // Method for creating a question
     public Question createQuestion(Question question) throws IllegalArgumentException {
         Globals.log.writeLog(this.getClass().getName(), this, "Create question", 2);
@@ -172,7 +174,7 @@ public class DbManager {
                 return question;
             }
 
-        //Exception to avoid crashing
+            //Exception to avoid crashing
             Globals.log.writeLog(this.getClass().getName(), this, "Create question catch", 2);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -187,18 +189,23 @@ public class DbManager {
         try {
             //SQL statement
             PreparedStatement createOption = connection
-                    .prepareStatement("INSERT INTO `Option` (`option`, question_id, is_correct) VALUES (?, ?, ?);");
-                //Setting parameters for user object
-                createOption.setString(1, option.getOption());
-                createOption.setInt(2, option.getOptionToQuestionId());
-                createOption.setInt(3, option.getIsCorrect());
+                    .prepareStatement("INSERT INTO `Option` (`option`, question_id, is_correct) VALUES (?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
+            //Setting parameters for user object
+            createOption.setString(1, option.getOption());
+            createOption.setInt(2, option.getOptionToQuestionId());
+            createOption.setInt(3, option.getIsCorrect());
 
-                int rowsAffected = createOption.executeUpdate();
-
-        if (rowsAffected == 1) {
-            return option;
-        }
-            Globals.log.writeLog(this.getClass().getName(), this, "Create option catch", 2);
+            int rowsAffected = createOption.executeUpdate();
+            if (rowsAffected == 1) {
+                ResultSet rs = createOption.getGeneratedKeys();
+                if (rs != null && rs.next()) {
+                    int autoIncrementedOptionId = rs.getInt(1);
+                    option.setOptionId(autoIncrementedOptionId);
+                } else {
+                    option = null;
+                }
+                return option;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -226,7 +233,7 @@ public class DbManager {
 
             }
 
-        //Exception to avoid crashing
+            //Exception to avoid crashing
         } catch (SQLException e) {
             e.printStackTrace();
 
@@ -273,7 +280,7 @@ public class DbManager {
 
             }
 
-        //Exception to avoid crashing
+            //Exception to avoid crashing
             Globals.log.writeLog(this.getClass().getName(), this, "Available quizzes catch", 2);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -328,7 +335,7 @@ public class DbManager {
             //Always close the resultset as it is a temporary table of content
         } finally {
             try {
-                if(resultSet != null) {
+                if (resultSet != null) {
                     resultSet.close();
                 }
             } catch (SQLException ef) {
@@ -337,7 +344,7 @@ public class DbManager {
             }
         }
 
-      // Retuning the ArrayList of question objects found in database with given quiz id
+        // Retuning the ArrayList of question objects found in database with given quiz id
         return questions;
 
     }
@@ -400,7 +407,7 @@ public class DbManager {
             addTokenStatement.setString(1, token);
             addTokenStatement.setInt(2, idUser);
             addTokenStatement.executeUpdate();
-        }   catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -411,7 +418,7 @@ public class DbManager {
         try {
             deleteTokenStatement.setInt(1, idUser);
             deleteTokenStatement.executeUpdate();
-        }   catch (SQLException exception) {
+        } catch (SQLException exception) {
             exception.printStackTrace();
         }
         return true;
@@ -457,7 +464,7 @@ public class DbManager {
             getTimeCreatedByUsername.setString(1, username);
             resultSet = getTimeCreatedByUsername.executeQuery();
 
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 user = new User();
                 user.setTimeCreated(resultSet.getLong("time_created"));
             }
@@ -472,7 +479,8 @@ public class DbManager {
         }
         return user;
     }
-        //Method for deleting a quiz and all it's sub-tables
+
+    //Method for deleting a quiz and all it's sub-tables
     public boolean deleteQuiz(int quizId) throws IllegalArgumentException {
         Globals.log.writeLog(this.getClass().getName(), this, "Delete quiz", 2);
         //Try-catch
@@ -525,7 +533,7 @@ public class DbManager {
 
 
             while (resultSet.next()) {
-                 //gets the count of the total correct answers and writes it to score.
+                //gets the count of the total correct answers and writes it to score.
                 score = (resultSet.getInt("count(*)"));
 
             }

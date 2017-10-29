@@ -3,7 +3,7 @@ package server.endpoints;
 
 import com.google.gson.Gson;
 import server.controller.MainController;
-import server.dbmanager.DbManager;
+import server.controller.TokenController;
 import server.models.User;
 import server.utility.Crypter;
 import server.utility.CurrentUserContext;
@@ -15,8 +15,9 @@ import java.sql.SQLException;
 
 @Path("/user")
 public class UserEndpoint {
-    DbManager dbManager = new DbManager();
     MainController mainController = new MainController();
+    TokenController tokenController = new TokenController();
+
     Crypter crypter = new Crypter();
 
     @POST
@@ -58,7 +59,7 @@ public class UserEndpoint {
     @GET
     //Getting own profile by token
     public Response getMyUser(@HeaderParam("authorization") String token) throws SQLException {
-        CurrentUserContext currentUser = mainController.getUserFromTokens(token);
+        CurrentUserContext currentUser = tokenController.getUserFromTokens(token);
         String myUser = new Gson().toJson(currentUser.getCurrentUser());
         myUser = crypter.encryptAndDecryptXor(myUser);
 
@@ -75,8 +76,9 @@ public class UserEndpoint {
     @Path("/logout")
     public Response logOut(String userId) throws SQLException {
         int myUserId = new Gson().fromJson(userId, Integer.class);
+        Boolean deletedToken = tokenController.deleteToken(myUserId);
 
-        if (dbManager.deleteToken(myUserId) == true) {
+        if (deletedToken == true) {
             Globals.log.writeLog(this.getClass().getName(), this, "User log out", 2);
             return Response.status(200).entity("Logged out").build();
         } else {

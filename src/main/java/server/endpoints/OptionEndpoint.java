@@ -1,8 +1,9 @@
 package server.endpoints;
 
 import com.google.gson.Gson;
-import server.controller.AdminController;
+import server.controller.QuizController;
 import server.controller.MainController;
+import server.controller.TokenController;
 import server.controller.UserController;
 import server.models.Option;
 import server.utility.CurrentUserContext;
@@ -17,9 +18,9 @@ import java.util.ArrayList;
 //Specifies path
 @Path("/option")
 public class OptionEndpoint {
-    AdminController adminController = new AdminController();
+    QuizController quizController = new QuizController();
     UserController userController = new UserController();
-    MainController mainController = new MainController();
+    TokenController tokenController = new TokenController();
     Crypter crypter = new Crypter();
 
 
@@ -27,11 +28,11 @@ public class OptionEndpoint {
     //Specifies path
     @Path("/{QuestionId}")
     public Response loadOptions(@HeaderParam("authorization") String token, @PathParam("QuestionId") int questionId) throws SQLException {
-        CurrentUserContext currentUser = mainController.getUserFromTokens(token);
+        CurrentUserContext currentUser = tokenController.getUserFromTokens(token);
 
         if (currentUser.getCurrentUser() != null) {
             //New arraylist of Option objects. Gives arraylist the value of the options loaded in loadOptions (dbmanager)
-            ArrayList options = userController.getOptions(questionId);
+            ArrayList options = quizController.getOptions(questionId);
             String loadedOptions = new Gson().toJson(options);
             loadedOptions = crypter.encryptAndDecryptXor(loadedOptions);
             Globals.log.writeLog(this.getClass().getName(), this, "Options loaded", 2);
@@ -49,10 +50,10 @@ public class OptionEndpoint {
     @POST
     //Creating a new option for a quiz.
     public Response createOption(@HeaderParam("authorization") String token, String option) throws SQLException {
-        CurrentUserContext currentUser = mainController.getUserFromTokens(token);
+        CurrentUserContext currentUser = tokenController.getUserFromTokens(token);
 
         if (currentUser.getCurrentUser() != null && currentUser.isAdmin()) {
-            Option optionCreated = adminController.createOption(new Gson().fromJson(option, Option.class));
+            Option optionCreated = quizController.createOption(new Gson().fromJson(option, Option.class));
             String newOption = new Gson().toJson(optionCreated);
             newOption = crypter.encryptAndDecryptXor(newOption);
 
@@ -70,7 +71,7 @@ public class OptionEndpoint {
     @DELETE
     @Path("{deleteId}")
     public Response deleteAnswer(@HeaderParam("authorization") String token, @PathParam("deleteId") int userId) throws SQLException {
-        CurrentUserContext currentUser = mainController.getUserFromTokens(token);
+        CurrentUserContext currentUser = tokenController.getUserFromTokens(token);
 
         if (currentUser.getCurrentUser() != null && currentUser.isAdmin()) {
             Boolean answerDeleted = userController.deleteAnswer(userId);

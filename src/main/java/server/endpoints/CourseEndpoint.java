@@ -1,7 +1,8 @@
 package server.endpoints;
 
 import com.google.gson.Gson;
-import server.controller.MainController;
+import server.controller.QuizController;
+import server.controller.TokenController;
 import server.dbmanager.DbManager;
 import server.models.Course;
 import server.utility.CurrentUserContext;
@@ -14,17 +15,17 @@ import java.util.ArrayList;
 
 @Path("/course")
 public class CourseEndpoint {
-    DbManager dbManager = new DbManager();
-    MainController mainController = new MainController();
+    TokenController tokenController = new TokenController();
+    QuizController quizController = new QuizController();
     Crypter crypter = new Crypter();
 
 
     @GET
     public Response loadCourses(@HeaderParam("authorization") String token) throws SQLException {
-        CurrentUserContext currentUser = mainController.getUserFromTokens(token);
+        CurrentUserContext currentUser = tokenController.getUserFromTokens(token);
 
         if (currentUser.getCurrentUser() != null) {
-            ArrayList<Course> courses = dbManager.loadCourses();
+            ArrayList<Course> courses = quizController.loadCourses();
             String loadedCourses = new Gson().toJson(courses);
             loadedCourses = crypter.encryptAndDecryptXor(loadedCourses);
             Globals.log.writeLog(this.getClass().getName(), this, "Courses loaded", 2);

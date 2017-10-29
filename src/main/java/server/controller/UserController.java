@@ -35,14 +35,4 @@ public class UserController {
         }
     }
 
-    public ArrayList<Option> getOptions(int idQuestion) {
-        ArrayList<Option> options = dbManager.loadOptions(idQuestion);
-
-        if(options !=null) {
-            return options;
-        } else {
-            return null;
-        }
-    }
-
 }

@@ -63,12 +63,7 @@ public class MainController {
         return dbManager.createUser(user);
     }
 
-    public CurrentUserContext getUserFromTokens(String token) throws SQLException {
-        User user = dbManager.getUserFromToken(token);
-        CurrentUserContext context = new CurrentUserContext();
-        context.setCurrentUser(user);
-        return context;
-    }
+
 
 }
 

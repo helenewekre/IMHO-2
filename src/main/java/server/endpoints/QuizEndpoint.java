@@ -1,8 +1,9 @@
 package server.endpoints;
 
 import com.google.gson.Gson;
-import server.controller.AdminController;
+import server.controller.QuizController;
 import server.controller.MainController;
+import server.controller.TokenController;
 import server.dbmanager.DbManager;
 import server.models.Quiz;
 import server.utility.Crypter;
@@ -17,18 +18,19 @@ import java.util.ArrayList;
 @Path("/quiz")
 public class QuizEndpoint {
     DbManager dbManager = new DbManager();
-    AdminController adminController = new AdminController();
-    MainController mainController = new MainController();
+    QuizController quizController = new QuizController();
+    TokenController tokenController = new TokenController();
+
     Crypter crypter = new Crypter();
 
 
     @GET
     @Path("/{CourseID}")
     public Response loadQuizzes(@HeaderParam("authorization") String token, @PathParam("CourseID") int courseId) throws SQLException {
-        CurrentUserContext currentUser = mainController.getUserFromTokens(token);
+        CurrentUserContext currentUser = tokenController.getUserFromTokens(token);
 
         if (currentUser.getCurrentUser() != null) {
-            ArrayList<Quiz> quizzes = adminController.loadQuizzes(courseId);
+            ArrayList<Quiz> quizzes = quizController.loadQuizzes(courseId);
             String loadedQuizzes = new Gson().toJson(quizzes);
             loadedQuizzes = crypter.encryptAndDecryptXor(loadedQuizzes);
             Globals.log.writeLog(this.getClass().getName(), this, "Quizzes loaded", 2);
@@ -47,10 +49,10 @@ public class QuizEndpoint {
     @POST
     // Method for creating a quiz
     public Response createQuiz(@HeaderParam("authorization") String token, String quiz) throws SQLException {
-        CurrentUserContext currentUser = mainController.getUserFromTokens(token);
+        CurrentUserContext currentUser = tokenController.getUserFromTokens(token);
 
         if (currentUser.getCurrentUser() != null && currentUser.isAdmin()) {
-            Quiz quizCreated = adminController.createQuiz(new Gson().fromJson(quiz, Quiz.class));
+            Quiz quizCreated = quizController.createQuiz(new Gson().fromJson(quiz, Quiz.class));
             String newQuiz = new Gson().toJson(quizCreated);
             newQuiz = crypter.encryptAndDecryptXor(newQuiz);
 
@@ -70,10 +72,10 @@ public class QuizEndpoint {
     @Path("{deleteId}")
     // Method for deleting a quiz and all it's sub-tables
     public Response deleteQuiz(@HeaderParam("authorization") String token, @PathParam("deleteId") int quizId) throws SQLException {
-        CurrentUserContext currentUser = mainController.getUserFromTokens(token);
+        CurrentUserContext currentUser = tokenController.getUserFromTokens(token);
 
         if (currentUser.getCurrentUser() != null && currentUser.isAdmin()) {
-            Boolean quizDeleted = adminController.deleteQuiz(quizId);
+            Boolean quizDeleted = quizController.deleteQuiz(quizId);
             if (quizDeleted = true) {
                 Globals.log.writeLog(this.getClass().getName(), this, "Quiz deleted", 2);
                 return Response.status(200).type("text/plain").entity("Quiz deleted").build();

@@ -22,7 +22,7 @@ public class Option {
         return optionId;
     }
 
-    public void setOptionId(int idOption) {
+    public void setOptionId(int optionId) {
         this.optionId = optionId;
     }
 
