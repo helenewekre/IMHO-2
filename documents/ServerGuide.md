@@ -1,5 +1,5 @@
 # Test af server
-- *Opdateret d. 23/10/2017 kl. 23.51*
+- *Opdateret d. 29/10/2017 kl. 17:18*
 - *Server på Master testet: OK!*
 
 ## Intro
@@ -56,7 +56,7 @@
 1. Åbn dit database værktøj. Naviger til **user** tabellen. Lokaliser den nuværende bruger, og ændrer type til **1**. Hvis ikke, har brugeren ikke admin-rettigheder til at lave ny quiz.
 2. Ændre **Method** til **POST** 
 3. Ændre **Request URL** til `http://localhost:8080/api/quiz`
-4. I body skriv da `{"createdBy":"Henrik Thorn","questionCount":10,"quizTitle":"Test","quizDescription":"Beskrivelse","idCourse":2}`
+4. I body skriv da `{"createdBy":"Andy Tran","questionCount":10,"quizTitle":"HejsaHejsa","quizDescription":"tester","courseId":2}`
 5. Sidst, tryk **Send**
 
 ### deleteQuiz
