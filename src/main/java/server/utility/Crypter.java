@@ -5,10 +5,8 @@ import server.controller.Config;
 public class Crypter {
 
 
-    //Metode til kryptering
+    //Method for encrypting
     public static String encryptAndDecryptXor(String input) {
-
-
         if (Config.getEncryption()) {
             char[] key = {'L', 'Y', 'N'};
             StringBuilder output = new StringBuilder();

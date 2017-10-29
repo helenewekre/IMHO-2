@@ -4,48 +4,31 @@ import java.util.ArrayList;
 
 public class Question {
 
-    private int idQuestion;
+    private int questionId;
     private String question;
-    private int quizIdQuiz;
+    private int questionToQuizId;
     private ArrayList<Option> options;
     private String option;
-    /*private int quizTopicIdTopic;*/
 
-    public String getOption() {
-        return option;
-    }
 
-    public void setOption(String option) {
-        this.option = option;
-    }
-
-    /*evt tilføj til parameter (slettet pr 17/10) int quizTopicIdTopic)*/
-    public Question(int idQuestion, String question, int quizIdQuiz) {
-        this.idQuestion = idQuestion;
+    public Question(int questionId, String question, int questionToQuizId) {
+        this.questionId = questionId;
         this.question = question;
-        this.quizIdQuiz = quizIdQuiz;
+        this.questionToQuizId = questionToQuizId;
         this.options = new ArrayList<Option>();
-       /* this.quizTopicIdTopic = quizTopicIdTopic; */
     }
 
     public Question(){
         this.options = new ArrayList<Option>();
     }
 
-    public ArrayList<Option> getOptions() {
-        return options;
+
+    public int getQuestionId() {
+        return questionId;
     }
 
-    public void setOption(Option option) {
-        this.options.add(option);
-    }
-
-    public int getIdQuestion() {
-        return idQuestion;
-    }
-
-    public void setIdQuestion(int idQuestion) {
-        this.idQuestion = idQuestion;
+    public void setQuestionId(int questionId) {
+        this.questionId = questionId;
     }
 
     public String getQuestion() {
@@ -56,19 +39,29 @@ public class Question {
         this.question = question;
     }
 
-    public int getQuizIdQuiz() {
-        return quizIdQuiz;
+    public int getQuestionToQuizId() {
+        return questionToQuizId;
     }
 
-    public void setQuizIdQuiz(int quizIdQuiz) {
-        this.quizIdQuiz = quizIdQuiz;
+    public void setQuestionToQuizId(int questionToQuizId) {
+        this.questionToQuizId = questionToQuizId;
     }
 
-   /* public int getQuizTopicIdTopic() {
-        return quizTopicIdTopic;
+    public ArrayList<Option> getOptions() {
+        return options;
     }
 
-    public void setQuizTopicIdTopic(int quizTopicIdTopic) {
-        this.quizTopicIdTopic = quizTopicIdTopic;
-    } */
+    public void setOptions(Option option) {
+        this.options.add(option);
+    }
+
+    public String getOption() {
+        return option;
+    }
+
+    public void setOption(String option) {
+        this.option = option;
+    }
+
+
 }

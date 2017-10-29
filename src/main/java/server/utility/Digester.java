@@ -4,12 +4,9 @@ import java.security.MessageDigest;
 import java.util.Date;
 
 public class Digester {
-
-    private String salt;
     private static MessageDigest digester;
 
     public Digester() {
-
 
     }
     static {
@@ -20,24 +17,13 @@ public class Digester {
         }
     }
 
-    /**
-     * Hash string AND salt with MD5 hash
-     * @param password input string
-     * @return MD5 hashed of string
-     */
     //Method for hashing the password with the salt.
     public String hashWithSalt(String password){
         return Digester.performHashing(password);
     }
 
-    /**
-     * Performing MD5 hashing of string
-     * @param password input
-     * @return MD5 hash of string
-     */
     // The logic behind the hashing.
-    private static String performHashing(String password){
-        // vigtigste metode, som laver hash for os
+    private static String performHashing(String password) {
         digester.update(password.getBytes());
         byte[] hash = digester.digest();
         StringBuilder hexString = new StringBuilder();

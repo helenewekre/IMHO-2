@@ -39,7 +39,7 @@ public class MainController {
             Date expDate = new Date(timeValue);
 
             token = JWT.create().withClaim("User", authorizedUser.getUsername()).withExpiresAt(expDate).withIssuer("IMHO").sign(algorithm);
-            dbManager.addToken(token, authorizedUser.getIdUser());
+            dbManager.addToken(token, authorizedUser.getUserId());
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -63,13 +63,7 @@ public class MainController {
         return dbManager.createUser(user);
     }
 
-    public CurrentUserContext getUserFromTokens(String token) throws SQLException {
-        User user = dbManager.getUserFromToken(token);
-        CurrentUserContext context = new CurrentUserContext();
-        context.setCurrentUser(user);
-        Globals.log.writeLog(getClass().getName(), this, "User created", 2);
-        return context;
-    }
+
 
 }
 

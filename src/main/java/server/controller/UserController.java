@@ -20,7 +20,7 @@ public class UserController {
         Result result = new Result();
 
         result.setResult(dbManager.getNrCorrectAnswers(quizID, userID));
-        result.setNrQuestions(dbManager.getNrQuestion(quizID));
+        result.setQuestionCount(dbManager.getNrQuestion(quizID));
 
         return result;
         }
@@ -32,16 +32,6 @@ public class UserController {
             return true;
         } else {
             return false;
-        }
-    }
-
-    public ArrayList<Option> getOptions(int idQuestion) {
-        ArrayList<Option> options = dbManager.loadOptions(idQuestion);
-
-        if(options !=null) {
-            return options;
-        } else {
-            return null;
         }
     }
 

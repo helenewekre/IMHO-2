@@ -2,34 +2,32 @@ package server.models;
 
 public class Quiz {
 
-    private int idQuiz;
+    private int quizId;
     private String createdBy;
-    private String url;
     private int questionCount;
     private String quizTitle;
     private String quizDescription;
-    private int idCourse;
+    private int courseId;
 
-    public Quiz(int idQuiz, String createdBy, String url, int questionCount, String quizTitle, String quizDescription, int idCourse) {
-        this.idQuiz = idQuiz;
+    public Quiz(int quizId, String createdBy, int questionCount, String quizTitle, String quizDescription, int courseId) {
+        this.quizId = quizId;
         this.createdBy = createdBy;
-        this.url = url;
         this.questionCount = questionCount;
         this.quizTitle = quizTitle;
         this.quizDescription = quizDescription;
-        this.idCourse= idCourse;
+        this.courseId= courseId;
     }
 
     public Quiz() {
 
     }
 
-    public int getIdQuiz() {
-        return idQuiz;
+    public int getQuizId() {
+        return quizId;
     }
 
-    public void setIdQuiz(int idQuiz) {
-        this.idQuiz = idQuiz;
+    public void setQuizId(int quizId) {
+        this.quizId = quizId;
     }
 
     public String getCreatedBy() {
@@ -38,14 +36,6 @@ public class Quiz {
 
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public int getQuestionCount() {
@@ -72,8 +62,10 @@ public class Quiz {
         this.quizDescription = quizDescription;
     }
 
-    public int getIdCourse() { return idCourse; }
+    public int getCourseId() {
+        return courseId; }
 
-    public void setIdCourse (int idCourse) { this.idCourse = idCourse;
+    public void setCourseId (int courseId) {
+        this.courseId = courseId;
     }
 }
