@@ -2,15 +2,15 @@ package server.models;
 
 public class Option {
 
-    private int idOption;
-    private String options;
-    private int questionIdQuestion;
+    private int optionId;
+    private String option;
+    private int optionToQuestionId;
     private int isCorrect;
 
-    public Option(int idOption, String options, int questionIdQuestion, int isCorrect) {
-        this.idOption = idOption;
-        this.options = options;
-        this.questionIdQuestion = questionIdQuestion;
+    public Option(int optionId, String option, int optionToQuestionId, int isCorrect) {
+        this.optionId = optionId;
+        this.option = option;
+        this.optionToQuestionId = optionToQuestionId;
         this.isCorrect = isCorrect;
     }
 
@@ -18,28 +18,28 @@ public class Option {
 
     }
 
-    public int getIdOption() {
-        return idOption;
+    public int getOptionId() {
+        return optionId;
     }
 
-    public void setIdOption(int idOption) {
-        this.idOption = idOption;
+    public void setOptionId(int optionId) {
+        this.optionId = optionId;
     }
 
-    public String getOptions() {
-        return options;
+    public String getOption() {
+        return option;
     }
 
-    public void setOption(String options) {
-        this.options = options;
+    public void setOption(String option) {
+        this.option = option;
     }
 
-    public int getQuestionIdQuestion() {
-        return questionIdQuestion;
+    public int getOptionToQuestionId() {
+        return optionToQuestionId;
     }
 
-    public void setQuestionIdQuestion(int questionIdQuestion) {
-        this.questionIdQuestion = questionIdQuestion;
+    public void setOptionToQuestionId(int optionToQuestionId) {
+        this.optionToQuestionId = optionToQuestionId;
     }
 
     public int getIsCorrect() {

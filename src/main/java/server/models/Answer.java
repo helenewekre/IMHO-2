@@ -2,26 +2,26 @@ package server.models;
 
 public class Answer {
 
-    private int idAnswer;
+    private int answerId;
     private int answerResult;
-    private int optionIdOption;
+    private int answerToOptionId;
 
-    public Answer(int idAnswer, int answerResult, int optionIdOption) {
-        this.idAnswer = idAnswer;
+    public Answer(int answerId, int answerResult, int answerToOptionId) {
+        this.answerId = answerId;
         this.answerResult = answerResult;
-        this.optionIdOption = optionIdOption;
+        this.answerToOptionId = answerToOptionId;
     }
 
     public Answer() {
 
     }
 
-    public int getIdAnswer() {
-        return idAnswer;
+    public int getAnswerId() {
+        return answerId;
     }
 
-    public void setIdAnswer(int idAnswer) {
-        this.idAnswer = idAnswer;
+    public void setAnswerId(int answerId) {
+        this.answerId = answerId;
     }
 
     public int getAnswerResult() {
@@ -32,12 +32,12 @@ public class Answer {
         this.answerResult = answerResult;
     }
 
-    public int getOptionIdOption() {
-        return optionIdOption;
+    public int getAnswerToOptionId() {
+        return answerToOptionId;
     }
 
-    public void setOptionIdOption(int optionIdOption) {
-        this.optionIdOption = optionIdOption;
+    public void setAnswerToOptionId(int answerToOptionId) {
+        this.answerToOptionId = answerToOptionId;
     }
 
 
