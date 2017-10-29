@@ -220,7 +220,6 @@ public class DbManager {
             }
 
         //Exception to avoid crashing
-            Globals.log.writeLog(this.getClass().getName(), this, "Loading courses catch", 2);
         } catch (SQLException e) {
             e.printStackTrace();
 

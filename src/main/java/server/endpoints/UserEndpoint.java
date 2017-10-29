@@ -15,7 +15,6 @@ import java.sql.SQLException;
 
 @Path("/user")
 public class UserEndpoint {
-    //Creating objects of database manager and MainController
     DbManager dbManager = new DbManager();
     MainController mainController = new MainController();
     Crypter crypter = new Crypter();
@@ -32,7 +31,8 @@ public class UserEndpoint {
             Globals.log.writeLog(this.getClass().getName(), this, "User authorized", 2);
             return Response.status(200).type("application/json").entity(new Gson().toJson(myUser)).build();
         } else {
-            return Response.status(401).type("text/plain").entity("Error signing in - unauthenticated").build();
+            Globals.log.writeLog(this.getClass().getName(), this, "User not authorized", 2);
+            return Response.status(401).type("text/plain").entity("Error signing in - unauthorized").build();
         }
     }
 
@@ -48,6 +48,7 @@ public class UserEndpoint {
             Globals.log.writeLog(this.getClass().getName(), this, "User created", 2);
             return Response.status(200).type("application/json").entity(new Gson().toJson(newUser)).build();
         } else {
+            Globals.log.writeLog(this.getClass().getName(), this, "Failed creating user", 2);
             return Response.status(400).type("text/plain").entity("Error creating user").build();
         }
     }
@@ -65,6 +66,7 @@ public class UserEndpoint {
             Globals.log.writeLog(this.getClass().getName(), this, "My user loaded", 2);
             return Response.status(200).type("application/json").entity(new Gson().toJson(myUser)).build();
         } else {
+            Globals.log.writeLog(this.getClass().getName(), this, "User failed loading", 2);
             return Response.status(200).type("text/plain").entity("Error loading user").build();
         }
     }
@@ -78,7 +80,8 @@ public class UserEndpoint {
             Globals.log.writeLog(this.getClass().getName(), this, "User log out", 2);
             return Response.status(200).entity("Logged out").build();
         } else {
-            return Response.status(400).entity("Error logging out").build();
+            Globals.log.writeLog(this.getClass().getName(), this, "User failed log out", 2);
+            return Response.status(400).type("text/plain").entity("Error logging out").build();
         }
 
 

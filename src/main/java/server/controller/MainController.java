@@ -67,7 +67,6 @@ public class MainController {
         User user = dbManager.getUserFromToken(token);
         CurrentUserContext context = new CurrentUserContext();
         context.setCurrentUser(user);
-        Globals.log.writeLog(getClass().getName(), this, "User created", 2);
         return context;
     }
 
