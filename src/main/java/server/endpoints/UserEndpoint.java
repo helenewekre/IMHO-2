@@ -76,7 +76,7 @@ public class UserEndpoint {
     public Response logOut(String userId) throws SQLException {
         int myUserId = new Gson().fromJson(userId, Integer.class);
 
-        if(dbManager.deleteToken(myUserId) == true) {
+        if (dbManager.deleteToken(myUserId) == true) {
             Globals.log.writeLog(this.getClass().getName(), this, "User log out", 2);
             return Response.status(200).entity("Logged out").build();
         } else {

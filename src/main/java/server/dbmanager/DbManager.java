@@ -128,7 +128,7 @@ public class DbManager {
         try {
             //SQL statement to create a quiz
             PreparedStatement createQuiz = connection
-                    .prepareStatement("INSERT INTO Quiz (created_by, question_count, quiz_title, quiz_description, idCourse) VALUES (?,?,?,?,?)");
+                    .prepareStatement("INSERT INTO Quiz (created_by, question_count, quiz_title, quiz_description, idCourse) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             //Setting parameters for quiz object
             createQuiz.setString(1, quiz.getCreatedBy());
             createQuiz.setInt(2, quiz.getQuestionCount());
@@ -138,6 +138,13 @@ public class DbManager {
 
             int rowsAffected = createQuiz.executeUpdate();
             if (rowsAffected == 1) {
+                ResultSet rs = createQuiz.getGeneratedKeys();
+                if(rs != null && rs.next()) {
+                    int autoIncrementedQuizId = rs.getInt(1);
+                    quiz.setQuizId(autoIncrementedQuizId);
+                } else {
+                    quiz = null;
+                }
                 return quiz;
             }
 
@@ -466,7 +473,7 @@ public class DbManager {
         return user;
     }
         //Method for deleting a quiz and all it's sub-tables
-    public boolean deleteQuiz(int idQuiz) throws IllegalArgumentException {
+    public boolean deleteQuiz(int quizId) throws IllegalArgumentException {
         Globals.log.writeLog(this.getClass().getName(), this, "Delete quiz", 2);
         //Try-catch
         try {
@@ -474,7 +481,7 @@ public class DbManager {
             PreparedStatement deleteQuiz = connection
                     .prepareStatement("DELETE FROM Quiz WHERE idQuiz = ?");
 
-            deleteQuiz.setInt(1, idQuiz);
+            deleteQuiz.setInt(1, quizId);
             int rowsAffected = deleteQuiz.executeUpdate();
             if (rowsAffected == 1) {
                 return true;

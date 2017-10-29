@@ -25,18 +25,18 @@ public class CourseEndpoint {
 
         if (currentUser.getCurrentUser() != null) {
             ArrayList<Course> courses = dbManager.loadCourses();
-            String allCourses = new Gson().toJson(courses);
-            allCourses = crypter.encryptAndDecryptXor(allCourses);
+            String loadedCourses = new Gson().toJson(courses);
+            loadedCourses = crypter.encryptAndDecryptXor(loadedCourses);
             Globals.log.writeLog(this.getClass().getName(), this, "Courses loaded", 2);
 
             if (courses != null) {
-                return Response.status(200).type("application/json").entity(new Gson().toJson(allCourses)).build();
+                return Response.status(200).type("application/json").entity(new Gson().toJson(loadedCourses)).build();
             } else {
                 return Response.status(204).type("text/plain").entity("No courses").build();
             }
         } else {
             Globals.log.writeLog(this.getClass().getName(), this, "Courses failed loading", 2);
-            return Response.status(401).type("text/plain").entity("Unauthenticated").build();
+            return Response.status(401).type("text/plain").entity("Unauthorized").build();
         }
     }
 }

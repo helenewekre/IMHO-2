@@ -3,9 +3,7 @@ package server.endpoints;
 import com.google.gson.Gson;
 import server.controller.AdminController;
 import server.controller.MainController;
-import server.controller.Config;
 import server.controller.UserController;
-import server.dbmanager.DbManager;
 import server.models.Option;
 import server.utility.CurrentUserContext;
 import server.utility.Crypter;
@@ -21,27 +19,23 @@ import java.util.ArrayList;
     public class OptionEndpoint {
     AdminController adminController = new AdminController();
     UserController userController = new UserController();
-    Crypter crypter = new Crypter();
     MainController mainController = new MainController();
+    Crypter crypter = new Crypter();
 
-    //Creating a new option for a quiz.
     @POST
+    //Creating a new option for a quiz.
     public Response createOption(@HeaderParam("authorization") String token, String option) throws SQLException {
-        Globals.log.writeLog(this.getClass().getName(), this, "Option created", 2);
-
         CurrentUserContext context = mainController.getUserFromTokens(token);
-        if(context.getCurrentUser() != null) {
-            if (context.isAdmin()) {
+
+        if(context.getCurrentUser() != null && context.isAdmin()) {
                 Option optionCreated = adminController.createOption(option);
                 String newOption = new Gson().toJson(optionCreated);
                 newOption = crypter.encryptAndDecryptXor(newOption);
                 if (optionCreated != null) {
+                    Globals.log.writeLog(this.getClass().getName(), this, "Option created", 2);
                     return Response.status(200).type("application/json").entity(new Gson().toJson(newOption)).build();
                 } else {
                     return Response.status(500).type("application/json").entity("Error in creating option").build();
-                }
-            } else {
-                return Response.status(500).type("application/json").entity("You are not authorized").build();
             }
         } else {
             return Response.status(500).type("application/json").entity("Error loading profile").build();

@@ -16,9 +16,9 @@ public class AdminController {
     }
 
     //Method for creating a question
-    public Quiz createQuiz(String quizJson) {
-        Quiz quiz = new Gson().fromJson(quizJson, Quiz.class);
-        Quiz createdQuiz = dbManager.createQuiz(quiz);
+    public Quiz createQuiz(String quiz) {
+        Quiz newQuiz = new Gson().fromJson(quiz, Quiz.class);
+        Quiz createdQuiz = dbManager.createQuiz(newQuiz);
 
         if(createdQuiz != null ) {
             Globals.log.writeLog(getClass().getName(), this, "Quiz created", 2);
@@ -59,8 +59,8 @@ public class AdminController {
     }
 
     //Method for deleting a quiz and all it's sub-tables
-    public Boolean deleteQuiz(int idQuiz) {
-        Boolean ifDeleted = dbManager.deleteQuiz(idQuiz);
+    public Boolean deleteQuiz(int quizId) {
+        Boolean ifDeleted = dbManager.deleteQuiz(quizId);
 
         if (ifDeleted) {
             return true;
