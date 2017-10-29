@@ -3,7 +3,6 @@ package server.endpoints;
 import com.google.gson.Gson;
 import server.controller.AdminController;
 import server.controller.MainController;
-import server.controller.Config;
 import server.dbmanager.DbManager;
 import server.models.Question;
 import server.utility.CurrentUserContext;
@@ -20,77 +19,51 @@ import java.util.ArrayList;
 public class QuestionEndpoint {
     AdminController adminController = new AdminController();
     MainController mainController = new MainController();
-
     Crypter crypter = new Crypter();
-
-    //Method for creating a question
-    @POST
-    public Response createQuestion(@HeaderParam("authorization") String token, String questionJson) throws SQLException {
-        Globals.log.writeLog(this.getClass().getName(), this, "Question created", 2);
-
-        CurrentUserContext context = mainController.getUserFromTokens(token);
-
-        if(context.getCurrentUser() != null) {
-            if(context.isAdmin()) {
-                Question questionCreated = adminController.createQuestion(new Gson().fromJson(questionJson, Question.class));
-                String newQuestion = new Gson().toJson(questionCreated);
-                newQuestion = crypter.encryptAndDecryptXor(newQuestion);
-                if (questionCreated != null) {
-                    return Response
-                            .status(200)
-                            .type("application/json")
-                            .entity(new Gson().toJson(newQuestion))
-                            .build();
-                } else {
-                    return Response
-                            .status(200)
-                            .type("application/json")
-                            .entity("Could not create question")
-                            .build();
-                }
-            } else {
-                return Response
-                        .status(200)
-                        .type("application/json")
-                        .entity("You are not authorized")
-                        .build();
-            }
-        } else {
-            return Response
-                    .status(200)
-                    .type("application/json")
-                    .entity("Error loading profile")
-                    .build();
-        }
-    }
 
     //GET method for loading questions bc. SQL statements is SELECT.
     @GET
-    @Path("/{quizId}")
-    public Response loadQuestion(@HeaderParam("authorization") String token, @PathParam("quizId") int quizId) throws SQLException {
-        Globals.log.writeLog(this.getClass().getName(), this, "Questions loaded", 2);
+    @Path("/{QuizId}")
+    public Response loadQuestion(@HeaderParam("authorization") String token, @PathParam("QuizId") int quizId) throws SQLException {
+        CurrentUserContext currentUser = mainController.getUserFromTokens(token);
 
-        CurrentUserContext context = mainController.getUserFromTokens(token);
+        if (currentUser.getCurrentUser() != null) {
+            ArrayList<Question> questions = adminController.loadQuestions(quizId);
+            String loadedQuestions = new Gson().toJson(questions);
+            loadedQuestions = crypter.encryptAndDecryptXor(loadedQuestions);
 
-        if (context.getCurrentUser() != null) {
-            //Instance of dbmanager to get access to loadQuestions method
-            DbManager dbManager = new DbManager();
-            //New arraylist, gives it the value of the questions loaded in loadQuestions (dbmanager), takes the integer quizId as param
-            ArrayList<Question> questions = dbManager.loadQuestions(quizId);
-            String newQuestions = new Gson().toJson(questions);
-            newQuestions = crypter.encryptAndDecryptXor(newQuestions);
-            if(questions != null) {
-                //Returning as Json
-                return Response.status(200).type("application/json").entity(new Gson().toJson(newQuestions)).build();
+            if (questions != null) {
+                Globals.log.writeLog(this.getClass().getName(), this, "Questions loaded", 2);
+                return Response.status(200).type("application/json").entity(new Gson().toJson(loadedQuestions)).build();
             } else {
-                return Response.status(200).type("application/json").entity("No question found").build();
+                return Response.status(204).type("application/json").entity("No questions").build();
             }
         } else {
-            return Response
-                    .status(200)
-                    .type("application/json")
-                    .entity("Error loading profile")
-                    .build();
+            return Response.status(401).type("text/plain").entity("Unauthorized").build();
         }
     }
+
+    @POST
+    //Method for creating a question
+    public Response createQuestion(@HeaderParam("authorization") String token, String question) throws SQLException {
+        CurrentUserContext currentUser = mainController.getUserFromTokens(token);
+
+        if (currentUser.getCurrentUser() != null && currentUser.isAdmin()) {
+            Question questionCreated = adminController.createQuestion(new Gson().fromJson(question, Question.class));
+            String newQuestion = new Gson().toJson(questionCreated);
+            newQuestion = crypter.encryptAndDecryptXor(newQuestion);
+
+            if (questionCreated != null) {
+                Globals.log.writeLog(this.getClass().getName(), this, "Question created", 2);
+                return Response.status(200).type("application/json").entity(new Gson().toJson(newQuestion)).build();
+            } else {
+                return Response.status(400).type("application/json").entity("Failed creating question").build();
+            }
+        } else {
+            return Response.status(401).type("application/json").entity("Unauthorized").build();
+
+        }
+    }
+
+
 }

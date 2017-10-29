@@ -7,6 +7,8 @@ import server.models.Question;
 import server.models.Quiz;
 import server.utility.Globals;
 
+import java.util.ArrayList;
+
 public class AdminController {
 
     private DbManager dbManager;
@@ -16,17 +18,19 @@ public class AdminController {
     }
 
     //Method for creating a question
-    public Quiz createQuiz(String quiz) {
-        Quiz newQuiz = new Gson().fromJson(quiz, Quiz.class);
-        Quiz createdQuiz = dbManager.createQuiz(newQuiz);
-
+    public Quiz createQuiz(Quiz quiz) {
+        Quiz createdQuiz = dbManager.createQuiz(quiz);
         if(createdQuiz != null ) {
             Globals.log.writeLog(getClass().getName(), this, "Quiz created", 2);
             return createdQuiz;
         } else {
             return null;
         }
+    }
 
+    public ArrayList<Quiz> loadQuizzes(int courseId) {
+        ArrayList<Quiz> quiz = dbManager.loadQuizzes(courseId);
+        return quiz;
     }
 
     //Method for creating a question
@@ -40,7 +44,11 @@ public class AdminController {
         } else {
             return null;
         }
+    }
 
+    public ArrayList<Question> loadQuestions (int quizId) {
+        ArrayList<Question> question = dbManager.loadQuestions(quizId);
+        return question;
     }
 
     //Method for creating a option

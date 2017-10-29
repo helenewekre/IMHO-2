@@ -28,7 +28,7 @@ public class QuizEndpoint {
         CurrentUserContext currentUser = mainController.getUserFromTokens(token);
 
         if (currentUser.getCurrentUser() != null) {
-            ArrayList<Quiz> quizzes = dbManager.loadQuizzes(courseId);
+            ArrayList<Quiz> quizzes = adminController.loadQuizzes(courseId);
             String loadedQuizzes = new Gson().toJson(quizzes);
             loadedQuizzes = crypter.encryptAndDecryptXor(loadedQuizzes);
             Globals.log.writeLog(this.getClass().getName(), this, "Quizzes loaded", 2);
@@ -50,7 +50,7 @@ public class QuizEndpoint {
         CurrentUserContext currentUser = mainController.getUserFromTokens(token);
 
         if (currentUser.getCurrentUser() != null && currentUser.isAdmin()) {
-            Quiz quizCreated = adminController.createQuiz(quiz);
+            Quiz quizCreated = adminController.createQuiz(new Gson().fromJson(quiz, Quiz.class));
             String newQuiz = new Gson().toJson(quizCreated);
             newQuiz = crypter.encryptAndDecryptXor(newQuiz);
 
