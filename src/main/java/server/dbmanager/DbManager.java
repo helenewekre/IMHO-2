@@ -68,6 +68,7 @@ public class DbManager {
                 user.setUsername(resultSet.getString("username"));
                 user.setPassword(resultSet.getString("password"));
                 user.setType(resultSet.getInt("type"));
+                user.setTimeCreated(resultSet.getInt("time_created"));
 
             }
         //Exception to avoid crashing
@@ -92,7 +93,7 @@ public class DbManager {
 
         //Try-catch method to avoid the program crashing on exceptions
         try {
-            PreparedStatement createUser = connection.prepareStatement("INSERT INTO User (username, password, time_created) VALUES (?,?,?)");
+            PreparedStatement createUser = connection.prepareStatement("INSERT INTO User (username, password, time_created) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
             createUser.setString(1,user.getUsername());
             createUser.setString(2,user.getPassword());
             createUser.setLong(3, user.getTimeCreated());
@@ -100,6 +101,15 @@ public class DbManager {
             //rowsAffected
             int rowsAffected = createUser.executeUpdate();
             if (rowsAffected == 1) {
+                ResultSet rs = createUser.getGeneratedKeys();
+                if(rs != null && rs.next()) {
+                    int autoIncrementedUserId = rs.getInt(1);
+                    user.setUserId(autoIncrementedUserId);
+                } else {
+                    user = null;
+                }
+
+                user.setType(2);
                 return user;
             }
 
@@ -402,13 +412,12 @@ public class DbManager {
     }
 
     public User getUserFromToken(String token) throws SQLException {
-        Globals.log.writeLog(this.getClass().getName(), this, "Get user from token", 2);
         ResultSet resultSet = null;
         User userFromToken = null;
 
         try {
             PreparedStatement getUserFromToken = connection
-                    .prepareStatement("SELECT username, idUser, `type` FROM `User` u INNER JOIN Tokens t ON t.token_idUser = u.idUser WHERE t.token = ?");
+                    .prepareStatement("SELECT username, idUser, `type`, time_created FROM `User` u INNER JOIN Tokens t ON t.token_idUser = u.idUser WHERE t.token = ?");
 
             getUserFromToken.setString(1, token);
             resultSet = getUserFromToken.executeQuery();
@@ -418,9 +427,9 @@ public class DbManager {
                 userFromToken.setUserId(resultSet.getInt("idUser"));
                 userFromToken.setUsername(resultSet.getString("username"));
                 userFromToken.setType(resultSet.getInt("type"));
+                userFromToken.setTimeCreated(resultSet.getInt("time_created"));
 
             }
-            Globals.log.writeLog(this.getClass().getName(), this, "Delete token catch", 2);
         } catch (SQLException sqlException) {
             System.out.println(sqlException.getMessage());
         }

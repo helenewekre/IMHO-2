@@ -23,73 +23,62 @@ public class UserEndpoint {
     @POST
     @Path("/login")
     //Endpoint for authorizing a user
-    public Response authorizeUser(String user) {
-        Globals.log.writeLog(this.getClass().getName(), this, "User authorized", 2);
-
-        User userAuth = new Gson().fromJson(user, User.class);
-        User authorizedUser = mainController.authUser(userAuth);
-
+    public Response logIn(String user) {
+        User authorizedUser = mainController.authUser(new Gson().fromJson(user, User.class));
         String myUser = new Gson().toJson(authorizedUser);
         myUser = crypter.encryptAndDecryptXor(myUser);
 
         if (authorizedUser != null) {
-            return Response.status(200).entity(new Gson().toJson(myUser)).build();
+            Globals.log.writeLog(this.getClass().getName(), this, "User authorized", 2);
+            return Response.status(200).type("application/json").entity(new Gson().toJson(myUser)).build();
         } else {
-            return Response.status(500).entity("There was an error").build();
+            return Response.status(401).type("text/plain").entity("Error signing in - unauthenticated").build();
         }
     }
 
     @POST
     @Path("/signup")
     //Creating a new user
-    public Response createUser(String user) {
-        Globals.log.writeLog(this.getClass().getName(), this, "User created", 2);
+    public Response signUp(String user) {
+        User createdUser = mainController.createUser(new Gson().fromJson(user, User.class));
+        String newUser = new Gson().toJson(createdUser);
+        newUser = crypter.encryptAndDecryptXor(newUser);
 
-        User newUser = mainController.createUser(new Gson().fromJson(user, User.class));
-
-        if (newUser != null) {
+        if (createdUser != null) {
+            Globals.log.writeLog(this.getClass().getName(), this, "User created", 2);
             return Response.status(200).type("application/json").entity(new Gson().toJson(newUser)).build();
         } else {
-            return Response.status(500).type("application/json").entity("Could not create user").build();
+            return Response.status(400).type("text/plain").entity("Error creating user").build();
         }
     }
 
 
-    @Path("/profile")
+    @Path("/myuser")
     @GET
     //Getting own profile by token
-    public Response getProfile(@HeaderParam("authorization") String token) throws SQLException {
-        Globals.log.writeLog(this.getClass().getName(), this, "Got profile", 2);
+    public Response getMyUser(@HeaderParam("authorization") String token) throws SQLException {
+        CurrentUserContext currentUser = mainController.getUserFromTokens(token);
+        String myUser = new Gson().toJson(currentUser.getCurrentUser());
+        myUser = crypter.encryptAndDecryptXor(myUser);
 
-        CurrentUserContext context = mainController.getUserFromTokens(token);
-
-        String myProfile = new Gson().toJson(context.getCurrentUser());
-        myProfile = crypter.encryptAndDecryptXor(myProfile);
-        if (context.getCurrentUser() != null) {
-            return Response
-                    .status(200)
-                    .type("application/json")
-                    .entity(new Gson().toJson(myProfile))
-                    .build();
+        if (currentUser.getCurrentUser() != null) {
+            Globals.log.writeLog(this.getClass().getName(), this, "My user loaded", 2);
+            return Response.status(200).type("application/json").entity(new Gson().toJson(myUser)).build();
         } else {
-            return Response
-                    .status(200)
-                    .type("application/json")
-                    .entity("Error loading profile")
-                    .build();
+            return Response.status(200).type("text/plain").entity("Error loading user").build();
         }
     }
 
     @POST
     @Path("/logout")
-    public Response logOut(String idUser) throws SQLException {
-        Globals.log.writeLog(this.getClass().getName(), this, "Logged out", 2);
+    public Response logOut(String userId) throws SQLException {
+        int myUserId = new Gson().fromJson(userId, Integer.class);
 
-        int id = new Gson().fromJson(idUser, Integer.class);
-        if(dbManager.deleteToken(id) == true) {
-            return Response.status(200).entity("You are now logged out").build();
+        if(dbManager.deleteToken(myUserId) == true) {
+            Globals.log.writeLog(this.getClass().getName(), this, "User log out", 2);
+            return Response.status(200).entity("Logged out").build();
         } else {
-            return Response.status(500).entity("There was an error").build();
+            return Response.status(400).entity("Error logging out").build();
         }
 
 
