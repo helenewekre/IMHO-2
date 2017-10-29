@@ -1,18 +1,10 @@
 package server.dbmanager;
 
-import server.models.Course;
-import server.models.Question;
-import server.models.Option;
-import server.models.Quiz;
-import server.models.User;
+import server.models.*;
 import server.utility.Crypter;
 import server.utility.Globals;
-
-import server.models.*;
-
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class DbManager {
 
@@ -36,12 +28,13 @@ public class DbManager {
     }
 
     //Method for closing the connection
-    private static void close() {
-        Globals.log.writeLog(this.getClass().getName(), this, "Database close connection", 2);
+    private void close() {
+
         try {
             connection.close();
-            Globals.log.writeLog(this.getClass().getName(), this, "Database close connection catch", 2);
+            Globals.log.writeLog(this.getClass().getName(), this, "Database close connection", 2);
         } catch (SQLException exception) {
+            Globals.log.writeLog(this.getClass().getName(), this, "Database close connection catch", 2);
             exception.printStackTrace();
         }
 
@@ -71,7 +64,7 @@ public class DbManager {
             //Method will run as long as there is content in the next line of the resultSet
             while (resultSet.next()) {
                 user = new User();
-                user.setIdUser(resultSet.getInt("idUser"));
+                user.setUserId(resultSet.getInt("idUser"));
                 user.setUsername(resultSet.getString("username"));
                 user.setPassword(resultSet.getString("password"));
                 user.setType(resultSet.getInt("type"));
@@ -131,7 +124,7 @@ public class DbManager {
             createQuiz.setInt(2, quiz.getQuestionCount());
             createQuiz.setString(3, quiz.getQuizTitle());
             createQuiz.setString(4, quiz.getQuizDescription());
-            createQuiz.setInt(5, quiz.getIdCourse());
+            createQuiz.setInt(5, quiz.getCourseId());
 
             int rowsAffected = createQuiz.executeUpdate();
             if (rowsAffected == 1) {
@@ -155,7 +148,7 @@ public class DbManager {
                     .prepareStatement("INSERT INTO Question (question, quiz_id) VALUES (?, ?)");
             //Setting parameters
             createQuestion.setString(1, question.getQuestion());
-            createQuestion.setInt(2, question.getQuizIdQuiz());
+            createQuestion.setInt(2, question.getQuestionToQuizId());
 
             int rowsAffected = createQuestion.executeUpdate();
             if (rowsAffected == 1) {
@@ -179,8 +172,8 @@ public class DbManager {
             PreparedStatement createOption = connection
                     .prepareStatement("INSERT INTO `Option` (`option`, question_id, is_correct) VALUES (?, ?, ?);");
                 //Setting parameters for user object
-                createOption.setString(1, option.getOptions());
-                createOption.setInt(2, option.getQuestionIdQuestion());
+                createOption.setString(1, option.getOption());
+                createOption.setInt(2, option.getOptionToQuestionId());
                 createOption.setInt(3, option.getIsCorrect());
 
                 int rowsAffected = createOption.executeUpdate();
@@ -210,7 +203,7 @@ public class DbManager {
 
             while (resultSet.next()) {
                 Course course = new Course();
-                course.setIdCourse(resultSet.getInt("idCourse"));
+                course.setCourseId(resultSet.getInt("idCourse"));
                 course.setCourseTitle(resultSet.getString("course_title"));
                 courses.add(course);
 
@@ -255,11 +248,11 @@ public class DbManager {
             while (resultSet.next()) {
                 //Adding values in ResultSet to quiz object
                 Quiz quiz = new Quiz();
-                quiz.setIdQuiz(resultSet.getInt("idQuiz"));
+                quiz.setQuizId(resultSet.getInt("idQuiz"));
                 quiz.setCreatedBy(resultSet.getString("created_by"));
                 quiz.setQuestionCount(resultSet.getInt("question_count"));
                 quiz.setQuizTitle(resultSet.getString("quiz_description"));
-                quiz.setIdCourse(resultSet.getInt("idCourse"));
+                quiz.setCourseId(resultSet.getInt("idCourse"));
                 quizzes.add(quiz);
 
             }
@@ -306,8 +299,8 @@ public class DbManager {
                 Question question = new Question();
                 //Adding values to parameter variables in the question object
                 question.setQuestion(resultSet.getString("question"));
-                question.setIdQuestion(resultSet.getInt("idQuestion"));
-                question.setQuizIdQuiz(resultSet.getInt("quiz_id"));
+                question.setQuestionId(resultSet.getInt("idQuestion"));
+                question.setQuestionToQuizId(resultSet.getInt("quiz_id"));
                 //Adding the questoin object to the arraylist of question objects
                 questions.add(question);
             }
@@ -355,8 +348,8 @@ public class DbManager {
             while (resultSet.next()) {
                 //Adding values in resultset to option objet.
                 Option option = new Option();
-                option.setIdOption(resultSet.getInt("idOption"));
-                option.setQuestionIdQuestion(resultSet.getInt("question_id"));
+                option.setOptionId(resultSet.getInt("idOption"));
+                option.setOptionToQuestionId(resultSet.getInt("question_id"));
                 option.setIsCorrect(resultSet.getInt("is_correct"));
                 option.setOption(resultSet.getString("option"));
                 //Adding option object with given parameter values to the arraylist of several option objects.
@@ -422,7 +415,7 @@ public class DbManager {
 
             while (resultSet.next()) {
                 userFromToken = new User();
-                userFromToken.setIdUser(resultSet.getInt("idUser"));
+                userFromToken.setUserId(resultSet.getInt("idUser"));
                 userFromToken.setUsername(resultSet.getString("username"));
                 userFromToken.setType(resultSet.getInt("type"));
 

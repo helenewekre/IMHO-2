@@ -4,15 +4,13 @@ import server.utility.Digester;
 
 public class User {
 
-    private int idUser;
-    private int type;
+    private int userId;
     private String username;
     private String password;
+    private int type;
     private long timeCreated;
 
     public User(String username, String password, long timeCreated) {
-        this.idUser = idUser;
-        this.type = type;
         this.username = username;
         this.password = password;
         this.timeCreated = timeCreated;
@@ -22,12 +20,12 @@ public class User {
 
     }
 
-    public int getIdUser() {
-        return idUser;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public int getType() {
@@ -50,6 +48,7 @@ public class User {
         return password;
     }
 
+    //Always hash password created
     public void setPassword(String password) {
         Digester digester = new Digester();
         this.password = digester.hashWithSalt(password);
@@ -59,8 +58,8 @@ public class User {
         return timeCreated;
     }
 
-    public void setTimeCreated(long time) {
-        this.timeCreated = time;
+    public void setTimeCreated(long timeCreated) {
+        this.timeCreated = timeCreated;
     }
 
 }

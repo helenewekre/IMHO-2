@@ -39,7 +39,7 @@ public class MainController {
             Date expDate = new Date(timeValue);
 
             token = JWT.create().withClaim("User", authorizedUser.getUsername()).withExpiresAt(expDate).withIssuer("IMHO").sign(algorithm);
-            dbManager.addToken(token, authorizedUser.getIdUser());
+            dbManager.addToken(token, authorizedUser.getUserId());
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
