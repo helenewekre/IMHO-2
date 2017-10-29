@@ -1,7 +1,8 @@
 {
-  "DATABASE_HOST" : "localhost",
+  "DATABASE_HOST" : "hej",
+  "DATABASE_NAME" : "imho",
   "DATABASE_PORT" : 3306,
-  "DATABASE_USERNAME" : "root",
-  "DATABASE_PASSWORD" : "root",
+  "DATABASE_USERNAME" : "dis2017hej",
+  "DATABASE_PASSWORD" : "doekdis2017hej",
   "ENCRYPTION": true
 }
