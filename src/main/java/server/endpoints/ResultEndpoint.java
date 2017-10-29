@@ -24,38 +24,23 @@ public class ResultEndpoint {
 
     @GET
     //send totale number of correct answer and questions back to the user.
-    @Path("{quizID}/{userID}")
-    public Response getUserScore(@HeaderParam("authorization") String token, @PathParam("quizID") int quizID, @PathParam("userID") int userID) throws SQLException {
-        Globals.log.writeLog(this.getClass().getName(), this, "Got User Score", 2);
+    @Path("{QuizId}/{UserId}")
+    public Response getUserScore(@HeaderParam("authorization") String token, @PathParam("QuizId") int QuizId, @PathParam("UserId") int UserId) throws SQLException {
+        CurrentUserContext currentUser = mainController.getUserFromTokens(token);
 
-        CurrentUserContext context = mainController.getUserFromTokens(token);
+        if (currentUser.getCurrentUser() != null) {
+                Result result = userController.getResult(QuizId, UserId);
+                String loadedResult = new Gson().toJson(result);
+                loadedResult = crypter.encryptAndDecryptXor(loadedResult);
+                Globals.log.writeLog(this.getClass().getName(), this, "Result loaded", 2);
 
-        if (context.getCurrentUser() != null) {
-            if(!context.isAdmin()) {
-                Result result = userController.getResult(quizID, userID);
-                String myResult = new Gson().toJson(result);
-                myResult = crypter.encryptAndDecryptXor(myResult);
-                return Response
-                        .status(200)
-                        .type("application/json")
-                        .entity(new Gson().toJson(myResult))
-                        .build();
-            } else {
-                return Response
-                        .status(200)
-                        .type("application/json")
-                        .entity("You are not authorized")
-                        .build();
-            }
-
+                if(result != null) {
+                    return Response.status(200).type("application/json").entity(new Gson().toJson(loadedResult)).build();
+                } else {
+                    return Response.status(204).type("text/plain").entity("No result").build();
+                }
         } else {
-            return Response
-                    .status(200)
-                    .type("application/json")
-                    .entity("Error loading profile")
-                    .build();
+            return Response.status(401).type("text/plain").entity("Unauthorized").build();
         }
-
-
     }
 }

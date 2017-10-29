@@ -15,74 +15,75 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 //Specifies path
-    @Path("/option")
-    public class OptionEndpoint {
+@Path("/option")
+public class OptionEndpoint {
     AdminController adminController = new AdminController();
     UserController userController = new UserController();
     MainController mainController = new MainController();
     Crypter crypter = new Crypter();
 
+
+    @GET
+    //Specifies path
+    @Path("/{QuestionId}")
+    public Response loadOptions(@HeaderParam("authorization") String token, @PathParam("QuestionId") int questionId) throws SQLException {
+        CurrentUserContext currentUser = mainController.getUserFromTokens(token);
+
+        if (currentUser.getCurrentUser() != null) {
+            //New arraylist of Option objects. Gives arraylist the value of the options loaded in loadOptions (dbmanager)
+            ArrayList options = userController.getOptions(questionId);
+            String loadedOptions = new Gson().toJson(options);
+            loadedOptions = crypter.encryptAndDecryptXor(loadedOptions);
+            Globals.log.writeLog(this.getClass().getName(), this, "Options loaded", 2);
+
+            if (options != null) {
+                return Response.status(200).type("application/json").entity(new Gson().toJson(loadedOptions)).build();
+            } else {
+                return Response.status(204).type("text/plain").entity("No options").build();
+            }
+        } else {
+            return Response.status(401).type("text/plain").entity("Unauthorized").build();
+        }
+    }
+
     @POST
     //Creating a new option for a quiz.
     public Response createOption(@HeaderParam("authorization") String token, String option) throws SQLException {
-        CurrentUserContext context = mainController.getUserFromTokens(token);
+        CurrentUserContext currentUser = mainController.getUserFromTokens(token);
 
-        if(context.getCurrentUser() != null && context.isAdmin()) {
-                Option optionCreated = adminController.createOption(option);
-                String newOption = new Gson().toJson(optionCreated);
-                newOption = crypter.encryptAndDecryptXor(newOption);
-                if (optionCreated != null) {
-                    Globals.log.writeLog(this.getClass().getName(), this, "Option created", 2);
-                    return Response.status(200).type("application/json").entity(new Gson().toJson(newOption)).build();
-                } else {
-                    return Response.status(500).type("application/json").entity("Error in creating option").build();
+        if (currentUser.getCurrentUser() != null && currentUser.isAdmin()) {
+            Option optionCreated = adminController.createOption(new Gson().fromJson(option, Option.class));
+            String newOption = new Gson().toJson(optionCreated);
+            newOption = crypter.encryptAndDecryptXor(newOption);
+
+            if (optionCreated != null) {
+                Globals.log.writeLog(this.getClass().getName(), this, "Option created", 2);
+                return Response.status(200).type("application/json").entity(new Gson().toJson(newOption)).build();
+            } else {
+                return Response.status(500).type("text/plain").entity("Failed creating option").build();
             }
         } else {
-            return Response.status(500).type("application/json").entity("Error loading profile").build();
+            return Response.status(500).type("text/plain").entity("Unauthorized").build();
         }
     }
 
     @DELETE
     @Path("{deleteId}")
-    public Response deleteAnswer(@HeaderParam("authorization") String token, @PathParam("deleteId") int answerJson) throws SQLException {
-        Globals.log.writeLog(this.getClass().getName(), this, "Answer deleted", 2);
+    public Response deleteAnswer(@HeaderParam("authorization") String token, @PathParam("deleteId") int userId) throws SQLException {
+        CurrentUserContext currentUser = mainController.getUserFromTokens(token);
 
-        CurrentUserContext context = mainController.getUserFromTokens(token);
-        if(context.getCurrentUser() != null) {
-            if(context.isAdmin()) {
-                Boolean quizDeleted = userController.deleteAnswer(answerJson);
-                return Response.status(200).type("application/json").entity(new Gson().toJson(quizDeleted)).build();
+        if (currentUser.getCurrentUser() != null && currentUser.isAdmin()) {
+            Boolean answerDeleted = userController.deleteAnswer(userId);
+            if (answerDeleted = true) {
+                Globals.log.writeLog(this.getClass().getName(), this, "Answer deleted", 2);
+                return Response.status(200).type("text/plain").entity("Answer deleted").build();
             } else {
-                return Response.status(500).type("application/json").entity("You are not authorized").build();
+                return Response.status(400).type("text/plain").entity("Error deleting answer").build();
             }
         } else {
-            return Response.status(500).type("application/json").entity("Error loading profile").build();
+            return Response.status(401).type("text/plain").entity("Unauthorized").build();
         }
     }
 
-    @GET
-        //Specifies path
-        @Path("/{question_id}")
-        public Response loadOptions (@HeaderParam("authorization") String token, @PathParam("question_id") int questionId) throws SQLException {
-        Globals.log.writeLog(this.getClass().getName(), this, "Options loaded", 2);
 
-        CurrentUserContext context = mainController.getUserFromTokens(token);
-
-        if(context.getCurrentUser() != null) {
-            //Instance of dbmanager to get access to loadOptions method
-            //New arraylist of Option objects. Gives arraylist the value of the options loaded in loadOptions (dbmanager)
-            ArrayList options = userController.getOptions(questionId);
-            String newLoadedOptions = new Gson().toJson(options);
-            newLoadedOptions = crypter.encryptAndDecryptXor(newLoadedOptions);
-            //Returns options object in arraylist as json
-            if (options != null) {
-                return Response.status(200).type("application/json").entity(new Gson().toJson(newLoadedOptions)).build();
-            } else {
-                return Response.status(200).type("application/json").entity("No options").build();
-            }
-        } else {
-            return Response.status(500).type("application/json").entity("Error loading profile").build();
-
-        }
-    }
 }
