@@ -4,7 +4,7 @@ import server.controller.Config;
 
 public class Crypter {
 
-
+    //test
     //Method for encrypting
     public static String encryptAndDecryptXor(String input) {
         if (Config.getEncryption()) {
