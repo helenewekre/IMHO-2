@@ -33,11 +33,9 @@ public class DbManager {
 
     //Method for closing the connection
     private void close() {
-<<<<<<< HEAD
-        Globals.log.writeLog(this.getClass().getName(), this, "Database close connection", 2);
-=======
 
->>>>>>> fa1d9ea5b486520b4b756afa83cd6866e9c86d20
+        Globals.log.writeLog(this.getClass().getName(), this, "Database close connection", 2);
+
         try {
             connection.close();
             Globals.log.writeLog(this.getClass().getName(), this, "Database close connection", 2);
