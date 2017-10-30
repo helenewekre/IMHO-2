@@ -39,7 +39,7 @@ public class DbManager {
     }
 
     //Method for closing the connection
-    private static void close() {
+    private void close() {
         Globals.log.writeLog(this.getClass().getName(), this, "Database close connection", 2);
         try {
             connection.close();
