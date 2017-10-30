@@ -2,23 +2,23 @@ package server.models;
 
 public class Result {
     int result;
-    int nrQuestions;
+    int questionCount;
 
-    public Result(int result, int nrQuestions) {
+    public Result(int result, int questionCount) {
         this.result = result;
-        this.nrQuestions = nrQuestions;
+        this.questionCount = questionCount;
     }
 
     public Result() {
 
     }
 
-    public int getNrQuestions() {
-        return nrQuestions;
+    public int getQuestionCount() {
+        return questionCount;
     }
 
-    public void setNrQuestions(int nrQuestions) {
-        this.nrQuestions = nrQuestions;
+    public void setQuestionCount(int questionCount) {
+        this.questionCount = questionCount;
     }
 
     public int getResult() {

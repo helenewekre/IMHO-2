@@ -2,26 +2,24 @@ package server.models;
 
 public class Course {
 
-    private int idCourse;
+    private int courseId;
     private String courseTitle;
 
-    public Course(int idCourse, String courseTitle) {
-        this.idCourse = idCourse;
+    public Course(int courseId, String courseTitle) {
+        this.courseId = courseId;
         this.courseTitle = courseTitle;
     }
     public Course() {
 
     }
 
-
-    public int getIdCourse() {
-
-        return idCourse;
+    public int getCourseId() {
+        return courseId;
     }
 
-    public void setIdCourse(int idCourse) {
+    public void setCourseId(int courseId) {
 
-        this.idCourse = idCourse;
+        this.courseId = courseId;
     }
 
     public String getCourseTitle() {

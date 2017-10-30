@@ -1,5 +1,5 @@
 # Test af server
-- *Opdateret d. 23/10/2017 kl. 23.51*
+- *Opdateret d. 29/10/2017 kl. 17:18*
 - *Server på Master testet: OK!*
 
 ## Intro
@@ -34,14 +34,14 @@
 2. Naviger til **tokens** tabellen og find den token der tilhører selvsamme bruger id. Kopier denne. 
 3. Ændre **Method** til **GET** 
 4. Naviger til **Headers** i jeres post-værktøj. Tryk **ADD HEADER**. I **Header name** skriv da `authorization`. I **Header value** indsæt da token. 
-5. Ændre **Request URL** til `http://localhost:8080/api/user/profile`
+5. Ændre **Request URL** til `http://localhost:8080/api/user/myuser`
 6. Sidst, tryk **Send**
 
 ## CourseEndpoint
 ### loadCourses
 - Metoden gør det muligt at se alle fag. 
 0. Husk nu, at det token i headeren skal forblive, ellers har i ikke rettigheder. 
-1. Ændre **Request URL** til `http://localhost:8080/api/courses`
+1. Ændre **Request URL** til `http://localhost:8080/api/course`
 2. Sidst, tryk **Send**
 
 ## QuizEndpont
@@ -56,7 +56,7 @@
 1. Åbn dit database værktøj. Naviger til **user** tabellen. Lokaliser den nuværende bruger, og ændrer type til **1**. Hvis ikke, har brugeren ikke admin-rettigheder til at lave ny quiz.
 2. Ændre **Method** til **POST** 
 3. Ændre **Request URL** til `http://localhost:8080/api/quiz`
-4. I body skriv da `{"createdBy":"Henrik Thorn","questionCount":10,"quizTitle":"Test","quizDescription":"Beskrivelse","idCourse":2}`
+4. I body skriv da `{"createdBy":"Andy Tran","questionCount":10,"quizTitle":"HejsaHejsa","quizDescription":"tester","courseId":2}`
 5. Sidst, tryk **Send**
 
 ### deleteQuiz
@@ -78,7 +78,7 @@
 - Metode til at lave en ny quiz
 1. Ændre **Method** til **POST**
 2. Ændre **Request URL** til `http://localhost:8080/api/question`
-3. I body skriv da `{"question":"Hvad er dette?","quizIdQuiz":1}`
+3. I body skriv da `{"question":"Hvad er defftte?","questionToQuizId":1}`
 4. Sidst, tryk **Send**
 4. Bemærk, at tallet **quizIdQuiz** betegner en quiz som spørgsmålet skal høre under. Hvis id'et ikke findes i databasen får i en fejl. 
 
@@ -94,7 +94,7 @@
 - Metode til at lave en ny valgmulighed
 1. Ændre **Method** til **POST**
 2. Ændre **Request URL** til `http://localhost:8080/api/option`
-3. I body skriv da `{"options":"Valgmulighed1","questionIdQuestion":1,"isCorrect":0}`
+3. I body skriv da `{"option":"Valgmulighed1","optionToQuestionId":1,"isCorrect":0}`
 4. Sidst, tryk **Send**
 4. Bemærk, at **questionIdQuestion** er ID'et på spørgsmålet. Hvis spørgsmåls-ID ikke findes, får i en fejl. Derudover kan **isCorrect** kun differentiere mellem 0 og 1. 
 
