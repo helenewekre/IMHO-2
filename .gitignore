@@ -31,5 +31,4 @@ hs_err_pid*
 =======
 
 #config
-config.json
->>>>>>> fa1d9ea5b486520b4b756afa83cd6866e9c86d20
+src/main/resources/config.json
