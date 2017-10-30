@@ -8,6 +8,7 @@ import server.dbmanager.DbManager;
 import server.models.Question;
 import server.utility.CurrentUserContext;
 import server.utility.Crypter;
+import server.utility.Globals;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -25,6 +26,8 @@ public class QuestionEndpoint {
     //Method for creating a question
     @POST
     public Response createQuestion(@HeaderParam("authorization") String token, String questionJson) throws SQLException {
+        Globals.log.writeLog(this.getClass().getName(), this, "Question created", 2);
+
         CurrentUserContext context = mainController.getUserFromTokens(token);
 
         if(context.getCurrentUser() != null) {
@@ -65,6 +68,8 @@ public class QuestionEndpoint {
     @GET
     @Path("/{quizId}")
     public Response loadQuestion(@HeaderParam("authorization") String token, @PathParam("quizId") int quizId) throws SQLException {
+        Globals.log.writeLog(this.getClass().getName(), this, "Questions loaded", 2);
+
         CurrentUserContext context = mainController.getUserFromTokens(token);
 
         if (context.getCurrentUser() != null) {

@@ -40,8 +40,10 @@ public class DbManager {
 
     //Method for closing the connection
     private static void close() {
+        Globals.log.writeLog(this.getClass().getName(), this, "Database close connection", 2);
         try {
             connection.close();
+            Globals.log.writeLog(this.getClass().getName(), this, "Database close connection catch", 2);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
@@ -50,6 +52,7 @@ public class DbManager {
 
     //Method for authorizing the user. Prepared statement are used, and a user object is returned.
     public User authorizeUser(String username, String password) throws IllegalArgumentException {
+        Globals.log.writeLog(this.getClass().getName(), this, "Authorize user", 2);
 
         //ResultSet and User to temporary contain values from SQL statement
         ResultSet resultSet = null;
@@ -78,6 +81,7 @@ public class DbManager {
 
             }
         //Exception to avoid crashing
+            Globals.log.writeLog(this.getClass().getName(), this, "Authorize user catch", 2);
         } catch (SQLException exception) {
             exception.printStackTrace();
         } finally {
@@ -94,6 +98,7 @@ public class DbManager {
 
     // Method for creating a user - Boolean returned, which decides if the user is created or not
     public User createUser(User user) throws IllegalArgumentException {
+        Globals.log.writeLog(this.getClass().getName(), this, "Create user", 2);
 
         //Try-catch method to avoid the program crashing on exceptions
         try {
@@ -109,6 +114,7 @@ public class DbManager {
             }
 
         //Exception to avoid crashing
+            Globals.log.writeLog(this.getClass().getName(), this, "Create user catch", 2);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
@@ -117,6 +123,7 @@ public class DbManager {
 
     // Method for creating a quiz
     public Quiz createQuiz(Quiz quiz) throws IllegalArgumentException {
+        Globals.log.writeLog(this.getClass().getName(), this, "Create quiz", 2);
         //Try-catch
         try {
             //SQL statement to create a quiz
@@ -135,6 +142,7 @@ public class DbManager {
             }
 
         //Exception to avoid crashing
+            Globals.log.writeLog(this.getClass().getName(), this, "Create quiz catch", 2);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -142,6 +150,7 @@ public class DbManager {
     }
     // Method for creating a question
     public Question createQuestion(Question question) throws IllegalArgumentException {
+        Globals.log.writeLog(this.getClass().getName(), this, "Create question", 2);
         //Try-catch
         try {
             //SQL statement
@@ -157,6 +166,7 @@ public class DbManager {
             }
 
         //Exception to avoid crashing
+            Globals.log.writeLog(this.getClass().getName(), this, "Create question catch", 2);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -165,6 +175,7 @@ public class DbManager {
 
     /* Method for creating a option */
     public Option createOption(Option option) throws IllegalArgumentException {
+        Globals.log.writeLog(this.getClass().getName(), this, "Create option", 2);
         //Try-catch
         try {
             //SQL statement
@@ -180,7 +191,7 @@ public class DbManager {
         if (rowsAffected == 1) {
             return option;
         }
-
+            Globals.log.writeLog(this.getClass().getName(), this, "Create option catch", 2);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -189,6 +200,7 @@ public class DbManager {
 
     // Method for loading courses
     public ArrayList<Course> loadCourses() {   //loadCourses
+        Globals.log.writeLog(this.getClass().getName(), this, "Loading courses", 2);
         ResultSet resultSet = null;
         ArrayList<Course> courses = new ArrayList<Course>();
 
@@ -208,6 +220,7 @@ public class DbManager {
             }
 
         //Exception to avoid crashing
+            Globals.log.writeLog(this.getClass().getName(), this, "Loading courses catch", 2);
         } catch (SQLException e) {
             e.printStackTrace();
 
@@ -227,6 +240,7 @@ public class DbManager {
 
     /* Method for seeing available wquizzes within a chosen course */
     public ArrayList<Quiz> loadQuizzes(int courseId) {
+        Globals.log.writeLog(this.getClass().getName(), this, "Available quizzes", 2);
         ResultSet resultSet = null;
         ArrayList<Quiz> quizzes = new ArrayList<Quiz>();
 
@@ -254,6 +268,7 @@ public class DbManager {
             }
 
         //Exception to avoid crashing
+            Globals.log.writeLog(this.getClass().getName(), this, "Available quizzes catch", 2);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -270,6 +285,7 @@ public class DbManager {
 
     //Method for loading questions
     public ArrayList<Question> loadQuestions(int quizId) {
+        Globals.log.writeLog(this.getClass().getName(), this, "Loading questions", 2);
 
         //Resultset to temporary contain values from SQL statement, first given the value of null
         ResultSet resultSet = null;
@@ -300,6 +316,7 @@ public class DbManager {
             }
 
             //Question to avoid crashes on exceptions
+            Globals.log.writeLog(this.getClass().getName(), this, "Loading questions catch", 2);
         } catch (SQLException e) {
             e.printStackTrace();
             //Always close the resultset as it is a temporary table of content
@@ -321,6 +338,7 @@ public class DbManager {
 
     //Method for loading options to a given question
     public ArrayList<Option> loadOptions(int questionId) {
+        Globals.log.writeLog(this.getClass().getName(), this, "Loading option", 2);
 
         //Resultset to temporary contain values from SQL statement
         ResultSet resultSet = null;
@@ -349,6 +367,7 @@ public class DbManager {
             }
 
             //Catch to avoid crashing on exceptions
+            Globals.log.writeLog(this.getClass().getName(), this, "Loading option catch", 2);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -368,29 +387,32 @@ public class DbManager {
 
 
     public void addToken(String token, int idUser) {
+        Globals.log.writeLog(this.getClass().getName(), this, "Add token", 2);
         PreparedStatement addTokenStatement;
         try {
             addTokenStatement = connection.prepareStatement("INSERT INTO Tokens (token, token_idUser) VALUES (?,?)");
             addTokenStatement.setString(1, token);
             addTokenStatement.setInt(2, idUser);
             addTokenStatement.executeUpdate();
-        } catch (SQLException e) {
+        }   catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     public boolean deleteToken(int idUser) throws SQLException {
+        Globals.log.writeLog(this.getClass().getName(), this, "Delete token", 2);
         PreparedStatement deleteTokenStatement = connection.prepareStatement("DELETE FROM Tokens WHERE token_idUser = ?");
         try {
             deleteTokenStatement.setInt(1, idUser);
             deleteTokenStatement.executeUpdate();
-        } catch (SQLException exception) {
+        }   catch (SQLException exception) {
             exception.printStackTrace();
         }
         return true;
     }
 
     public User getUserFromToken(String token) throws SQLException {
+        Globals.log.writeLog(this.getClass().getName(), this, "Get user from token", 2);
         ResultSet resultSet = null;
         User userFromToken = null;
 
@@ -408,6 +430,7 @@ public class DbManager {
                 userFromToken.setType(resultSet.getInt("type"));
 
             }
+            Globals.log.writeLog(this.getClass().getName(), this, "Delete token catch", 2);
         } catch (SQLException sqlException) {
             System.out.println(sqlException.getMessage());
         }
@@ -416,6 +439,7 @@ public class DbManager {
     }
 
     public User getTimeCreatedByUsername(String username) {
+        Globals.log.writeLog(this.getClass().getName(), this, "Time Created By Username", 2);
         User user = null;
 
         //Try-catch
@@ -437,6 +461,7 @@ public class DbManager {
                 throw new IllegalArgumentException();
             }
             resultSet.close();
+            Globals.log.writeLog(this.getClass().getName(), this, "Time Created By Username catch", 2);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -444,6 +469,7 @@ public class DbManager {
     }
         //Method for deleting a quiz and all it's sub-tables
     public boolean deleteQuiz(int idQuiz) throws IllegalArgumentException {
+        Globals.log.writeLog(this.getClass().getName(), this, "Delete quiz", 2);
         //Try-catch
         try {
             //SQL statement that deletes a quiz and all it's sub-tables
@@ -455,6 +481,7 @@ public class DbManager {
             if (rowsAffected == 1) {
                 return true;
             }
+            Globals.log.writeLog(this.getClass().getName(), this, "Delete quiz catch", 2);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -464,6 +491,7 @@ public class DbManager {
 
     //Method to get the number of corret answers of a quiz using quiz ID og user ID as parameters
     public int getNrCorrectAnswers(int quizID, int userID) {
+        Globals.log.writeLog(this.getClass().getName(), this, "Number of correct answers", 2);
         ResultSet resultSet = null;
         int score = 0;
         //Try-catch
@@ -496,7 +524,7 @@ public class DbManager {
                 score = (resultSet.getInt("count(*)"));
 
             }
-
+            Globals.log.writeLog(this.getClass().getName(), this, "Number of correct answers catch", 2);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -513,6 +541,7 @@ public class DbManager {
 
     //Method gets the number of questions using quiz ID as a parameter
     public int getNrQuestion(int quizID) {
+        Globals.log.writeLog(this.getClass().getName(), this, "Number of question", 2);
 
         ResultSet resultSet = null;
         int nrQuestions = 0;
@@ -537,7 +566,7 @@ public class DbManager {
                 nrQuestions = (resultSet.getInt("count(*)"));
 
             }
-
+            Globals.log.writeLog(this.getClass().getName(), this, "Number of question catch", 2);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -553,6 +582,7 @@ public class DbManager {
     }
 
     public boolean deleteAnswer(int idUser) throws IllegalArgumentException {
+        Globals.log.writeLog(this.getClass().getName(), this, "Delete answer", 2);
         try {
             PreparedStatement deleteAnswer = connection
                     .prepareStatement("DELETE FROM Answer WHERE user_id = ?");
@@ -562,7 +592,7 @@ public class DbManager {
             if (rowsAffected == 1) {
                 return true;
             }
-
+            Globals.log.writeLog(this.getClass().getName(), this, "Delete answer catch", 2);
         } catch (SQLException e) {
             e.printStackTrace();
         }
