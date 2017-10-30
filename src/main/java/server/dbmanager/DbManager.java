@@ -33,11 +33,6 @@ public class DbManager {
 
     //Method for closing the connection
     private void close() {
-<<<<<<< HEAD
-        Globals.log.writeLog(this.getClass().getName(), this, "Database close connection", 2);
-=======
-
->>>>>>> fa1d9ea5b486520b4b756afa83cd6866e9c86d20
         try {
             connection.close();
             Globals.log.writeLog(this.getClass().getName(), this, "Database close connection", 2);
@@ -258,7 +253,7 @@ public class DbManager {
 
     }
 
-    /* Method for seeing available wquizzes within a chosen course */
+    /* Method for seeing available quizzes within a chosen course */
     public ArrayList<Quiz> loadQuizzes(int courseId) {
         Globals.log.writeLog(this.getClass().getName(), this, "Available quizzes", 2);
         ResultSet resultSet = null;
