@@ -20,14 +20,26 @@ public class QuizController {
     public ArrayList<Course> loadCourses() {
         DbManager dbManager = new DbManager();
         ArrayList<Course> courses = dbManager.loadCourses();
-        return courses;
+
+        if(!courses.isEmpty()) {
+            return courses;
+        } else {
+            return null;
+        }
+
     }
 
     // Method for loading quizzes
     public ArrayList<Quiz> loadQuizzes(int courseId) {
         DbManager dbManager = new DbManager();
         ArrayList<Quiz> quizzes = dbManager.loadQuizzes(courseId);
-        return quizzes;
+
+        if(!quizzes.isEmpty()) {
+            return quizzes;
+        } else {
+            return null;
+        }
+
     }
 
     //Method for creating a question
@@ -83,10 +95,11 @@ public class QuizController {
 
     }
     //Method for loading options
-    public ArrayList<Option> getOptions(int idQuestion) {
+    public ArrayList<Option> loadOptions(int questionId) {
         DbManager dbManager = new DbManager();
-        ArrayList<Option> options = dbManager.loadOptions(idQuestion);
-        if(options !=null) {
+        ArrayList<Option> options = dbManager.loadOptions(questionId);
+
+        if(!options.isEmpty()) {
             return options;
         } else {
             return null;

@@ -40,7 +40,7 @@ public class QuestionEndpoint {
                 return Response.status(204).type("text/plain").entity("No questions").build();
             }
         } else {
-            Globals.log.writeLog(this.getClass().getName(), this, "Questions failed loading", 2);
+            Globals.log.writeLog(this.getClass().getName(), this, "Unauthorized - load questions", 2);
             return Response.status(401).type("text/plain").entity("Unauthorized").build();
         }
     }
@@ -63,7 +63,7 @@ public class QuestionEndpoint {
                 return Response.status(400).type("text/plain").entity("Failed creating question").build();
             }
         } else {
-            Globals.log.writeLog(this.getClass().getName(), this, "Failed creating question", 2);
+            Globals.log.writeLog(this.getClass().getName(), this, "Unauthorized - create question", 2);
             return Response.status(401).type("application/json").entity("Unauthorized").build();
 
         }

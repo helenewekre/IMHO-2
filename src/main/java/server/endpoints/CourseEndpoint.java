@@ -36,7 +36,7 @@ public class CourseEndpoint {
                 return Response.status(204).type("text/plain").entity("No courses").build();
             }
         } else {
-            Globals.log.writeLog(this.getClass().getName(), this, "Courses failed loading", 2);
+            Globals.log.writeLog(this.getClass().getName(), this, "Unauthorized - load course", 2);
             return Response.status(401).type("text/plain").entity("Unauthorized").build();
         }
     }
