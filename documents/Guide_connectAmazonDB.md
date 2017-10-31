@@ -4,10 +4,10 @@
 
 ## Sequel Pro
 - Først skal man åbne Sequel Pro, og logge ind på Amazon Databasen:
-      HOST: distribueredesystemer.cqsg17giwvxa.eu-central-1.rds.amazonaws.com
-      Username: dis2017
-      Password: doekdis2017
-      Database: imho
+      - HOST: distribueredesystemer.cqsg17giwvxa.eu-central-1.rds.amazonaws.com
+      - Username: dis2017
+      - Password: doekdis2017
+      - Database: imho
 
 
 
