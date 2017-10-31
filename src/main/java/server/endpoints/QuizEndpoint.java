@@ -63,6 +63,7 @@ public class QuizEndpoint {
                 return Response.status(400).type("text/plain").entity("Failed creating quiz").build();
             }
         } else {
+            Globals.log.writeLog(this.getClass().getName(), this, "Quiz failed creating", 2);
             return Response.status(401).type("text/plain").entity("Unauthorized").build();
         }
     }

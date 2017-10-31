@@ -67,8 +67,8 @@ public class UserEndpoint {
             Globals.log.writeLog(this.getClass().getName(), this, "My user loaded", 2);
             return Response.status(200).type("application/json").entity(new Gson().toJson(myUser)).build();
         } else {
-            Globals.log.writeLog(this.getClass().getName(), this, "User failed loading", 2);
-            return Response.status(200).type("text/plain").entity("Error loading user").build();
+            Globals.log.writeLog(this.getClass().getName(), this, "My user failed loading", 2);
+            return Response.status(400).type("text/plain").entity("Error loading user").build();
         }
     }
 

@@ -7,15 +7,15 @@ import java.util.ArrayList;
 
 public class UserController {
 
-    private DbManager dbManager;
 
     public UserController() {
-        dbManager = new DbManager();
+
     }
 
 
     //Method for calculating result
     public Result getResult(int quizId, int userId) {
+        DbManager dbManager = new DbManager();
         Result result = new Result();
         result.setResult(dbManager.getCorrectAnswersCount(quizId, userId));
         result.setQuestionCount(dbManager.getQuestionCount(quizId));
@@ -25,6 +25,7 @@ public class UserController {
 
     //Method for deleting answers
     public Boolean deleteAnswer(int userId) {
+        DbManager dbManager = new DbManager();
         Boolean ifDeleted = dbManager.deleteAnswer(userId);
         return ifDeleted;
     }

@@ -24,7 +24,6 @@ public class DbManager {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-            Globals.log.writeLog(this.getClass().getName(), this, "Database connected", 2);
         } catch (Exception exception) {
             exception.printStackTrace();
         }
@@ -34,9 +33,7 @@ public class DbManager {
     private void close() {
         try {
             connection.close();
-            Globals.log.writeLog(this.getClass().getName(), this, "Database close connection", 2);
         } catch (SQLException exception) {
-            Globals.log.writeLog(this.getClass().getName(), this, "Database close connection catch", 2);
             exception.printStackTrace();
         }
 
@@ -285,7 +282,7 @@ public class DbManager {
         //Resultset to temporary contain values from SQL statement, first given the value of null
         ResultSet resultSet = null;
         //Arraylist of question object
-        ArrayList<Question> questions = new ArrayList<Question>();
+        ArrayList<Question> questions = new ArrayList<>();
 
         ///Try-catch
         try {
@@ -464,7 +461,6 @@ public class DbManager {
             //SQL statement that deletes a quiz and all it's sub-tables
             PreparedStatement deleteQuiz = connection
                     .prepareStatement("DELETE FROM Quiz WHERE quiz_id = ?");
-
             deleteQuiz.setInt(1, quizId);
             int rowsAffected = deleteQuiz.executeUpdate();
             if (rowsAffected == 1) {
