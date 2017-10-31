@@ -14,25 +14,19 @@ public class UserController {
     }
 
 
-
-    //this code calculate user results on a quiz.
-    public Result getResult (int quizID, int userID){
+    //Method for calculating result
+    public Result getResult(int quizID, int userID) {
         Result result = new Result();
-
         result.setResult(dbManager.getNrCorrectAnswers(quizID, userID));
         result.setQuestionCount(dbManager.getNrQuestion(quizID));
 
         return result;
-        }
+    }
 
+    //Method for deleting answers
     public Boolean deleteAnswer(int idUser) {
         Boolean ifDeleted = dbManager.deleteAnswer(idUser);
-
-        if (ifDeleted) {
-            return true;
-        } else {
-            return false;
-        }
+        return ifDeleted;
     }
 
 }

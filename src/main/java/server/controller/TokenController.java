@@ -15,6 +15,7 @@ public class TokenController {
     }
 
 
+    //Method to save the user object in a currentUser
     public CurrentUserContext getUserFromTokens(String token) throws SQLException {
         User user = dbManager.getUserFromToken(token);
         CurrentUserContext context = new CurrentUserContext();
@@ -22,13 +23,9 @@ public class TokenController {
         return context;
     }
 
+    //Delete the token at log out
     public boolean deleteToken(int userId) throws SQLException {
         boolean tokenDeleted = dbManager.deleteToken(userId);
-        if (tokenDeleted = true) {
-            return true;
-        } else {
-            return false;
-        }
-
+        return tokenDeleted;
     }
 }
