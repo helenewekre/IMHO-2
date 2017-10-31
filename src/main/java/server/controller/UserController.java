@@ -24,8 +24,8 @@ public class UserController {
     }
 
     //Method for deleting answers
-    public Boolean deleteAnswer(int idUser) {
-        Boolean ifDeleted = dbManager.deleteAnswer(idUser);
+    public Boolean deleteAnswer(int userId) {
+        Boolean ifDeleted = dbManager.deleteAnswer(userId);
         return ifDeleted;
     }
 
