@@ -29,16 +29,21 @@ public class MainController {
     // Logic behind authorizing user
     public User authUser(User user) {
         String token = null;
+        //Use username to get the time created
         User foundUser = dbManager.getTimeCreatedByUsername(user.getUsername());
+        //Add the time created to the password and hash
         user.setPassword(digester.hashWithSalt(user.getPassword() + foundUser.getTimeCreated()));
+        //Authorize user
         User authorizedUser = dbManager.authorizeUser(user.getUsername(), user.getPassword());
 
+        //Generate token at login
         try {
             Algorithm algorithm = Algorithm.HMAC256("Secret");
             long timeValue = (System.currentTimeMillis() * 1000) + 20000205238L;
             Date expDate = new Date(timeValue);
 
             token = JWT.create().withClaim("User", authorizedUser.getUsername()).withExpiresAt(expDate).withIssuer("IMHO").sign(algorithm);
+            //Add token to database
             dbManager.addToken(token, authorizedUser.getUserId());
 
         } catch (UnsupportedEncodingException e) {
@@ -55,9 +60,10 @@ public class MainController {
     //Logic behind creating user.
 
     public User createUser(User user) {
+        //Add the time created to user
         long unixTime = (long) Math.floor(System.currentTimeMillis() / 10000);
-
         user.setTimeCreated(unixTime);
+        //Add the time created to the password and hash
         user.setPassword(digester.hashWithSalt(user.getPassword()+user.getTimeCreated()));
 
         return dbManager.createUser(user);
