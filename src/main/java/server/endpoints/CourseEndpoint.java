@@ -28,11 +28,12 @@ public class CourseEndpoint {
             ArrayList<Course> courses = quizController.loadCourses();
             String loadedCourses = new Gson().toJson(courses);
             loadedCourses = crypter.encryptAndDecryptXor(loadedCourses);
-            Globals.log.writeLog(this.getClass().getName(), this, "Courses loaded", 2);
 
             if (courses != null) {
+                Globals.log.writeLog(this.getClass().getName(), this, "Courses loaded", 2);
                 return Response.status(200).type("application/json").entity(new Gson().toJson(loadedCourses)).build();
             } else {
+                Globals.log.writeLog(this.getClass().getName(), this, "Empty course array loaded", 2);
                 return Response.status(204).type("text/plain").entity("No courses").build();
             }
         } else {
