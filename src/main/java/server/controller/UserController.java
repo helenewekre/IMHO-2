@@ -18,7 +18,7 @@ public class UserController {
     public Result getResult(int quizID, int userID) {
         Result result = new Result();
         result.setResult(dbManager.getNrCorrectAnswers(quizID, userID));
-        result.setQuestionCount(dbManager.getNrQuestion(quizID));
+        result.setQuestionCount(dbManager.getQuestionCount(quizID));
 
         return result;
     }

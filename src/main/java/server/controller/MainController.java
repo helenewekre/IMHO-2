@@ -44,7 +44,7 @@ public class MainController {
 
             token = JWT.create().withClaim("User", authorizedUser.getUsername()).withExpiresAt(expDate).withIssuer("IMHO").sign(algorithm);
             //Add token to database
-            dbManager.addToken(token, authorizedUser.getUserId());
+            dbManager.createToken(token, authorizedUser.getUserId());
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
