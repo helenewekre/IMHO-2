@@ -12,28 +12,41 @@ import java.util.ArrayList;
 
 public class QuizController {
 
-    private DbManager dbManager;
 
     public QuizController() {
-        dbManager = new DbManager();
     }
 
+    //Method for loading courses
     public ArrayList<Course> loadCourses() {
+        DbManager dbManager = new DbManager();
         ArrayList<Course> courses = dbManager.loadCourses();
-        return courses;
+
+        if(!courses.isEmpty()) {
+            return courses;
+        } else {
+            return null;
+        }
+
     }
 
     // Method for loading quizzes
     public ArrayList<Quiz> loadQuizzes(int courseId) {
+        DbManager dbManager = new DbManager();
         ArrayList<Quiz> quizzes = dbManager.loadQuizzes(courseId);
-        return quizzes;
+
+        if(!quizzes.isEmpty()) {
+            return quizzes;
+        } else {
+            return null;
+        }
+
     }
 
     //Method for creating a question
     public Quiz createQuiz(Quiz quiz) {
+        DbManager dbManager = new DbManager();
         Quiz createdQuiz = dbManager.createQuiz(quiz);
         if (createdQuiz != null) {
-            Globals.log.writeLog(getClass().getName(), this, "Quiz created", 2);
             return createdQuiz;
         } else {
             return null;
@@ -42,24 +55,26 @@ public class QuizController {
 
     //Method for deleting a quiz and all it's sub-tables
     public Boolean deleteQuiz(int quizId) {
+        DbManager dbManager = new DbManager();
         Boolean ifDeleted = dbManager.deleteQuiz(quizId);
-
-        if (ifDeleted) {
-            return true;
-        } else {
-            return false;
-        }
+        return ifDeleted;
     }
 
     public ArrayList<Question> loadQuestions(int quizId) {
+        DbManager dbManager = new DbManager();
         ArrayList<Question> question = dbManager.loadQuestions(quizId);
-        return question;
+
+        if(!question.isEmpty()) {
+            return question;
+        } else {
+            return null;
+        }
     }
 
     //Method for creating a question
     public Question createQuestion(Question question) {
+        DbManager dbManager = new DbManager();
         Question createdQuestion = dbManager.createQuestion(question);
-        Globals.log.writeLog(getClass().getName(), this, "Question created", 2);
 
         if (createdQuestion != null) {
             return createdQuestion;
@@ -70,9 +85,8 @@ public class QuizController {
 
     //Method for creating a option
     public Option createOption(Option option) {
+        DbManager dbManager = new DbManager();
         Option newOption = dbManager.createOption(option);
-        Globals.log.writeLog(getClass().getName(), this, "Option created", 2);
-
         if (newOption != null) {
             return newOption;
         } else {
@@ -80,11 +94,12 @@ public class QuizController {
         }
 
     }
+    //Method for loading options
+    public ArrayList<Option> loadOptions(int questionId) {
+        DbManager dbManager = new DbManager();
+        ArrayList<Option> options = dbManager.loadOptions(questionId);
 
-    public ArrayList<Option> getOptions(int idQuestion) {
-        ArrayList<Option> options = dbManager.loadOptions(idQuestion);
-
-        if(options !=null) {
+        if(!options.isEmpty()) {
             return options;
         } else {
             return null;

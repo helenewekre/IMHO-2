@@ -7,32 +7,27 @@ import java.util.ArrayList;
 
 public class UserController {
 
-    private DbManager dbManager;
 
     public UserController() {
-        dbManager = new DbManager();
+
     }
 
 
-
-    //this code calculate user results on a quiz.
-    public Result getResult (int quizID, int userID){
+    //Method for calculating result
+    public Result getResult(int quizId, int userId) {
+        DbManager dbManager = new DbManager();
         Result result = new Result();
-
-        result.setResult(dbManager.getNrCorrectAnswers(quizID, userID));
-        result.setQuestionCount(dbManager.getNrQuestion(quizID));
+        result.setResult(dbManager.getCorrectAnswersCount(quizId, userId));
+        result.setQuestionCount(dbManager.getQuestionCount(quizId));
 
         return result;
-        }
+    }
 
-    public Boolean deleteAnswer(int idUser) {
-        Boolean ifDeleted = dbManager.deleteAnswer(idUser);
-
-        if (ifDeleted) {
-            return true;
-        } else {
-            return false;
-        }
+    //Method for deleting answers
+    public Boolean deleteAnswer(int userId) {
+        DbManager dbManager = new DbManager();
+        Boolean ifDeleted = dbManager.deleteAnswer(userId);
+        return ifDeleted;
     }
 
 }

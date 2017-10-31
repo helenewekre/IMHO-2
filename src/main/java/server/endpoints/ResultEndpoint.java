@@ -34,14 +34,16 @@ public class ResultEndpoint {
                 Result result = userController.getResult(QuizId, UserId);
                 String loadedResult = new Gson().toJson(result);
                 loadedResult = crypter.encryptAndDecryptXor(loadedResult);
-                Globals.log.writeLog(this.getClass().getName(), this, "Result loaded", 2);
 
                 if(result != null) {
+                    Globals.log.writeLog(this.getClass().getName(), this, "Result loaded", 2);
                     return Response.status(200).type("application/json").entity(new Gson().toJson(loadedResult)).build();
                 } else {
+                    Globals.log.writeLog(this.getClass().getName(), this, "Empty result array loaded", 2);
                     return Response.status(204).type("text/plain").entity("No result").build();
                 }
         } else {
+            Globals.log.writeLog(this.getClass().getName(), this, "Unauthorized - get score", 2);
             return Response.status(401).type("text/plain").entity("Unauthorized").build();
         }
     }

@@ -7,28 +7,26 @@ import server.utility.CurrentUserContext;
 import java.sql.SQLException;
 
 public class TokenController {
-    private DbManager dbManager;
 
 
     public TokenController() {
-        dbManager = new DbManager();
+
     }
 
 
+    //Method to save the user object in a currentUser
     public CurrentUserContext getUserFromTokens(String token) throws SQLException {
+        DbManager dbManager = new DbManager();
         User user = dbManager.getUserFromToken(token);
         CurrentUserContext context = new CurrentUserContext();
         context.setCurrentUser(user);
         return context;
     }
 
+    //Delete the token at log out
     public boolean deleteToken(int userId) throws SQLException {
+        DbManager dbManager = new DbManager();
         boolean tokenDeleted = dbManager.deleteToken(userId);
-        if (tokenDeleted = true) {
-            return true;
-        } else {
-            return false;
-        }
-
+        return tokenDeleted;
     }
 }

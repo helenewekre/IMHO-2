@@ -32,17 +32,19 @@ public class OptionEndpoint {
 
         if (currentUser.getCurrentUser() != null) {
             //New arraylist of Option objects. Gives arraylist the value of the options loaded in loadOptions (dbmanager)
-            ArrayList options = quizController.getOptions(questionId);
+            ArrayList options = quizController.loadOptions(questionId);
             String loadedOptions = new Gson().toJson(options);
             loadedOptions = crypter.encryptAndDecryptXor(loadedOptions);
-            Globals.log.writeLog(this.getClass().getName(), this, "Options loaded", 2);
 
             if (options != null) {
+                Globals.log.writeLog(this.getClass().getName(), this, "Options loaded", 2);
                 return Response.status(200).type("application/json").entity(new Gson().toJson(loadedOptions)).build();
             } else {
+                Globals.log.writeLog(this.getClass().getName(), this, "Empty options array loaded", 2);
                 return Response.status(204).type("text/plain").entity("No options").build();
             }
         } else {
+            Globals.log.writeLog(this.getClass().getName(), this, "Unauthorized - load options", 2);
             return Response.status(401).type("text/plain").entity("Unauthorized").build();
         }
     }
@@ -61,9 +63,11 @@ public class OptionEndpoint {
                 Globals.log.writeLog(this.getClass().getName(), this, "Option created", 2);
                 return Response.status(200).type("application/json").entity(new Gson().toJson(newOption)).build();
             } else {
+                Globals.log.writeLog(this.getClass().getName(), this, "No input to new option", 2);
                 return Response.status(500).type("text/plain").entity("Failed creating option").build();
             }
         } else {
+            Globals.log.writeLog(this.getClass().getName(), this, "Unauthorized - create option", 2);
             return Response.status(500).type("text/plain").entity("Unauthorized").build();
         }
     }
@@ -73,15 +77,17 @@ public class OptionEndpoint {
     public Response deleteAnswer(@HeaderParam("authorization") String token, @PathParam("deleteId") int userId) throws SQLException {
         CurrentUserContext currentUser = tokenController.getUserFromTokens(token);
 
-        if (currentUser.getCurrentUser() != null && currentUser.isAdmin()) {
+        if (currentUser.getCurrentUser() != null) {
             Boolean answerDeleted = userController.deleteAnswer(userId);
             if (answerDeleted = true) {
                 Globals.log.writeLog(this.getClass().getName(), this, "Answer deleted", 2);
                 return Response.status(200).type("text/plain").entity("Answer deleted").build();
             } else {
+                Globals.log.writeLog(this.getClass().getName(), this, "Delete answer attempt failed", 2);
                 return Response.status(400).type("text/plain").entity("Error deleting answer").build();
             }
         } else {
+            Globals.log.writeLog(this.getClass().getName(), this, "Unauthorized - delete answer", 2);
             return Response.status(401).type("text/plain").entity("Unauthorized").build();
         }
     }

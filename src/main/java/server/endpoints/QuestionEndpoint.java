@@ -36,9 +36,11 @@ public class QuestionEndpoint {
                 Globals.log.writeLog(this.getClass().getName(), this, "Questions loaded", 2);
                 return Response.status(200).type("application/json").entity(new Gson().toJson(loadedQuestions)).build();
             } else {
-                return Response.status(204).type("application/json").entity("No questions").build();
+                Globals.log.writeLog(this.getClass().getName(), this, "Empty question array loaded", 2);
+                return Response.status(204).type("text/plain").entity("No questions").build();
             }
         } else {
+            Globals.log.writeLog(this.getClass().getName(), this, "Unauthorized - load questions", 2);
             return Response.status(401).type("text/plain").entity("Unauthorized").build();
         }
     }
@@ -57,9 +59,11 @@ public class QuestionEndpoint {
                 Globals.log.writeLog(this.getClass().getName(), this, "Question created", 2);
                 return Response.status(200).type("application/json").entity(new Gson().toJson(newQuestion)).build();
             } else {
-                return Response.status(400).type("application/json").entity("Failed creating question").build();
+                Globals.log.writeLog(this.getClass().getName(), this, "No input to new question", 2);
+                return Response.status(400).type("text/plain").entity("Failed creating question").build();
             }
         } else {
+            Globals.log.writeLog(this.getClass().getName(), this, "Unauthorized - create question", 2);
             return Response.status(401).type("application/json").entity("Unauthorized").build();
 
         }
