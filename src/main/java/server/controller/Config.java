@@ -73,6 +73,7 @@ public final class Config {
     }
 
     public static void setEncryption(Boolean ENCRYPTION) {
+
         Config.ENCRYPTION = ENCRYPTION;
     }
 }

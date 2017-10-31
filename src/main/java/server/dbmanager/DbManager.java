@@ -478,14 +478,14 @@ public class DbManager {
     }
 
     //Method to get the number of correct answers of a quiz using quiz ID og user ID as parameters
-    public int getNrCorrectAnswers(int quizId, int userId) {
+    public int getCorrectAnswersCount(int quizId, int userId) {
         ResultSet resultSet = null;
-        int score = 0;
+        int correctAnswersCount = 0;
         //Try-catch
         try {
             //SQL statement that gets all the correct answers the user have on a quiz
             //In the SELECT part we define that we need the DB to return quiz description and count. we use count
-            PreparedStatement getNrCorrectAnswers = connection.prepareStatement("SELECT q.quiz_description, count(*)\n" +
+            PreparedStatement getCorrectAnswersCount = connection.prepareStatement("SELECT q.quiz_description, count(*)\n" +
                     "FROM user u\n" + // we define that it is from user, her after known as u.
                     "INNER JOIN answer a\n" + // we inner join the statement with answer. now know as a.
                     "ON u.user_id = a.user_id\n" + // and that is should do it where user id from the user table = user id from answer table
@@ -497,18 +497,18 @@ public class DbManager {
                     "ON qt.quiz_id = q.quiz_id\n" + // on qt quiz id = q id quiz
                     "WHERE quiz_id = ? \n" + // where quiz id = ?. ? is defined by the user.
                     "\tAND user_id = ?\n" + // and user id = + ?. also defined by the user.
-                    "GROUP BY o.is_correct" // in the end it is sortet by o is correct. so the final count is returned.
+                    "GROUP BY o.is_correct" // in the end it is sorted by o is correct. so the final count is returned.
             );
 
-            getNrCorrectAnswers.setInt(1, quizId);
-            getNrCorrectAnswers.setInt(2, userId);
+            getCorrectAnswersCount.setInt(1, quizId);
+            getCorrectAnswersCount.setInt(2, userId);
 
-            resultSet = getNrCorrectAnswers.executeQuery();
+            resultSet = getCorrectAnswersCount.executeQuery();
 
 
             while (resultSet.next()) {
                 //gets the count of the total correct answers and writes it to score.
-                score = (resultSet.getInt("count(*)"));
+                correctAnswersCount = (resultSet.getInt("count(*)"));
 
             }
         } catch (SQLException e) {
@@ -521,7 +521,7 @@ public class DbManager {
                 close();
             }
         }
-        return score;
+        return correctAnswersCount;
     }
 
     //Method gets the number of questions using quiz ID as a parameter

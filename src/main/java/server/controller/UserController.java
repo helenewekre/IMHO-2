@@ -15,10 +15,10 @@ public class UserController {
 
 
     //Method for calculating result
-    public Result getResult(int quizID, int userID) {
+    public Result getResult(int quizId, int userId) {
         Result result = new Result();
-        result.setResult(dbManager.getNrCorrectAnswers(quizID, userID));
-        result.setQuestionCount(dbManager.getQuestionCount(quizID));
+        result.setResult(dbManager.getCorrectAnswersCount(quizId, userId));
+        result.setQuestionCount(dbManager.getQuestionCount(quizId));
 
         return result;
     }
