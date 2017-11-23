@@ -33,6 +33,7 @@ public class ResultEndpoint {
         if (currentUser.getCurrentUser() != null) {
                 Result result = userController.getResult(QuizId, UserId);
                 String loadedResult = new Gson().toJson(result);
+                loadedResult = crypter.decrypt(loadedResult);
                 //loadedResult = crypter.encryptAndDecryptXor(loadedResult);
 
                 if(result != null) {
