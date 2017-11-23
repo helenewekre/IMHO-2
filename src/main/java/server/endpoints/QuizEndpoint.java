@@ -28,6 +28,7 @@ public class QuizEndpoint {
     @Path("/{CourseID}")
     public Response loadQuizzes(@HeaderParam("authorization") String token, @PathParam("CourseID") int courseId) throws SQLException {
         token = new Gson().fromJson(token, String.class);
+        System.out.println(courseId);
         CurrentUserContext currentUser = tokenController.getUserFromTokens(token);
 
         if (currentUser.getCurrentUser() != null) {
@@ -35,10 +36,11 @@ public class QuizEndpoint {
             String loadedQuizzes = new Gson().toJson(quizzes);
             //loadedQuizzes = crypter.encrypt(loadedQuizzes);
             //loadedQuizzes = crypter.encryptAndDecryptXor(loadedQuizzes);
+            loadedQuizzes = crypter.encrypt(loadedQuizzes);
 
             if (quizzes != null) {
                 Globals.log.writeLog(this.getClass().getName(), this, "Quizzes loaded", 2);
-                return Response.status(200).type("application/json").entity(crypter.encrypt(loadedQuizzes)).build();
+                return Response.status(200).type("application/json").entity(loadedQuizzes).build();
             } else {
                 Globals.log.writeLog(this.getClass().getName(), this, "Empty quiz array loaded", 2);
                 return Response.status(204).type("text/plain").entity("No quizzes").build();

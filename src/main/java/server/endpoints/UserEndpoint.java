@@ -67,7 +67,7 @@ public class UserEndpoint {
     public Response getMyUser(@HeaderParam("authorization") String token) throws SQLException {
         CurrentUserContext currentUser = tokenController.getUserFromTokens(token);
         String myUser = new Gson().toJson(currentUser.getCurrentUser());
-        myUser = crypter.encrypt(myUser);
+        myUser = crypter.decrypt(myUser);
 
         //myUser = crypter.encryptAndDecryptXor(myUser);
 
