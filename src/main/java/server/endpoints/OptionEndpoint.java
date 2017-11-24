@@ -34,12 +34,12 @@ public class OptionEndpoint {
             //New arraylist of Option objects. Gives arraylist the value of the options loaded in loadOptions (dbmanager)
             ArrayList options = quizController.loadOptions(questionId);
             String loadedOptions = new Gson().toJson(options);
-            loadedOptions = crypter.decrypt(loadedOptions);
+            loadedOptions = crypter.encrypt(loadedOptions);
            // loadedOptions = crypter.encryptAndDecryptXor(loadedOptions);
 
             if (options != null) {
                 Globals.log.writeLog(this.getClass().getName(), this, "Options loaded", 2);
-                return Response.status(200).type("application/json").entity(new Gson().toJson(loadedOptions)).build();
+                return Response.status(200).type("application/json").entity(loadedOptions).build();
             } else {
                 Globals.log.writeLog(this.getClass().getName(), this, "Empty options array loaded", 2);
                 return Response.status(204).type("text/plain").entity("No options").build();

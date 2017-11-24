@@ -30,12 +30,12 @@ public class QuestionEndpoint {
         if (currentUser.getCurrentUser() != null) {
             ArrayList<Question> questions = quizController.loadQuestions(quizId);
             String loadedQuestions = new Gson().toJson(questions);
-            loadedQuestions = crypter.decrypt(loadedQuestions);
+            loadedQuestions = crypter.encrypt(loadedQuestions);
             //loadedQuestions = crypter.encryptAndDecryptXor(loadedQuestions);
 
             if (questions != null) {
                 Globals.log.writeLog(this.getClass().getName(), this, "Questions loaded", 2);
-                return Response.status(200).type("application/json").entity(new Gson().toJson(loadedQuestions)).build();
+                return Response.status(200).type("application/json").entity(loadedQuestions).build();
             } else {
                 Globals.log.writeLog(this.getClass().getName(), this, "Empty question array loaded", 2);
                 return Response.status(204).type("text/plain").entity("No questions").build();
