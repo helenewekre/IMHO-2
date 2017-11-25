@@ -65,7 +65,7 @@ public class QuizEndpoint {
 
             if (quizCreated != null) {
                 Globals.log.writeLog(this.getClass().getName(), this, "Quiz created", 2);
-                return Response.status(200).type("application/json").entity(new Gson().toJson(newQuiz)).build();
+                return Response.status(200).type("application/json").entity(newQuiz).build();
             } else {
                 Globals.log.writeLog(this.getClass().getName(), this, "No input to new quiz", 2);
                 return Response.status(400).type("text/plain").entity("Failed creating quiz").build();

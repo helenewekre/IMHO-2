@@ -32,7 +32,7 @@ public class OptionEndpoint {
 
         if (currentUser.getCurrentUser() != null) {
             //New arraylist of Option objects. Gives arraylist the value of the options loaded in loadOptions (dbmanager)
-            ArrayList options = quizController.loadOptions(questionId);
+            ArrayList<Option> options = quizController.loadOptions(questionId);
             String loadedOptions = new Gson().toJson(options);
             loadedOptions = crypter.encrypt(loadedOptions);
            // loadedOptions = crypter.encryptAndDecryptXor(loadedOptions);

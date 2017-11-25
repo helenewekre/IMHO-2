@@ -332,11 +332,11 @@ public class DbManager {
         //Try-catch
         try {
             //SQL statement
-            PreparedStatement loadQuestions = connection
+            PreparedStatement loadOptions = connection
                     .prepareStatement("SELECT * FROM `Option` WHERE question_id = ?");
-            loadQuestions.setInt(1, questionId);
+            loadOptions.setInt(1, questionId);
             //Resultset gets the value of the SQL statement
-            resultSet = loadQuestions.executeQuery();
+            resultSet = loadOptions.executeQuery();
 
             //Method will run as long as there is content in the next line of the resultset
             while (resultSet.next()) {
