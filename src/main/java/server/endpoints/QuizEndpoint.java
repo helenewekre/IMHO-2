@@ -54,18 +54,24 @@ public class QuizEndpoint {
     @POST
     // Method for creating a quiz
     public Response createQuiz(@HeaderParam("authorization") String token, String quiz) throws SQLException {
+        System.out.println(quiz);
+        System.out.println(token);
+        quiz =  new Gson().fromJson(quiz, String.class);
+        String decryptedQuiz = crypter.decrypt(quiz);
+        System.out.println(decryptedQuiz);
 
         CurrentUserContext currentUser = tokenController.getUserFromTokens(token);
 
+        System.out.print(currentUser);
+
         if (currentUser.getCurrentUser() != null && currentUser.isAdmin()) {
-            Quiz quizCreated = quizController.createQuiz(new Gson().fromJson(quiz, Quiz.class));
+            Quiz quizCreated = quizController.createQuiz(new Gson().fromJson(decryptedQuiz, Quiz.class));
             String newQuiz = new Gson().toJson(quizCreated);
-            newQuiz = crypter.decrypt(newQuiz);
-           // newQuiz = crypter.encryptAndDecryptXor(newQuiz);
+            System.out.println(newQuiz);
 
             if (quizCreated != null) {
                 Globals.log.writeLog(this.getClass().getName(), this, "Quiz created", 2);
-                return Response.status(200).type("application/json").entity(newQuiz).build();
+                return Response.status(200).type("application/json").entity(crypter.encrypt(newQuiz)).build();
             } else {
                 Globals.log.writeLog(this.getClass().getName(), this, "No input to new quiz", 2);
                 return Response.status(400).type("text/plain").entity("Failed creating quiz").build();
@@ -81,7 +87,9 @@ public class QuizEndpoint {
     @Path("{deleteId}")
     // Method for deleting a quiz and all it's sub-tables
     public Response deleteQuiz(@HeaderParam("authorization") String token, @PathParam("deleteId") int quizId) throws SQLException {
+        System.out.println(token);
         CurrentUserContext currentUser = tokenController.getUserFromTokens(token);
+        System.out.println(currentUser.getCurrentUser());
 
         if (currentUser.getCurrentUser() != null && currentUser.isAdmin()) {
             Boolean quizDeleted = quizController.deleteQuiz(quizId);
