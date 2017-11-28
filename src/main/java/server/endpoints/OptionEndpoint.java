@@ -53,10 +53,17 @@ public class OptionEndpoint {
     @POST
     //Creating a new option for a quiz.
     public Response createOption(@HeaderParam("authorization") String token, String option) throws SQLException {
+        System.out.println(option);
+
+        option = new Gson().fromJson(option, String.class);
+        String decryptedOption = crypter.decrypt(option);
+
+        System.out.println(decryptedOption);
+
         CurrentUserContext currentUser = tokenController.getUserFromTokens(token);
 
         if (currentUser.getCurrentUser() != null && currentUser.isAdmin()) {
-            Option optionCreated = quizController.createOption(new Gson().fromJson(option, Option.class));
+            Option optionCreated = quizController.createOption(new Gson().fromJson(decryptedOption, Option.class));
             String newOption = new Gson().toJson(optionCreated);
             newOption = crypter.decrypt(newOption);
           //  newOption = crypter.encryptAndDecryptXor(newOption);
